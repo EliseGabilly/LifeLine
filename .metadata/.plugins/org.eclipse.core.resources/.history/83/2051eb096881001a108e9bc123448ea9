@@ -1,0 +1,91 @@
+package util;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class CSVReader {
+	
+	public static void getWeitedAdj () {
+		String csvFile = "weight_adj.csv";
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ";";
+        int node1 =0;
+        int node2 = 0;
+        float weigth =0;
+        
+        try {
+            br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null) {
+                // use ; as separator
+                String[] edge = line.split(cvsSplitBy);
+                node1=Integer.parseInt(edge[0]);
+                node2=Integer.parseInt(edge[1]);
+                weigth=Float.parseFloat(edge[2]);
+                
+                System.out.println(node1+" "+node2+" : "+weigth);                		
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+	} // public static void getWeitedAdj ()	
+	
+	public static Map<Integer, Coord<?, ?>> getCityCoord () {
+		String csvFile = "city_coord.csv";
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ";";
+        int node =0;
+        int x = 0;
+        int y = 0;
+        
+        Map<Integer, Coord<?, ?>> cityCoordMap = new HashMap<Integer, Coord<?,?>>();
+        
+        try {
+            br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null) {
+                // use ; as separator
+                String[] edge = line.split(cvsSplitBy);
+                node=Integer.parseInt(edge[0]);
+                x=Integer.parseInt(edge[1]);
+                y=Integer.parseInt(edge[2]);
+                Coord<?, ?> coord=new Coord<Object, Object>(x, y);
+                
+                System.out.println(node+" : "+coord.toString());
+                cityCoordMap.put(node, coord);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return cityCoordMap;
+	} // public static void getCityCoord () 
+	
+	
+	
+}

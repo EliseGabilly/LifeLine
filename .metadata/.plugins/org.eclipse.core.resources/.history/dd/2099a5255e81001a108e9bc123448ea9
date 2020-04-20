@@ -1,0 +1,19 @@
+package pkg;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Map;
+
+import util.CSVReader;
+import util.Coord;
+
+public class Main {
+
+    public static void main(String[] args) {
+    	Map<Integer, Coord<?, ?>> cityCoordMap = CSVReader.getCityCoord();
+        
+    }
+
+}

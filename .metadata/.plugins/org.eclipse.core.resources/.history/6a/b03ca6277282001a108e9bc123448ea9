@@ -1,0 +1,31 @@
+package pkg;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import obj.Adjacent;
+import obj.Coord;
+import util.Printer;
+
+public class PathOptimizer {
+	
+	public PathOptimizer(Map<Integer, Coord<?, ?>> cityCoordMap, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap, List<Integer> nodeRequired) {
+		
+		List<Integer> pathResum = new ArrayList<Integer>();
+		
+		PathFinder myPathFinder = new PathFinder(cityCoordMap, weightedAdjMap);
+		for(int i=0; i<pathResum ; i++) {
+
+			List<Integer> thePath = myPathFinder.findPathBetweenTwoNode(start, goal);
+	    	Printer.printPathData(thePath, myPathFinder);
+		}
+	}
+	
+	private List<Integer> optimizeForFewNodes(){
+		return null;
+	}
+	
+}

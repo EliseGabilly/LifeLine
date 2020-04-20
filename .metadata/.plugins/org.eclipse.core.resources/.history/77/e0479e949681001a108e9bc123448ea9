@@ -1,0 +1,55 @@
+package obj;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class Path {
+
+	List<Integer> path;
+	float cost;
+	float heuristc;
+
+	Path(int start) {
+		path = new ArrayList<Integer>(Arrays.asList(start));
+		cost = 0;
+		heuristc = 0;
+	}
+	
+	Path(Path oldPath){
+		
+		
+	}
+	
+	
+	
+
+	public float getCost() {
+		return cost;
+	}
+	private void setCost() {
+		float c =0;
+		this.cost = c;
+	}
+
+	public float getHeuristc() {
+		return heuristc;
+	}
+	private void setHeuristc() {
+		float h=0;
+		this.heuristc = h;
+	}
+
+	public List<Integer> getPath() {
+		return path;
+	}
+
+	/**
+	 * @param path
+	 * @return if the path is valid, meaning are all edges taken existing
+	 */
+	public boolean isPathValid(List<?> path) {
+		return true;
+	} // public boolean isPathValid(List<?> path)
+
+}

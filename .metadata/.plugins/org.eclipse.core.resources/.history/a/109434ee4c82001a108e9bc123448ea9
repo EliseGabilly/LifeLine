@@ -1,0 +1,29 @@
+package util;
+
+import java.util.List;
+import java.util.Map;
+
+import obj.Adjacent;
+
+public class ValidityChecker {
+
+	public boolean isPathValidSolution(List<Integer> path, int start, int goal,
+			Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) {
+		return isSolusion(path, start, goal) && isPathValid(path, weightedAdjMap);
+	}
+
+	private boolean isSolusion(List<Integer> path, int start, int goal) {
+		int lastPathNode = path.get(path.size() - 1);
+		int firstPathNode = path.get(0);
+		return lastPathNode == goal && firstPathNode == start;
+	}
+
+	/**
+	 * @param path
+	 * @return if the path is valid, meaning are all edges taken existing
+	 */
+	private boolean isPathValid(List<Integer> path, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) {
+		return true;
+	} // public boolean isPathValid(List<?> path)
+
+}

@@ -1,0 +1,17 @@
+package pkg;
+
+import java.util.List;
+
+public class PathFinder {
+	
+	public List<?> findPath(int start, int goal){
+		List<Object> myPath=null;
+		
+		return myPath;
+	} // public List<?> findPath(int start, int goal)
+	
+	
+	
+	
+	
+}

@@ -1,0 +1,47 @@
+package pkg;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import obj.Adjacent;
+import obj.Coord;
+import util.Printer;
+
+public class PathOptimizer {
+	
+	public PathOptimizer(Map<Integer, Coord<?, ?>> cityCoordMap, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap, List<Integer> nodeRequired) {
+		
+		List<Integer> pathResum = new ArrayList<Integer>(); // list of needed cities that we have to go through
+		List<Integer> subPath; // path between two needed cities
+		List<List<Integer>> thePath = new ArrayList<List<Integer>>(); // all of sub path
+		
+		
+		PathFinder myPathFinder = new PathFinder(cityCoordMap, weightedAdjMap);
+		int start;
+		int end;
+		for(int i=0; i<pathResum.size() ; i++) {
+			start=pathResum.get(i);
+			end=pathResum.get(i+1);
+			subPath = myPathFinder.findPathBetweenTwoNode(start, end);
+	    	Printer.printPathData(subPath, myPathFinder);
+	    	thePath.add(subPath);
+		}
+		
+		
+	}
+
+	private List<Integer> sortNeededCities(List<Integer> pathResum){
+		return pathResum;
+	}
+	private List<Integer> sortFewNeededCities(List<Integer> pathResum){
+		return pathResum;
+	}
+	private List<Integer> sortManyNeededCities(List<Integer> pathResum){
+		System.out.println("Not implamented yet : sortManyNeededCities ");
+		return null;
+	}
+	
+}

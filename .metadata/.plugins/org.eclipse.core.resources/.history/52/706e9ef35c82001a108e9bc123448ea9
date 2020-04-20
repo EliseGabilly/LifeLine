@@ -1,0 +1,41 @@
+package pkg;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import obj.Adjacent;
+import obj.Coord;
+import util.CSVReader;
+import util.Printer;
+
+public class Main {
+	private static String[] savedArgs;
+    public static String[] getArgs() {
+        return savedArgs;
+    }
+
+    public static void main(String[] args) {
+    	savedArgs=args;
+    	Map<Integer, Coord<?, ?>> cityCoordMap = CSVReader.getCityCoord();
+    	if (Arrays.asList(args).contains("-pn") || Arrays.asList(args).contains("-printNode"))
+    		Printer.printCityCoordMap(cityCoordMap);
+    	Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap = CSVReader.getWeitedAdj();
+    	if (Arrays.asList(args).contains("-pe") || Arrays.asList(args).contains("-printEdge"))
+    		Printer.printWeightedAdjMap(weightedAdjMap);
+    	
+    	//TODO use argument to launch the program if we want to
+    	
+    	PathFinder myPathFinder = new PathFinder(cityCoordMap, weightedAdjMap);
+    	List<Integer> thePath = myPathFinder.findPathBetweenTwoNode(2, 10);
+    	if (Arrays.asList(args).contains("-pv") || Arrays.asList(args).contains("-printVerif"))
+    		Printer.printPathData(thePath, myPathFinder);
+		
+    	System.out.println("Arguments : ");
+    	for (String s: args) {
+            System.out.println(s);
+        }
+        
+    }
+
+}

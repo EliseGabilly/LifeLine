@@ -1,0 +1,22 @@
+package pkg;
+
+import java.util.List;
+import java.util.Map;
+
+import util.Adjacent;
+import util.CSVReader;
+import util.Coord;
+import util.Printer;
+
+public class Main {
+
+    public static void main(String[] args) {
+    	Map<Integer, Coord<?, ?>> cityCoordMap = CSVReader.getCityCoord();
+    	Printer.prin
+    	Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap = CSVReader.getWeitedAdj();
+    	System.out.println(weightedAdjMap.size());
+    	
+        
+    }
+
+}

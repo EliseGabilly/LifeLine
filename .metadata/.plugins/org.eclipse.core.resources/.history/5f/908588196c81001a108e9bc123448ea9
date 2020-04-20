@@ -1,0 +1,116 @@
+package util;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class CSVReader {
+	
+	public static Map<Integer, List<Adjacent<?, ?>>> getWeitedAdj () {
+		String csvFile = "weight_adj.csv";
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ";";
+        int node1 =0;
+        int node2 = 0;
+        float weight =0;
+        
+        Map<Integer, List<Adjacent<?,?>>> weitedAdjMap = new HashMap<Integer, List<Adjacent<?,?>>>();
+        List<Adjacent<?,?>> oldAdjList;
+        Adjacent<Object, Object> adj;
+        try {
+            br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null) {
+                // use ; as separator
+                String[] edge = line.split(cvsSplitBy);
+                node1=Integer.parseInt(edge[0]);
+                node2=Integer.parseInt(edge[1]);
+                weight=Float.parseFloat(edge[2]);
+
+                // add node2 to adjacent of node1
+                adj=new Adjacent<Object, Object>(node2, weight);
+                List<Adjacent<?,?>> newAdjList = new ArrayList<Adjacent<?,?>>( Arrays.asList(adj));
+                if (weitedAdjMap.containsKey(node1)) {
+                	oldAdjList = weitedAdjMap.get(node1);
+                	oldAdjList.addAll(newAdjList);
+                	weitedAdjMap.put(node1, oldAdjList);
+                } else {
+                	weitedAdjMap.put(node1, newAdjList);
+                }
+                // add node1 to adjacent of node2
+                adj=new Adjacent<Object, Object>(node1, weight);
+                newAdjList.add(adj);
+                if (weitedAdjMap.containsKey(node2)) {
+                	oldAdjList = weitedAdjMap.get(node2);
+                	oldAdjList.addAll(newAdjList);
+                	weitedAdjMap.put(node2, oldAdjList);
+                } else {
+                	weitedAdjMap.put(node2, newAdjList);
+                }                		
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return weitedAdjMap;        
+	} // public static void getWeitedAdj ()	
+	
+	public static Map<Integer, Coord<?, ?>> getCityCoord () {
+		String csvFile = "city_coord.csv";
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ";";
+        int node =0;
+        int x = 0;
+        int y = 0;
+        
+        Map<Integer, Coord<?, ?>> cityCoordMap = new HashMap<Integer, Coord<?,?>>();
+        
+        try {
+            br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null) {
+                // use ; as separator
+                String[] edge = line.split(cvsSplitBy);
+                node=Integer.parseInt(edge[0]);
+                x=Integer.parseInt(edge[1]);
+                y=Integer.parseInt(edge[2]);
+                Coord<?, ?> coord=new Coord<Object, Object>(x, y);
+                
+                cityCoordMap.put(node, coord);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return cityCoordMap;
+	} // public static void getCityCoord () 
+	
+	
+	
+}

@@ -1,0 +1,42 @@
+package pkg;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import util.Coord;
+
+public class PathFinder {
+	
+	Map<Integer, Coord<?, ?>> cityCoordMap;
+	
+	
+	
+	public List<?> findPath(int start, int goal){
+		List<Object> myPath=null;
+		
+		return myPath;
+	} // public List<?> findPath(int start, int goal)
+	
+	
+	/**
+	 * @param goal
+	 * @param cityCoordMap
+	 * @return the map fill with heuristic distance for each node
+	 */
+	public Map<Integer, Float> makeHeuristic(int goal){
+		Coord<?, ?> goalCoord = cityCoordMap.get(goal);
+		Map<Integer, Float> heurysticMap = new HashMap<Integer, Float>();
+		int city;
+	    Coord<?, ?> coord;
+	    float distance;
+		for(Map.Entry<Integer, Coord<?, ?>> entry : cityCoordMap.entrySet()) {
+			city = entry.getKey();
+		    coord =  entry.getValue();
+		    distance = Calcul.getDistance(coord, goalCoord);
+		    heurysticMap.put(city, distance);
+		}
+		return heurysticMap; 		
+	} // public Map<Integer, Float> makeHeuristic(int goal, Map<Integer, Coord<?, ?>> cityCoordMap)
+	
+}

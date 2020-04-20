@@ -1,0 +1,28 @@
+package pkg;
+
+import java.util.List;
+
+public class Checker {
+
+	/**
+	 * @param path
+	 * @return if the path is valid, meaning are all edges taken existing
+	 */
+	public boolean isPathValid(List<?> path) {
+		return true;
+	} // public boolean isPathValid(List<?> path) 
+	
+	/**
+	 * @param path
+	 * @return the some of all edges taken by the path
+	 */
+	public float getPathCost (List<?> path) {
+		@SuppressWarnings("null")
+		float totalCost = (Float) null;
+		if (isPathValid(path)) {
+			
+		}
+		return totalCost;
+	}
+	
+}
