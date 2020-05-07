@@ -17,7 +17,7 @@ public class CreatFrame {
 		};
 		frame.addWindowListener(wa);
 		frame.getContentPane().add(component);
-		frame.getContentPane().addMouseListener(new ClickListener());
+		frame.getContentPane().addMouseListener(new ClickListener((PaintInterface) component));
 		frame.pack();
 		frame.setVisible(true);
 	}

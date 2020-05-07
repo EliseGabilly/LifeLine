@@ -96,7 +96,7 @@ public class TXTReader {
 	 * value : coord(x, y)
 	 */
 	public static Map<Integer, Coord<?, ?>> getCityCoord() {
-		String csvFile = "sandboxCoords.txt";
+		String csvFile = "Coordinates.txt";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\t";
@@ -118,7 +118,7 @@ public class TXTReader {
 					xFloat = x.floatValue();
 					y = format.parse(edge[1]);
 					yFloat = y.floatValue();
-					Coord<?, ?> coord = new Coord<Object, Object>(xFloat, yFloat);
+					Coord<?, ?> coord = new Coord<Object, Object>((xFloat/2)+100, (yFloat/3));
 
 					cityCoordMap.put(node, coord);
 				} catch (Exception e) {
@@ -195,7 +195,7 @@ public class TXTReader {
 	 * value : [name (string), code region(int)]
 	 */
 	public static Map<Integer, Object[]> getNames() {
-		String csvFile = "sandboxNames.txt";
+		String csvFile = "NamesXRegions.txt";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\t";
