@@ -51,6 +51,30 @@ public class Printer {
 		System.out.println("");
 	} // public void printWeightedAdjMap(Map<Integer, List<Adjacent<?, ?>>>
 		// weightedAdjMap)
+	
+	public static void printBasesMap(Map<Integer, String> basesMap) {
+		System.out.println("Printing base map");
+		int city;
+		String name;
+		for (Map.Entry<Integer, String> entry : basesMap.entrySet()) {
+			city = entry.getKey();
+			name = entry.getValue();
+			System.out.println(city + " : " +name);
+		}
+		System.out.println("");
+	} // public static void printBasesMap(Map<Integer, String> basesMap) 
+	
+	public static void printDataMap(Map<Integer, Object[]> basesMap) {
+		System.out.println("Printing data map");
+		int city;
+		Object[] data;
+		for (Map.Entry<Integer, Object[]> entry : basesMap.entrySet()) {
+			city = entry.getKey();
+			data = entry.getValue();
+			System.out.println(city + " : " +data[0]+", "+data[1]);
+		}
+		System.out.println("");
+	} // public static void printBasesMap(Map<Integer, String[]> namesMap) 
 
 	/**
 	 * @param heuristicMap
