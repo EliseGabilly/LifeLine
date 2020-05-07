@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import front.PrintPoints;
 import obj.Adjacent;
 import obj.Coord;
 import util.TXTReader;
@@ -37,6 +38,12 @@ public class Main {
     	Map<Integer, Object[]> regMap = TXTReader.getRegions();
     	if (Arrays.asList(args).contains("-pr") || Arrays.asList(args).contains("-printRegions"))
     		Printer.printDataMap(regMap);
+    	
+    	
+    	
+    	//call the interface
+    	
+    //	PrintPoints.mainIterface(cityCoordMap);
     	
     	// initialize list of cities we have to visit
     	int min = Collections.min(cityCoordMap.keySet());

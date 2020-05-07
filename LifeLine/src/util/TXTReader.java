@@ -28,7 +28,7 @@ public class TXTReader {
 		String csvFile = "sandboxAdjacency.txt";
 		BufferedReader br = null;
 		String line = "";
-		String cvsSplitBy = "\\t";
+		String cvsSplitBy = "\\s+";
 		int node1 = 0;
 		int node2 = 0;
 		Number weight = 0;
@@ -96,10 +96,10 @@ public class TXTReader {
 	 * value : coord(x, y)
 	 */
 	public static Map<Integer, Coord<?, ?>> getCityCoord() {
-		String csvFile = "sandboxCoords.txt";
+		String csvFile = "Coordinates.txt";
 		BufferedReader br = null;
 		String line = "";
-		String cvsSplitBy = "\\t";
+		String cvsSplitBy = "\\s+";
 		int node = 0;
 		Number x = 0;
 		Number y = 0;
@@ -118,7 +118,7 @@ public class TXTReader {
 					xFloat = x.floatValue();
 					y = format.parse(edge[1]);
 					yFloat = y.floatValue();
-					Coord<?, ?> coord = new Coord<Object, Object>(xFloat, yFloat);
+					Coord<?, ?> coord = new Coord<Object, Object>((xFloat/2)+100, (yFloat/3));
 
 					cityCoordMap.put(node, coord);
 				} catch (Exception e) {
@@ -152,7 +152,7 @@ public class TXTReader {
 		String csvFile = "sandboxBases.txt";
 		BufferedReader br = null;
 		String line = "";
-		String cvsSplitBy = "\\t";
+		String cvsSplitBy = "\\s+";
 		int node = 0;
 		String name = "";
 
@@ -195,10 +195,10 @@ public class TXTReader {
 	 * value : [name (string), code region(int)]
 	 */
 	public static Map<Integer, Object[]> getNames() {
-		String csvFile = "sandboxNames.txt";
+		String csvFile = "NamesXRegions.txt";
 		BufferedReader br = null;
 		String line = "";
-		String cvsSplitBy = "\\t";
+		String cvsSplitBy = "\\s+";
 		int node = 0;
 		String name = "";
 		int region = 0;
@@ -244,10 +244,10 @@ public class TXTReader {
 	 * value : [name (string), dencity (int)]
 	 */
 	public static Map<Integer, Object[]> getRegions() {
-		String csvFile = "sandboxRegions.txt";
+		String csvFile = "Table 5 - Regions.txt";
 		BufferedReader br = null;
 		String line = "";
-		String cvsSplitBy = "\\t";
+		String cvsSplitBy = "\\s+";
 		int node = 0;
 		String name = "";
 		int dencity = 0;
