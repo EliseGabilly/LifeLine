@@ -9,7 +9,7 @@ import java.util.Random;
 
 import obj.Adjacent;
 import obj.Coord;
-import util.CSVReader;
+import util.TXTReader;
 import util.Printer;
 
 public class Main {
@@ -22,12 +22,21 @@ public class Main {
     	savedArgs=args;
     	
     	// read BDD
-    	Map<Integer, Coord<?, ?>> cityCoordMap = CSVReader.getCityCoord();
+    	Map<Integer, Coord<?, ?>> cityCoordMap = TXTReader.getCityCoord();
     	if (Arrays.asList(args).contains("-pn") || Arrays.asList(args).contains("-printNode"))
     		Printer.printCityCoordMap(cityCoordMap);
-    	Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap = CSVReader.getWeitedAdj();
+    	Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap = TXTReader.getWeitedAdj();
     	if (Arrays.asList(args).contains("-pe") || Arrays.asList(args).contains("-printEdge"))
     		Printer.printWeightedAdjMap(weightedAdjMap);
+    	Map<Integer, String> basesMap = TXTReader.getBase();
+    	if (Arrays.asList(args).contains("-pb") || Arrays.asList(args).contains("-printBases"))
+    		Printer.printBasesMap(basesMap);
+    	Map<Integer, Object[]> namesMap = TXTReader.getNames();
+    	if (Arrays.asList(args).contains("-pna") || Arrays.asList(args).contains("-printNames"))
+    		Printer.printDataMap(namesMap);
+    	Map<Integer, Object[]> regMap = TXTReader.getRegions();
+    	if (Arrays.asList(args).contains("-pr") || Arrays.asList(args).contains("-printRegions"))
+    		Printer.printDataMap(regMap);
     	
     	// initialize list of cities we have to visit
     	int min = Collections.min(cityCoordMap.keySet());
