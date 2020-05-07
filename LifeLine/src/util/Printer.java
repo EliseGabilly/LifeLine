@@ -8,7 +8,7 @@ import obj.Adjacent;
 import obj.Coord;
 import pkg.Calcul;
 import pkg.Main;
-import pkg.PathFinder;
+import pkg.PathFinder_AStar;
 
 public class Printer {
 
@@ -92,7 +92,7 @@ public class Printer {
 		System.out.println("");
 	} // public void printCityCoordMap(Map<Integer, Coord<?, ?>> cityCoordMap )
 
-	public static void printPathData(List<Integer> path, PathFinder pFinder) {
+	public static void printPathData(List<Integer> path, PathFinder_AStar pFinder) {
 		System.out.print(path);
 		float cost = Calcul.getCost(path, pFinder.getWeightedAdjMap());
 		System.out.println(" -> cost : " + cost);

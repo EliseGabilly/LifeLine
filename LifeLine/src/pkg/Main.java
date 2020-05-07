@@ -31,6 +31,7 @@ public class Main {
     	Map<Integer, String> basesMap = TXTReader.getBase();
     	if (Arrays.asList(args).contains("-pb") || Arrays.asList(args).contains("-printBases"))
     		Printer.printBasesMap(basesMap);
+    	List<Integer> basesList = new ArrayList<>(basesMap.keySet());
     	Map<Integer, Object[]> namesMap = TXTReader.getNames();
     	if (Arrays.asList(args).contains("-pna") || Arrays.asList(args).contains("-printNames"))
     		Printer.printDataMap(namesMap);
@@ -43,17 +44,21 @@ public class Main {
     	int max = Collections.max(cityCoordMap.keySet());
     	Random rn = new Random();
     	List<Integer> nodeRequierment = new ArrayList<Integer>();
-    	for (int i=0; i<3; i++) {
-    		nodeRequierment.add(rn.nextInt(max - min + 1) + min);
+    	int n;
+    	while(nodeRequierment.size()<3) {
+    		n=rn.nextInt(max - min + 1) + min;
+    		if(!nodeRequierment.contains(n) && !basesList.contains(n)) {
+        		nodeRequierment.add(n);	
+    		}
     	}
-    	int mainCity = rn.nextInt(max - min + 1) + min; // we start and end in the same city
 
     	// launch the path optimizer
-    	//TODO define main city
-    	//TODO total cost
-    	PathOptimizer myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap);
-    	myPathOptimizer.findPath(nodeRequierment, mainCity);
-//    	List<Integer> fullPath = myPathOptimizer.findPath(nodeRequierment, mainCity);
+    	PathOptimizer myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
+    	List<Integer> fullPath = myPathOptimizer.findPath(nodeRequierment);
+    	//TODO choose methode & change initialization of map etc.
+		System.out.println("");
+		System.out.println("Final path : " + fullPath);
+		System.out.println("Cost : " + Calcul.getCost(fullPath, weightedAdjMap));
 
         
     }

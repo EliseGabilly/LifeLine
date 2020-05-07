@@ -14,28 +14,32 @@ public class PathOptimizer {
 
 	Map<Integer, Coord<?, ?>> cityCoordMap;
 	Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap;
+	List<Integer> basesList;
+	Map<Integer, Integer> closetBaseList = new HashMap<Integer, Integer>();
 	Map<Integer, List<Adjacent<?, ?>>> neededWeightedAdjMap = new HashMap<Integer, List<Adjacent<?, ?>>>();
 	List<List<Integer>> thePath = new ArrayList<List<Integer>>(); // all of sub path
-	List<Integer> nodeRequired;
 
-	public PathOptimizer(Map<Integer, Coord<?, ?>> cityCoordMap, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) {
+	public PathOptimizer(Map<Integer, Coord<?, ?>> cityCoordMap, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap,
+			List<Integer> basesList) {
 		this.cityCoordMap = cityCoordMap;
 		this.weightedAdjMap = weightedAdjMap;
+		this.basesList = basesList;
 	}
 
-	public List<Integer> findPath(List<Integer> nodeRequired, int mainCity) {
-		System.out.print("Main city : " + mainCity);
-		System.out.println("   node requierd : " + nodeRequired);
+	public List<Integer> findPath(List<Integer> nodeRequired) {
+		System.out.print("Node requierd : " + nodeRequired);
 		List<Integer> subPath; // path between two needed cities
 
 		// make neededWeightedAdjMap
-		makeNeededWeightedAdjMap(nodeRequired, mainCity);
+		makeNeededWeightedAdjMap(nodeRequired);
+		// make closetBase map
+		initClosetBases(nodeRequired);
 		// get the path to use with main city at the end and the beginning
-		List<Integer> sortedNodeRequired = sortNeededCities(nodeRequired, mainCity);
+		List<Integer> sortedNodeRequired = sortNeededCities(nodeRequired);
 
 		// find path between each needed cities
-		System.out.println("Finding all sub path for "+sortedNodeRequired);
-		PathFinder myPathFinder = new PathFinder(cityCoordMap, weightedAdjMap);
+		System.out.println("Finding all sub path for " + sortedNodeRequired);
+		PathFinder_AStar myPathFinder = new PathFinder_AStar(cityCoordMap, weightedAdjMap);
 		int start;
 		int end;
 		for (int i = 0; i < sortedNodeRequired.size() - 1; i++) {
@@ -47,15 +51,34 @@ public class PathOptimizer {
 		}
 
 		List<Integer> flatPath = flatenThePath(thePath);
-		System.out.println("");
-		System.out.println("Final path : "+flatPath);
-		System.out.println("Cost : "+Calcul.getCost(flatPath, weightedAdjMap));
 		return flatPath;
 	}
 
-	private void makeNeededWeightedAdjMap(List<Integer> nodeRequired, int mainCity) {
+	private void initClosetBases(List<Integer> nodeRequiered) {
+		float weight;
+		float minWeight = (float) Double.MAX_VALUE;
+		int minBase = 0;
+
+		for (Integer oneNode : nodeRequiered) {
+			for (Integer aNode : basesList) {
+				weight = Calcul.getDistance(cityCoordMap.get(oneNode), cityCoordMap.get(aNode));
+				if (weight < minWeight) {
+					minBase = aNode;
+					minWeight = weight;
+				}
+			}
+			closetBaseList.put(oneNode, minBase);
+		}
+	}
+
+	/**
+	 * initialize the adgency between all requierd node
+	 * 
+	 * @param nodeRequired
+	 */
+	private void makeNeededWeightedAdjMap(List<Integer> nodeRequired) {
 		List<Integer> allNode = new ArrayList<Integer>(nodeRequired);
-		allNode.add(mainCity);
+		allNode.addAll(basesList);
 		LinkedHashSet<Integer> hashSet = new LinkedHashSet<>(allNode);
 		allNode = new ArrayList<>(hashSet);
 
@@ -74,6 +97,9 @@ public class PathOptimizer {
 
 	}
 
+	/**
+	 * from List<List<Integer>> to List<Integer>
+	 */
 	private List<Integer> flatenThePath(List<List<Integer>> thePath) {
 		List<Integer> flatPath = new ArrayList<Integer>();
 		flatPath.add(thePath.get(0).get(0));
@@ -89,10 +115,10 @@ public class PathOptimizer {
 	 * @param nodeRequired
 	 * @return
 	 */
-	private List<Integer> sortNeededCities(List<Integer> nodeRequired, int mainCity) {
+	private List<Integer> sortNeededCities(List<Integer> nodeRequired) {
 		List<Integer> sortedPath = new ArrayList<Integer>();
 		if (nodeRequired.size() < 5) {
-			sortedPath = sortFewNeededCities(nodeRequired, mainCity);
+			sortedPath = sortFewNeededCities(nodeRequired);
 		} else {
 			sortManyNeededCities(nodeRequired);
 		}
@@ -105,21 +131,28 @@ public class PathOptimizer {
 	 * @param nodeRequired
 	 * @return
 	 */
-	private List<Integer> sortFewNeededCities(List<Integer> nodeRequired, int mainCity) {
+	private List<Integer> sortFewNeededCities(List<Integer> nodeRequired) {
 		System.out.println("");
 		System.out.println("Cheking all path : ");
 		// get all path possible
 		List<List<Integer>> permutationPath = permute(nodeRequired);
 		// get the cheapest path
-		List<Integer> cheapestPermutation = new ArrayList<Integer>(); 
+		List<Integer> cheapestPermutation = new ArrayList<Integer>();
 		float cheapestCost = (float) Double.POSITIVE_INFINITY;
 
 		List<Integer> testPermutation;
 		float testCost;
+		int closetBase;
 		for (List<Integer> onePath : permutationPath) {
 			testPermutation = onePath;
-			testPermutation.add(mainCity);
-			testPermutation.add(0, mainCity); // add main city at the begining and the end
+			System.out.print(testPermutation + " -> ");
+			// add closet base from the first city
+			closetBase = closetBaseList.get(testPermutation.get(0));
+			testPermutation.add(0, closetBase);
+			// add closet base from the last city
+			closetBase = closetBaseList.get(testPermutation.get(testPermutation.size() - 1));
+			testPermutation.add(closetBase);
+
 			testCost = Calcul.getCost(testPermutation, neededWeightedAdjMap);
 			System.out.println(testPermutation + " for " + testCost);
 			if (testCost < cheapestCost) {
@@ -158,6 +191,7 @@ public class PathOptimizer {
 	 */
 	private List<Integer> sortManyNeededCities(List<Integer> nodeRequired) {
 		System.out.println("Not implamented yet : sortManyNeededCities ");
+		System.out.println("Complexity of n!");
 		return null;
 	}
 

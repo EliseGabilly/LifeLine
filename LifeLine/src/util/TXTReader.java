@@ -69,7 +69,7 @@ public class TXTReader {
 						weitedAdjMap.put(node2, newAdjList);
 					}
 				} catch (Exception e) {
-					System.out.println("Ligne vide ou titre");
+//					System.out.println("Ligne vide ou titre");
 				}
 			}
 
@@ -122,7 +122,7 @@ public class TXTReader {
 
 					cityCoordMap.put(node, coord);
 				} catch (Exception e) {
-					System.out.println("Ligne vide ou titre");
+//					System.out.println("Ligne vide ou titre");
 				}
 			}
 
@@ -168,7 +168,7 @@ public class TXTReader {
 					basesMap.put(node, name);
 
 				} catch (Exception e) {
-					System.out.println("Ligne vide ou titre");
+//					System.out.println("Ligne vide ou titre");
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -218,7 +218,7 @@ public class TXTReader {
 					namesMap.put(node, data);
 
 				} catch (Exception e) {
-					System.out.println("Ligne vide ou titre");
+//					System.out.println("Ligne vide ou titre");
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -267,7 +267,7 @@ public class TXTReader {
 					namesMap.put(node, data);
 
 				} catch (Exception e) {
-					System.out.println("Ligne vide ou titre");
+//					System.out.println("Ligne vide ou titre");
 				}
 			}
 		} catch (FileNotFoundException e) {
