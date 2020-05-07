@@ -9,7 +9,7 @@ import java.util.Random;
 
 import obj.Adjacent;
 import obj.Coord;
-import util.CSVReader;
+import util.TXTReader;
 import util.Printer;
 
 public class Main {
@@ -22,10 +22,10 @@ public class Main {
     	savedArgs=args;
     	
     	// read BDD
-    	Map<Integer, Coord<?, ?>> cityCoordMap = CSVReader.getCityCoord();
+    	Map<Integer, Coord<?, ?>> cityCoordMap = TXTReader.getCityCoord();
     	if (Arrays.asList(args).contains("-pn") || Arrays.asList(args).contains("-printNode"))
     		Printer.printCityCoordMap(cityCoordMap);
-    	Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap = CSVReader.getWeitedAdj();
+    	Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap = TXTReader.getWeitedAdj();
     	if (Arrays.asList(args).contains("-pe") || Arrays.asList(args).contains("-printEdge"))
     		Printer.printWeightedAdjMap(weightedAdjMap);
     	

@@ -26,3 +26,4 @@ hs_err_pid*
 .metadata/.*
 .metadata/defender.check
 .metadata/version.ini
+*.txt

@@ -16,7 +16,7 @@ import java.util.Map;
 import obj.Adjacent;
 import obj.Coord;
 
-public class CSVReader {
+public class TXTReader {
 	static NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
 
 	public static Map<Integer, List<Adjacent<?, ?>>> getWeitedAdj() {
@@ -127,6 +127,45 @@ public class CSVReader {
 			}
 		}
 		return cityCoordMap;
+	} // public static void getCityCoord ()
+
+	public static Map<Integer, String> getBase() {
+		String csvFile = "sandboxBases.txt";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = "\\t";
+		int node = 0;
+		String name = "";
+
+		Map<Integer, String> basesMap = new HashMap<Integer, String>();
+
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+				try {
+					String[] edge = line.split(cvsSplitBy);
+					node = Integer.parseInt(edge[0]);
+					name=edge[1];
+					basesMap.put(node, name);	
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return basesMap;
 	} // public static void getCityCoord ()
 
 }
