@@ -1,8 +1,10 @@
 package front;
 
+import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
@@ -15,6 +17,8 @@ public class CreatFrame {
 				System.exit(0);
 			}
 		};
+		
+		
 		frame.addWindowListener(wa);
 		frame.getContentPane().add(component);
 		frame.getContentPane().addMouseListener(new ClickListener((PaintInterface) component));
