@@ -10,16 +10,26 @@ import javax.swing.JFrame;
 
 public class CreatFrame {
 	
-	public static void showOnFrame(JComponent component, String frameName) {
+	public static void showOnFrame(JComponent component, String frameName, Boolean isSmallMap) {
 		JFrame frame = new JFrame(frameName);
-		WindowAdapter wa = new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
+		
+			if(!isSmallMap) {
+				WindowAdapter wa = new WindowAdapter() {
+					public void windowClosing(WindowEvent e) {
+						System.exit(0);
+					}
+					
+				};
+				frame.addWindowListener(wa);
+			}else {
+				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
-		};
 		
 		
-		frame.addWindowListener(wa);
+		
+		
+		
+		
 		frame.getContentPane().add(component);
 		frame.getContentPane().addMouseListener(new ClickListener((PaintInterface) component));
 		frame.pack();

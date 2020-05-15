@@ -42,10 +42,13 @@ public class PaintInterface extends JPanel{
 				
 				x=(int) cityCoordMap.get(number).getX();
 				y=(int) cityCoordMap.get(number).getY();
+				Color color = new Color(168, 86, 69);
 				
+				if(namesXRegions!=null) {
+					region = (int) namesXRegions.get(number)[1];
+					color = PrintPoints.chooseColor(region);
+				}
 				
-				region = (int) namesXRegions.get(number)[1];
-				Color color = PrintPoints.chooseColor(region);
 				
 				g.setColor(color);
 				g.fillRect(x, y, width, width);	

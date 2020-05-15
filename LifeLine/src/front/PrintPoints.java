@@ -52,7 +52,13 @@ public class PrintPoints implements ActionListener {
     		JButton button = new JButton(name);
 	    	
     		button.setBounds(btnX,btnY,150,30);
-    		//button.addActionListener(this);
+    		button.addActionListener(new ActionListener() { 
+    			  public void actionPerformed(ActionEvent e) { 
+    				  List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(key,namesMap);
+    				  Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,cityCoordMap);
+    				 ByRegion.createFrameForRegion(name, regionCoordsMap);
+    			  } 
+    			} );
 	    	
 	    	
 	    	button.setBackground(chooseColor(key));
@@ -71,7 +77,7 @@ public class PrintPoints implements ActionListener {
     	jc.namesXRegions = namesMap;
     	jc.regions = regMap;
     	
-		CreatFrame.showOnFrame(jc,"LifeLine");
+		CreatFrame.showOnFrame(jc,"LifeLine", false);
  
 	}
 	
