@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import front.PrintPoints;
+import front.CreateInterface;
 import obj.Adjacent;
 import obj.Coord;
 import util.TXTReader;
