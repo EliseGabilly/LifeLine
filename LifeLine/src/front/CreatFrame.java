@@ -10,6 +10,14 @@ import obj.Plan;
 
 public class CreatFrame {
 	
+	/**
+	 * Create and show the frame
+	 * Add the on close event : stop program or go bakc to the entire Rwanda maps parameters
+	 * @param component
+	 * @param frameName
+	 * @param isSmallMap
+	 * @param plan
+	 */
 	public static void showOnFrame(JComponent component, String frameName, Boolean isSmallMap, Plan plan) {
 		JFrame frame = new JFrame(frameName);
 		WindowAdapter wa;
@@ -27,7 +35,7 @@ public class CreatFrame {
 				wa = new WindowAdapter() {
 					public void windowClosing(WindowEvent e) {
 						PaintInterface.idRegion=12;
-						ClickListener.currentMap = PrintPoints.regionInfo.get(12);
+						ClickListener.currentMap = CreateInterface.regionInfo.get(12);
 					}
 				};
 			}

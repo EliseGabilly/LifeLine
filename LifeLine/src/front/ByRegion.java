@@ -50,7 +50,13 @@ public class ByRegion {
 			}
 			return regionCoordsMap;
 		}
-	
+	/**
+	 * Create the frame for only one region --> dimension, adjuste coords, create Plan for the selected region
+	 * @param name
+	 * @param regionCoordsMap
+	 * @param key
+	 * @return
+	 */
 	public static Plan createFrameForRegion(String name, Map<Integer, Coord<?, ?>> regionCoordsMap, int key) {
 		
 		Plan plan = new Plan();
@@ -59,8 +65,8 @@ public class ByRegion {
 		regionInterface.setBackground(Color.WHITE);
 		regionInterface.setLayout(null);
 		plan.setCityCoordMap(regionCoordsMap);
-		adjustRegionCoordMap=PrintPoints.adjustOnFrame(plan);
-		int[] dimensionRegion = PrintPoints.getDimension(adjustRegionCoordMap);
+		adjustRegionCoordMap=CreateInterface.adjustOnFrame(plan);
+		int[] dimensionRegion = CreateInterface.getDimension(adjustRegionCoordMap);
 		
 		Map<Integer, Boolean> selectedTown = new HashMap<>();
 		Map<Integer, TownInterface<?, ?>> rectMap = plan.getRectCoordMap();
@@ -91,20 +97,25 @@ public class ByRegion {
 		return plan;
 	}
 	
+	/**
+	 * Create the Plan object for the region without creating the frame --> adjust coords, dimension, maps to click on town
+	 * @param selectedTownInRegion
+	 * @param region
+	 * @return
+	 */
+public static Plan createARegion(Map<Integer, Boolean> selectedTownInRegion, int region) {
 	
-public static Plan createForRegion(Map<Integer, Boolean> selectedTownInRegion, int region) {
-	
-		String name = (String) PrintPoints.regMap.get(region)[0];
-		List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(region,PrintPoints.namesMap);
-		Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,PrintPoints.cityCoordMap);
+		String name = (String) CreateInterface.regMap.get(region)[0];
+		List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(region,CreateInterface.namesMap);
+		Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,CreateInterface.cityCoordMap);
 		
 		Plan plan = new Plan();
 		Map<Integer, Coord<?, ?>> adjustRegionCoordMap = new HashMap<>();
 		
 		
 		plan.setCityCoordMap(regionCoordsMap);
-		adjustRegionCoordMap=PrintPoints.adjustOnFrame(plan);
-		int[] dimensionRegion = PrintPoints.getDimension(adjustRegionCoordMap);
+		adjustRegionCoordMap=CreateInterface.adjustOnFrame(plan);
+		int[] dimensionRegion = CreateInterface.getDimension(adjustRegionCoordMap);
 		
 		Map<Integer, TownInterface<?, ?>> rectMap = plan.getRectCoordMap();
 		plan = new Plan(name,region,selectedTownInRegion, adjustRegionCoordMap, dimensionRegion,rectMap ); 
@@ -113,7 +124,11 @@ public static Plan createForRegion(Map<Integer, Boolean> selectedTownInRegion, i
 	}
 	
 	
-	
+	/**
+	 * create a frame for a region that already have the Plan made
+	 * @param plan
+	 * @return
+	 */
 public static Plan recreateFrame(Plan plan) {
 		
 		regionInterface.setBackground(Color.WHITE);

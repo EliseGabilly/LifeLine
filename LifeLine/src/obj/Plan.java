@@ -1,6 +1,5 @@
 package obj;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Plan {
@@ -29,8 +28,6 @@ public class Plan {
 		this.rectCoordMap = rectCoordMap;
 	}
 
-
-
 	public void setCityCoordMap(Map<Integer, Coord<?, ?>> cityCoordMap) {
 		this.cityCoordMap = cityCoordMap;
 	}
@@ -50,8 +47,6 @@ public class Plan {
 	public Map<Integer, Coord<?, ?>> getCityCoordMap() {
 		return cityCoordMap;
 	}
-	
-
 	
 	public Map<Integer, TownInterface<?, ?>> getRectCoordMap() {
 		return rectCoordMap;
