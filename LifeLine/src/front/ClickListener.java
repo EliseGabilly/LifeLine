@@ -7,16 +7,19 @@ import java.util.List;
 import java.util.Map;
 
 import obj.Coord;
+import obj.Plan;
 import obj.TownInterface;
 
 public class ClickListener extends MouseAdapter {
 	
 	private PaintInterface panel;
 	private static int key;
+	private Plan plan; 
 	
-	public ClickListener(PaintInterface panel) {
+	public ClickListener(PaintInterface panel, Plan plan) {
 		super();
 		this.panel = panel;
+		this.plan =plan;
 	}
 
 	@Override
@@ -24,7 +27,7 @@ public class ClickListener extends MouseAdapter {
 		Boolean toBeAdd = getNode(e.getX(),e.getY());
 		
 		if(toBeAdd) {
-			panel.addTown(key);
+			panel.addTown(key, plan);
 		}	
 	}
 	

@@ -1,37 +1,42 @@
 package front;
 
-import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import obj.Plan;
+
 public class CreatFrame {
 	
-	public static void showOnFrame(JComponent component, String frameName, Boolean isSmallMap) {
+	public static void showOnFrame(JComponent component, String frameName, Boolean isSmallMap, Plan plan) {
 		JFrame frame = new JFrame(frameName);
+		WindowAdapter wa;
 		
 			if(!isSmallMap) {
-				WindowAdapter wa = new WindowAdapter() {
+				 wa = new WindowAdapter() {
 					public void windowClosing(WindowEvent e) {
 						System.exit(0);
 					}
 					
 				};
-				frame.addWindowListener(wa);
+				
+				
 			}else {
-				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				wa = new WindowAdapter() {
+					public void windowClosing(WindowEvent e) {
+						PaintInterface.idRegion=12;
+					}
+				};
 			}
 		
 		
 		
 		
-		
-		
+		frame.addWindowListener(wa);
 		frame.getContentPane().add(component);
-		frame.getContentPane().addMouseListener(new ClickListener((PaintInterface) component));
+		frame.getContentPane().addMouseListener(new ClickListener((PaintInterface) component,plan));
 		frame.pack();
 		frame.setVisible(true);
 	}

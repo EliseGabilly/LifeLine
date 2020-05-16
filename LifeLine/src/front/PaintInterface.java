@@ -2,6 +2,8 @@ package front;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -10,62 +12,104 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import obj.Coord;
+import obj.Plan;
 import obj.TownInterface;
 
 public class PaintInterface extends JPanel{
 	
-	Map<Integer, Coord<?, ?>> cityCoordMap ;
+	static boolean forEntireMap =true;	
+	static int idRegion =12;
+	//Map<Integer, Coord<?, ?>> cityCoordMap;
 	Map<Integer, Object[]> namesXRegions ;
 	Map<Integer, Object[]> regions ;
 
 	private static final long serialVersionUID = 1L;
 	
-	private List<int[]> towns = new LinkedList<>();
+	//private List<int[]> townsAllCountry = new LinkedList<>();
 	public static int width = 10;
+	
+	public void paintEntireMap(Graphics g) {
+		
+		super.paint(g);
+		
+		Color c = g.getColor();
+		g.setColor(c);
+		
+
+		Plan currentMap = PrintPoints.regionInfo.get(idRegion);
+		Map<Integer, Coord<?, ?>> cityCoordMap = currentMap.getCityCoordMap();
+		Map<Integer, Boolean> selectedTown = currentMap.getSelectedTown();
+		List<int[]> listOfSelectedTown = new LinkedList<>();
+		
+		int x;
+		int y;
+		int region;
+		
+		for(int number:cityCoordMap.keySet()) {
+			
+			x=(int) cityCoordMap.get(number).getX();
+			y=(int) cityCoordMap.get(number).getY();
+			Color color = new Color(168, 86, 69);
+			
+			if(namesXRegions!=null) {
+				region = (int) namesXRegions.get(number)[1];
+				color = PrintPoints.chooseColor(region);
+			}
+			
+			
+			g.setColor(color);
+			g.fillRect(x, y, width, width);	
+		}
+		for(int key : selectedTown.keySet()) {
+			if(selectedTown.get(key)) {
+				
+				int[] coords = completeList(key, cityCoordMap);
+				g.setColor(Color.red);
+				g.fillRect(coords[0], coords[1], width, width);
+			}
+		}
+		
+		
+		
+		
+		
+	}
 
 
 	@Override
 	public void paint(Graphics g) {
-			
-		super.paint(g);
-		Color c = g.getColor();
-		g.setColor(c);
 		
-		
-			super.paint(g);
+			paintEntireMap(g);
 	
-			int x;
-			int y;
-			int region;
-			
-			for(int number:cityCoordMap.keySet()) {
-				
-				x=(int) cityCoordMap.get(number).getX();
-				y=(int) cityCoordMap.get(number).getY();
-				Color color = new Color(168, 86, 69);
-				
-				if(namesXRegions!=null) {
-					region = (int) namesXRegions.get(number)[1];
-					color = PrintPoints.chooseColor(region);
-				}
-				
-				
-				g.setColor(color);
-				g.fillRect(x, y, width, width);	
-			}
-			for(int[] town : towns) {
-				g.setColor(Color.red);
-				g.fillRect(town[0], town[1], width, width);
-			}
+		
+		
+
 	}
 	
 	
-	public void addTown(int key) {
+	public void addTown(int key, Plan plan) {
+		Map<Integer, Boolean> selectedTown = plan.getSelectedTown();
+		if(selectedTown!=null && !selectedTown.isEmpty()&&selectedTown.containsKey(key)) {
+			//townsAllCountry.add(coords);
+			if(!selectedTown.get(key)) {
+				selectedTown.put(key,true);
+			}else {
+				selectedTown.put(key,false);
+			}
+		}else {
+			selectedTown.put(key,true);
+		}
+		
+		this.repaint();
+
+	}
+	
+	public int[] completeList(int key, Map<Integer, Coord<?, ?>> cityCoordMap) {
 		int x=(int) cityCoordMap.get(key).getX();
 		int y=(int) cityCoordMap.get(key).getY();
 		int[] coords = {x, y};
-		towns.add(coords);
-		this.repaint();
+
+		return coords;
 	}
 
 

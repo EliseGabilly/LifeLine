@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.swing.JButton;
 
 import obj.Coord;
+import obj.Plan;
 
 public class ByRegion {
 	
@@ -54,19 +55,22 @@ public class ByRegion {
 			return regionCoordsMap;
 		}
 	
-	public static void createFrameForRegion(String name, Map<Integer, Coord<?, ?>> regionCoordsMap) {
+	public static Plan createFrameForRegion(String name, Map<Integer, Coord<?, ?>> regionCoordsMap, int key) {
 		
-		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
+		Map<Integer, Coord<?, ?>> adjustRegionCoordMap = new HashMap<>();
 		
 		regionInterface.setBackground(Color.WHITE);
 		regionInterface.setLayout(null);
 		
-		adjustCityCoordMap=PrintPoints.adjustOnFrame(regionCoordsMap);
-		int[] dimension = PrintPoints.getDimension(adjustCityCoordMap);
+		adjustRegionCoordMap=PrintPoints.adjustOnFrame(regionCoordsMap);
+		int[] dimensionRegion = PrintPoints.getDimension(adjustRegionCoordMap);
 		
+		 Map<Integer, Boolean> selectedTown = new HashMap<>();
+		  Plan plan = new Plan(name,key,selectedTown, adjustRegionCoordMap, dimensionRegion ); 
 		
-		regionInterface.setPreferredSize(new Dimension(dimension[0],dimension[1]+100));
-		regionInterface.cityCoordMap = adjustCityCoordMap;
+		//regionInterface.selectedTown=PrintPoints.jc.selectedTown;
+		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]+100));
+		//regionInterface.cityCoordMap = adjustRegionCoordMap;
 		
 		//TODO
 		/*
@@ -85,8 +89,10 @@ public class ByRegion {
     	regionInterface.add(goOnMainPageBtn);*/
 	
 		
-    	
-		CreatFrame.showOnFrame(regionInterface,name, true);
+		PaintInterface.forEntireMap = false;
+		PaintInterface.idRegion=key;
+		CreatFrame.showOnFrame(regionInterface,name, true, plan);
+		return plan;
 	}
 
 }

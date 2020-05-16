@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
+import obj.Plan;
 import obj.Coord;
 import obj.TownInterface;
 import util.Printer;
@@ -26,20 +27,23 @@ public class PrintPoints implements ActionListener {
 	public static Map<Integer, TownInterface<?, ?>> rectCoordMap = new HashMap<Integer, TownInterface<?, ?>>(); //maps to verify if the click is inside a rectangle
 
 	static PaintInterface jc = new PaintInterface();
+	static Map<Integer, Plan> regionInfo = new HashMap<>();
+	//private static Map<Integer, Boolean> selectedTown; 
+	private static Plan regionMap = new Plan();
 	
 	
 	public static  void mainIterface(Map<Integer, Coord<?, ?>> cityCoordMap, Map<Integer, Object[]> namesMap, Map<Integer, Object[]> regMap ) {
-			
+		
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
-	
+
     	jc.setBackground(Color.WHITE);
     	jc.setLayout(null);
     	
     	adjustCityCoordMap=adjustOnFrame(cityCoordMap);
-    	int[] dimension = getDimension(adjustCityCoordMap);
+    	int[] dimensionCountry = getDimension(adjustCityCoordMap);
     	
     	int btnX=300;
-    	int btnY= dimension[1];
+    	int btnY= dimensionCountry[1];
     	
     	JTextArea area=new JTextArea("Zoom on a region: "); 
     	
@@ -50,13 +54,19 @@ public class PrintPoints implements ActionListener {
     	for(int key :regMap.keySet() ) {
     		String name = (String) regMap.get(key)[0];
     		JButton button = new JButton(name);
-	    	
+    		Map<Integer, Boolean> selectedTown = new HashMap<>();
+    		
+    		 List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(key,namesMap);
+			 Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,cityCoordMap);
+    		 
+    		
     		button.setBounds(btnX,btnY,150,30);
     		button.addActionListener(new ActionListener() { 
     			  public void actionPerformed(ActionEvent e) { 
-    				  List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(key,namesMap);
-    				  Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,cityCoordMap);
-    				 ByRegion.createFrameForRegion(name, regionCoordsMap);
+
+    				 regionMap = ByRegion.createFrameForRegion(name, regionCoordsMap, key);
+    				 regionInfo.put(key, regionMap);
+    				 
     			  } 
     			} );
 	    	
@@ -69,15 +79,16 @@ public class PrintPoints implements ActionListener {
 	    	}
 	    	jc.add(button);
     	}
-    	
-	    	
+    	Map<Integer, Boolean> selectedTown = new HashMap<>();
+    	Plan forEntireMap = new Plan("All",12, selectedTown,adjustCityCoordMap, dimensionCountry);
+    	regionInfo.put(12,forEntireMap);
     	jc.add(area);
-		jc.setPreferredSize(new Dimension(dimension[0],dimension[1]+100));
-    	jc.cityCoordMap = adjustCityCoordMap;
+		jc.setPreferredSize(new Dimension(dimensionCountry[0],dimensionCountry[1]+100));
+    	//jc.cityCoordMap = adjustCityCoordMap;
     	jc.namesXRegions = namesMap;
     	jc.regions = regMap;
     	
-		CreatFrame.showOnFrame(jc,"LifeLine", false);
+		CreatFrame.showOnFrame(jc,"LifeLine", false, forEntireMap);
  
 	}
 	
