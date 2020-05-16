@@ -2,11 +2,9 @@ package front;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -24,11 +22,12 @@ import util.TXTReader;
 public class PrintPoints implements ActionListener {
 	
 	
-	//public static Map<Integer, TownInterface<?, ?>> rectCoordMap = new HashMap<Integer, TownInterface<?, ?>>(); //maps to verify if the click is inside a rectangle
-
+	public static Map<Integer, Coord<?, ?>> cityCoordMap;
+	public static Map<Integer, Object[]> namesMap;
+	public static Map<Integer, Object[]> regMap;
+	
 	static PaintInterface jc = new PaintInterface();
-	static Map<Integer, Plan> regionInfo = new HashMap<>();
-	//private static Map<Integer, Boolean> selectedTown; 
+	static Map<Integer, Plan> regionInfo = new HashMap<>(); 
 	private static Plan regionMap = new Plan();
 	
 	
@@ -52,10 +51,20 @@ public class PrintPoints implements ActionListener {
     	area.setFont(area.getFont().deriveFont(25f));
     	area.setEnabled(false);
     	
+    	JButton refreshBtn = new JButton("Refresh");
+    	refreshBtn.setBounds(btnX,btnY-50,150,30);
+    	refreshBtn.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+
+				jc.repaint();
+				 
+			  } 
+			} );
+    	
+    	
     	for(int key :regMap.keySet() ) {
     		String name = (String) regMap.get(key)[0];
     		JButton button = new JButton(name);
-    		Map<Integer, Boolean> selectedTown = new HashMap<>();
     		
     		 List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(key,namesMap);
 			 Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,cityCoordMap);
@@ -64,10 +73,13 @@ public class PrintPoints implements ActionListener {
     		button.setBounds(btnX,btnY,150,30);
     		button.addActionListener(new ActionListener() { 
     			  public void actionPerformed(ActionEvent e) { 
-
-    				 regionMap = ByRegion.createFrameForRegion(name, regionCoordsMap, key);
-    				 regionInfo.put(key, regionMap);
-    				 
+    				  if(regionInfo.containsKey(key)) {
+    					  ByRegion.recreateFrame(regionInfo.get(key));
+    				  }else {
+    					  regionMap = ByRegion.createFrameForRegion(name, regionCoordsMap, key);
+    	    			  regionInfo.put(key, regionMap);
+    				  }
+ 
     			  } 
     			} );
 	    	
@@ -85,8 +97,8 @@ public class PrintPoints implements ActionListener {
     	forEntireMap = new Plan("All",12, selectedTown,adjustCityCoordMap, dimensionCountry, rectMap);
     	regionInfo.put(12,forEntireMap);
     	jc.add(area);
+    	jc.add(refreshBtn);
 		jc.setPreferredSize(new Dimension(dimensionCountry[0],dimensionCountry[1]+100));
-    	//jc.cityCoordMap = adjustCityCoordMap;
     	jc.namesXRegions = namesMap;
     	jc.regions = regMap;
     	
@@ -98,15 +110,12 @@ public class PrintPoints implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		jc.setBackground(Color.black);
 		
 	}
 	
 	
-	
-	
-	
+
 	public static int[] getDimension(Map<Integer, Coord<?, ?>> cityCoordMap) {
 		int x=0;
     	int y=0;
@@ -226,17 +235,19 @@ public class PrintPoints implements ActionListener {
 	
 	public static void main(String[] args) {
 		//lecture de la bdd qui a terme sera dans le main de Elise
-				Map<Integer, Coord<?, ?>> cityCoordMap = TXTReader.getCityCoord();
+				cityCoordMap = TXTReader.getCityCoord();
 		    	if (Arrays.asList(args).contains("-pn") || Arrays.asList(args).contains("-printNode"))
 		    		Printer.printCityCoordMap(cityCoordMap);
-		    	Map<Integer, Object[]> namesMap = TXTReader.getNames();
+		    	namesMap = TXTReader.getNames();
 		    	if (Arrays.asList(args).contains("-pna") || Arrays.asList(args).contains("-printNames"))
 		    		Printer.printDataMap(namesMap);
-		    	Map<Integer, Object[]> regMap = TXTReader.getRegions();
+		    	regMap = TXTReader.getRegions();
 		    	if (Arrays.asList(args).contains("-pr") || Arrays.asList(args).contains("-printRegions"))
 		    		Printer.printDataMap(regMap);
 		    	
 		    	mainIterface(cityCoordMap,  namesMap, regMap );
 	}
+	
+
 
 }

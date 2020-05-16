@@ -2,44 +2,36 @@ package front;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import obj.Coord;
 import obj.Plan;
-import obj.TownInterface;
 
 public class PaintInterface extends JPanel{
 	
 	static boolean forEntireMap =true;	
 	static int idRegion =12;
-	//Map<Integer, Coord<?, ?>> cityCoordMap;
 	Map<Integer, Object[]> namesXRegions ;
 	Map<Integer, Object[]> regions ;
 
 	private static final long serialVersionUID = 1L;
 	
-	//private List<int[]> townsAllCountry = new LinkedList<>();
 	public static int width = 10;
 	
-	public void paintEntireMap(Graphics g) {
+	@Override
+	public void paint(Graphics g) {
 		
-		super.paint(g);
+super.paint(g);
 		
-		Color c = g.getColor();
-		g.setColor(c);
+		Color color = PrintPoints.chooseColor(idRegion);
 		
 
 		Plan currentMap = PrintPoints.regionInfo.get(idRegion);
 		Map<Integer, Coord<?, ?>> cityCoordMap = currentMap.getCityCoordMap();
 		Map<Integer, Boolean> selectedTown = currentMap.getSelectedTown();
-		List<int[]> listOfSelectedTown = new LinkedList<>();
 		
 		int x;
 		int y;
@@ -49,7 +41,6 @@ public class PaintInterface extends JPanel{
 			
 			x=(int) cityCoordMap.get(number).getX();
 			y=(int) cityCoordMap.get(number).getY();
-			Color color = new Color(168, 86, 69);
 			
 			if(namesXRegions!=null) {
 				region = (int) namesXRegions.get(number)[1];
@@ -69,21 +60,6 @@ public class PaintInterface extends JPanel{
 			}
 		}
 		
-		
-		
-		
-		
-	}
-
-
-	@Override
-	public void paint(Graphics g) {
-		
-			paintEntireMap(g);
-	
-		
-		
-
 	}
 	public void addTownInEntireMap(int key, Boolean selected) {
 		
@@ -106,7 +82,6 @@ public class PaintInterface extends JPanel{
 		Map<Integer, Boolean> selectedTown = plan.getSelectedTown();
 		Boolean isSelected;
 		if(selectedTown!=null && !selectedTown.isEmpty()&&selectedTown.containsKey(key)) {
-			//townsAllCountry.add(coords);
 			if(!selectedTown.get(key)) {
 				selectedTown.put(key,true);
 				isSelected=true;
@@ -119,8 +94,24 @@ public class PaintInterface extends JPanel{
 			selectedTown.put(key,true);
 			isSelected=true;
 		}
-		if(plan.getId()==12) {
+		if(plan.getId()!=12) {
 			addTownInEntireMap(key,isSelected);
+		}else {
+			int region = (int) namesXRegions.get(key)[1];
+			if(PrintPoints.regionInfo.containsKey(region)) {
+				Map<Integer, Boolean> selectedTownInRegion = PrintPoints.regionInfo.get(region).getSelectedTown();
+				if(selectedTownInRegion!=null ) {
+					selectedTownInRegion.put(key, isSelected);
+				}
+			}else {
+				Map<Integer, Boolean> selectedTownInRegion = new HashMap<>();	
+				selectedTownInRegion.put(key, isSelected);
+				
+				Plan newRegion = ByRegion.createForRegion(selectedTownInRegion, region );
+				PrintPoints.regionInfo.put(region, newRegion);
+			}
+			
+			
 		}
 		
 		this.repaint();

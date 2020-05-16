@@ -2,11 +2,8 @@ package front;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import obj.Coord;
 import obj.Plan;
 import obj.TownInterface;
 
@@ -19,7 +16,7 @@ public class ClickListener extends MouseAdapter {
 	public ClickListener(PaintInterface panel, Plan plan) {
 		super();
 		this.panel = panel;
-		this.currentMap =plan;
+		ClickListener.currentMap =plan;
 	}
 
 	@Override

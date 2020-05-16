@@ -10,7 +10,7 @@ public class Plan {
 	private  Map<Integer, Boolean> selectedTown;	
 	private  Map<Integer, Coord<?, ?>> cityCoordMap ;
 	private  int[] dimension;
-	private  Map<Integer, TownInterface<?, ?>> rectCoordMap ;
+	private  Map<Integer, TownInterface<?, ?>> rectCoordMap;
 
 	public Plan() {
 		this.selectedTown = null;
