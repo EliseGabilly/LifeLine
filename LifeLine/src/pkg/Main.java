@@ -66,8 +66,6 @@ public class Main {
 		System.out.println("");
 		System.out.println("Final path : " + fullPath);
 		System.out.println("Cost : " + Calcul.getCost(fullPath, weightedAdjMap));
-
-        
     }
 
 }
