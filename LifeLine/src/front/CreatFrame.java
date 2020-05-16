@@ -27,6 +27,7 @@ public class CreatFrame {
 				wa = new WindowAdapter() {
 					public void windowClosing(WindowEvent e) {
 						PaintInterface.idRegion=12;
+						ClickListener.currentMap = PrintPoints.regionInfo.get(12);
 					}
 				};
 			}

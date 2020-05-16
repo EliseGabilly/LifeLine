@@ -24,7 +24,7 @@ import util.TXTReader;
 public class PrintPoints implements ActionListener {
 	
 	
-	public static Map<Integer, TownInterface<?, ?>> rectCoordMap = new HashMap<Integer, TownInterface<?, ?>>(); //maps to verify if the click is inside a rectangle
+	//public static Map<Integer, TownInterface<?, ?>> rectCoordMap = new HashMap<Integer, TownInterface<?, ?>>(); //maps to verify if the click is inside a rectangle
 
 	static PaintInterface jc = new PaintInterface();
 	static Map<Integer, Plan> regionInfo = new HashMap<>();
@@ -35,11 +35,12 @@ public class PrintPoints implements ActionListener {
 	public static  void mainIterface(Map<Integer, Coord<?, ?>> cityCoordMap, Map<Integer, Object[]> namesMap, Map<Integer, Object[]> regMap ) {
 		
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
-
+		
+		Plan forEntireMap = new Plan();
     	jc.setBackground(Color.WHITE);
     	jc.setLayout(null);
-    	
-    	adjustCityCoordMap=adjustOnFrame(cityCoordMap);
+    	forEntireMap.setCityCoordMap(cityCoordMap);
+    	adjustCityCoordMap=adjustOnFrame(forEntireMap);
     	int[] dimensionCountry = getDimension(adjustCityCoordMap);
     	
     	int btnX=300;
@@ -80,7 +81,8 @@ public class PrintPoints implements ActionListener {
 	    	jc.add(button);
     	}
     	Map<Integer, Boolean> selectedTown = new HashMap<>();
-    	Plan forEntireMap = new Plan("All",12, selectedTown,adjustCityCoordMap, dimensionCountry);
+    	 Map<Integer, TownInterface<?, ?>> rectMap = forEntireMap.getRectCoordMap();
+    	forEntireMap = new Plan("All",12, selectedTown,adjustCityCoordMap, dimensionCountry, rectMap);
     	regionInfo.put(12,forEntireMap);
     	jc.add(area);
 		jc.setPreferredSize(new Dimension(dimensionCountry[0],dimensionCountry[1]+100));
@@ -137,8 +139,9 @@ public class PrintPoints implements ActionListener {
 		
 	}
 	
-	public static Map<Integer, Coord<?, ?>> adjustOnFrame(Map<Integer, Coord<?, ?>> cityCoordMap) {
+	public static Map<Integer, Coord<?, ?>> adjustOnFrame(Plan plan) {
 		
+		Map<Integer, Coord<?, ?>> cityCoordMap =plan.getCityCoordMap();
 		int xMin=Integer.MAX_VALUE;
     	int yMin=Integer.MAX_VALUE;
     	for(int number:cityCoordMap.keySet()) {		
@@ -153,13 +156,14 @@ public class PrintPoints implements ActionListener {
     	xMin-=50;
     	yMin=+20;
     	
-    	return cityCoordMap=adjustMap(cityCoordMap, xMin, yMin);
+    	return adjustMap(xMin, yMin, plan);
 	}
 	
-	public static Map<Integer, Coord<?, ?>>  adjustMap(Map<Integer, Coord<?, ?>> cityCoordMap, int deltaX, int deltaY) {
+	public static Map<Integer, Coord<?, ?>>  adjustMap( int deltaX, int deltaY, Plan plan) {
 		
+		Map<Integer, Coord<?, ?>> cityCoordMap= plan.getCityCoordMap();
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
-		
+		 Map<Integer, TownInterface<?, ?>> rectMap = new HashMap<Integer, TownInterface<?, ?>>();
 		for(int number:cityCoordMap.keySet()) {
 			int x =(int) cityCoordMap.get(number).getX();
 			int y =(int) cityCoordMap.get(number).getY();
@@ -168,8 +172,10 @@ public class PrintPoints implements ActionListener {
 			TownInterface<?, ?> rect = new TownInterface<Object, Object>(x-deltaX, y-deltaY, x-deltaX+PaintInterface.width, y-deltaY+PaintInterface.width );
 			
 			adjustCityCoordMap.put(number, coord);
-			rectCoordMap.put(number, rect);
+			
+			rectMap.put(number, rect);
 		}
+		plan.setRectCoordMap(rectMap);
 		return adjustCityCoordMap;
 		
 	}

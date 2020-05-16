@@ -14,6 +14,7 @@ import javax.swing.JButton;
 
 import obj.Coord;
 import obj.Plan;
+import obj.TownInterface;
 
 public class ByRegion {
 	
@@ -57,16 +58,18 @@ public class ByRegion {
 	
 	public static Plan createFrameForRegion(String name, Map<Integer, Coord<?, ?>> regionCoordsMap, int key) {
 		
+		Plan plan = new Plan();
 		Map<Integer, Coord<?, ?>> adjustRegionCoordMap = new HashMap<>();
 		
 		regionInterface.setBackground(Color.WHITE);
 		regionInterface.setLayout(null);
-		
-		adjustRegionCoordMap=PrintPoints.adjustOnFrame(regionCoordsMap);
+		plan.setCityCoordMap(regionCoordsMap);
+		adjustRegionCoordMap=PrintPoints.adjustOnFrame(plan);
 		int[] dimensionRegion = PrintPoints.getDimension(adjustRegionCoordMap);
 		
 		 Map<Integer, Boolean> selectedTown = new HashMap<>();
-		  Plan plan = new Plan(name,key,selectedTown, adjustRegionCoordMap, dimensionRegion ); 
+		 Map<Integer, TownInterface<?, ?>> rectMap = plan.getRectCoordMap();
+		 plan = new Plan(name,key,selectedTown, adjustRegionCoordMap, dimensionRegion,rectMap ); 
 		
 		//regionInterface.selectedTown=PrintPoints.jc.selectedTown;
 		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]+100));

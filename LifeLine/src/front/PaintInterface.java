@@ -85,19 +85,42 @@ public class PaintInterface extends JPanel{
 		
 
 	}
+	public void addTownInEntireMap(int key, Boolean selected) {
+		
+		Map<Integer, Boolean> selectedTownInCountry =  PrintPoints.regionInfo.get(12).getSelectedTown();
+		if(selectedTownInCountry!=null && !selectedTownInCountry.isEmpty()&&selectedTownInCountry.containsKey(key)) {
+			//townsAllCountry.add(coords);
+			if(selected) {
+				selectedTownInCountry.put(key,true);
+			}else {
+				selectedTownInCountry.put(key,false);
+			}
+		}else {
+			selectedTownInCountry.put(key,true);
+		}
+		
+	}
 	
 	
 	public void addTown(int key, Plan plan) {
 		Map<Integer, Boolean> selectedTown = plan.getSelectedTown();
+		Boolean isSelected;
 		if(selectedTown!=null && !selectedTown.isEmpty()&&selectedTown.containsKey(key)) {
 			//townsAllCountry.add(coords);
 			if(!selectedTown.get(key)) {
 				selectedTown.put(key,true);
+				isSelected=true;
+
 			}else {
 				selectedTown.put(key,false);
+				isSelected=false;
 			}
 		}else {
 			selectedTown.put(key,true);
+			isSelected=true;
+		}
+		if(plan.getId()==12) {
+			addTownInEntireMap(key,isSelected);
 		}
 		
 		this.repaint();
