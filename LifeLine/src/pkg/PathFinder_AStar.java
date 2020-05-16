@@ -12,7 +12,7 @@ import obj.Coord;
 import util.NodeComparator;
 import util.ValidityChecker;
 
-public class PathFinder {
+public class PathFinder_AStar {
 
 	public final Logger logger = Logger.getGlobal();
 	
@@ -23,7 +23,7 @@ public class PathFinder {
 	int start;
 	int goal;
 	
-	PathFinder(Map<Integer, Coord<?, ?>> cityCoordMap, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) {
+	PathFinder_AStar(Map<Integer, Coord<?, ?>> cityCoordMap, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) {
 		this.cityCoordMap = cityCoordMap;
 		this.weightedAdjMap = weightedAdjMap;
 	}
@@ -141,7 +141,6 @@ public class PathFinder {
     	}
 		return min;
 	}
-	
 	
 	
 	public Map<Integer, List<Adjacent<?, ?>>> getWeightedAdjMap() {

@@ -2,13 +2,13 @@ package util;
 
 import java.util.Comparator;
 
-import pkg.PathFinder;
+import pkg.PathFinder_AStar;
 
 public class NodeComparator implements Comparator<Integer> {
 
-	PathFinder pFinder;
+	PathFinder_AStar pFinder;
 	
-	public NodeComparator(PathFinder pFinder) {
+	public NodeComparator(PathFinder_AStar pFinder) {
 		this.pFinder=pFinder;
 	}
 	
