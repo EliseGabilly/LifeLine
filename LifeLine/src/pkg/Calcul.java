@@ -13,7 +13,7 @@ public class Calcul {
 
 
 	/**
-	 * @param goal
+	 * @param goal (int) id of the 
 	 * @param cityCoordMap
 	 * @return the map fill with heuristic distance for each node
 	 */
@@ -27,9 +27,6 @@ public class Calcul {
 			city = entry.getKey();
 		    coord =  entry.getValue();
 		    distance = getDistance(coord, goalCoord);
-		    if (city==0) {
-		    	distance=0; //TODO if it's the start heuristic = 0
-		    }
 		    heurysticMap.put(city, distance);
 		}
     	if (Arrays.asList(Main.getArgs()).contains("-ph") || Arrays.asList(Main.getArgs()).contains("-printHeuristic"))
@@ -38,9 +35,10 @@ public class Calcul {
 	} // public Map<Integer, Float> makeHeuristic(int goal, Map<Integer, Coord<?, ?>> cityCoordMap)
 	
 	/**
-	 * @param node1 
-	 * @param node2
-	 * @return the strait distance between two points 
+	 * Use as heuristic between two points
+	 * @param node1 (coord)
+	 * @param node2 (coord)
+	 * @return (float) the strait distance between two points 
 	 */
 	public static float getDistance (Coord<?, ?> node1, Coord<?, ?> node2) {
 		float x1 = node1.getX();
@@ -54,6 +52,11 @@ public class Calcul {
 	} //public float getDistance (int node1, int node2) 
 
 
+	/**
+	 * @param path (list of id)
+	 * @param weightedAdjMap
+	 * @return (int) the cost of the path 
+	 */
 	public static float getCost(List<Integer> path, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) {
 		float totalCost =0;
 		int s;
@@ -66,7 +69,14 @@ public class Calcul {
 			totalCost+=cost;
 		}
 		return totalCost;
-	}
+	} // public static float getCost(List<Integer> path, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) 
+	
+	/**
+	 * @param start (id of the first city)
+	 * @param end (id of the last city)
+	 * @param weightedAdjMap
+	 * @return (int) the weight between two points
+	 */
 	public static float getEdgeCost(int start, int end, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) {
 		List<Adjacent<?, ?>> adjList = weightedAdjMap.get(start);
 		float weight=0;
@@ -76,6 +86,6 @@ public class Calcul {
 			}
 		}
 		return weight;
-	}
+	} // public static float getEdgeCost(int start, int end, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) 
 	
 }
