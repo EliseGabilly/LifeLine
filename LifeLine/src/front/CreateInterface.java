@@ -92,8 +92,21 @@ public class CreateInterface implements ActionListener {
 			  } 
 			} );
     	
+    	JButton validatesChoicesBtn = new JButton("Confirm my choices");
+    	validatesChoicesBtn.setBounds(btnX+250,btnY-50,200,30);
+    	validatesChoicesBtn.addActionListener(new ActionListener() { 
+		public void actionPerformed(ActionEvent e) { 
+
+				/**
+				 * 
+				 */
+				 
+			  } 
+			} );
+    	
     	jc.add(area);
     	jc.add(refreshBtn);
+    	jc.add(validatesChoicesBtn);
     	
 	}
 	
