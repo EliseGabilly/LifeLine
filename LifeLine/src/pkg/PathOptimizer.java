@@ -54,6 +54,9 @@ public class PathOptimizer {
 		return flatPath;
 	}
 
+	/**
+	 * @param nodeRequiered
+	 */
 	private void initClosetBases(List<Integer> nodeRequiered) {
 		float weight;
 		float minWeight = (float) Double.MAX_VALUE;
@@ -69,12 +72,12 @@ public class PathOptimizer {
 			}
 			closetBaseList.put(oneNode, minBase);
 		}
-	}
+	} // private void initClosetBases(List<Integer> nodeRequiered)
 
 	/**
 	 * initialize the adgency between all requierd node
 	 * 
-	 * @param nodeRequired
+	 * @param nodeRequired (list of id we have to go through)
 	 */
 	private void makeNeededWeightedAdjMap(List<Integer> nodeRequired) {
 		List<Integer> allNode = new ArrayList<Integer>(nodeRequired);
@@ -94,8 +97,7 @@ public class PathOptimizer {
 			}
 			neededWeightedAdjMap.put(oneNode, lAdj);
 		}
-
-	}
+	} // private void makeNeededWeightedAdjMap(List<Integer> nodeRequired)
 
 	/**
 	 * from List<List<Integer>> to List<Integer>
@@ -107,7 +109,7 @@ public class PathOptimizer {
 			flatPath.addAll(subPath.subList(1, subPath.size()));
 		}
 		return flatPath;
-	}
+	} // private List<Integer> flatenThePath(List<List<Integer>> thePath)
 
 	/**
 	 * Choose the sorting method
@@ -162,8 +164,13 @@ public class PathOptimizer {
 		}
 		System.out.println("");
 		return cheapestPermutation;
-	}
+	} // private List<Integer> sortFewNeededCities(List<Integer> nodeRequired) 
 
+	/**
+	 * Calculate all possible permutation of a list
+	 * @param original list
+	 * @return a list of all possible permutation of a list
+	 */
 	public static List<List<Integer>> permute(List<Integer> original) {
 		if (original.isEmpty()) {
 			List<List<Integer>> result = new ArrayList<>();
@@ -181,18 +188,17 @@ public class PathOptimizer {
 			}
 		}
 		return returnValue;
-	}
+	} //public static List<List<Integer>> permute(List<Integer> original)
 
 	/**
 	 * Approximate the shortest path
 	 * 
-	 * @param nodeRequired
-	 * @return
+	 * @param nodeRequired (list of id we have to visit)
+	 * @return order the list of id 
 	 */
 	private List<Integer> sortManyNeededCities(List<Integer> nodeRequired) {
 		System.out.println("Not implamented yet : sortManyNeededCities ");
 		System.out.println("Complexity of n!");
 		return null;
-	}
-
+	} // private List<Integer> sortManyNeededCities(List<Integer> nodeRequired)
 }
