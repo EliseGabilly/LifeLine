@@ -52,14 +52,12 @@ public class Printer {
 	} // public void printWeightedAdjMap(Map<Integer, List<Adjacent<?, ?>>>
 		// weightedAdjMap)
 	
-	public static void printBasesMap(Map<Integer, String> basesMap) {
+	public static void printBasesMap(List<Integer> basesMap) {
 		System.out.println("Printing base map");
 		int city;
-		String name;
-		for (Map.Entry<Integer, String> entry : basesMap.entrySet()) {
-			city = entry.getKey();
-			name = entry.getValue();
-			System.out.println(city + " : " +name);
+		for (Integer  entry : basesMap) {
+			city = entry;
+			System.out.println(city );
 		}
 		System.out.println("");
 	} // public static void printBasesMap(Map<Integer, String> basesMap) 

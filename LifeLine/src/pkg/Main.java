@@ -7,11 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import front.CreateInterface;
 import obj.Adjacent;
 import obj.Coord;
-import util.TXTReader;
 import util.Printer;
+import util.TXTReader;
 
 public class Main {
 	private static String[] savedArgs;
@@ -29,10 +28,9 @@ public class Main {
     	Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap = TXTReader.getWeitedAdj();
     	if (Arrays.asList(args).contains("-pe") || Arrays.asList(args).contains("-printEdge"))
     		Printer.printWeightedAdjMap(weightedAdjMap);
-    	Map<Integer, String> basesMap = TXTReader.getBase();
+    	List<Integer>  basesList = TXTReader.getBase();
     	if (Arrays.asList(args).contains("-pb") || Arrays.asList(args).contains("-printBases"))
-    		Printer.printBasesMap(basesMap);
-    	List<Integer> basesList = new ArrayList<>(basesMap.keySet());
+    		Printer.printBasesMap(basesList);
     	Map<Integer, Object[]> namesMap = TXTReader.getNames();
     	if (Arrays.asList(args).contains("-pna") || Arrays.asList(args).contains("-printNames"))
     		Printer.printDataMap(namesMap);
