@@ -180,12 +180,12 @@ public class CreateInterface implements ActionListener {
 		}	
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth();
-		double height = screenSize.getHeight();
-		while(x>=width-100) {
+		double width = screenSize.getWidth()-100;
+		double height = screenSize.getHeight()-100;
+		while(x>=width) {
 			x-=100;
 		}
-		while(y>=height-100) {
+		while(y>=height) {
 			y-=100;
 		}
 		
@@ -204,20 +204,63 @@ public class CreateInterface implements ActionListener {
 		Map<Integer, Coord<?, ?>> cityCoordMap =plan.getCityCoordMap();
 		int xMin=Integer.MAX_VALUE;
     	int yMin=Integer.MAX_VALUE;
-    	for(int number:cityCoordMap.keySet()) {		
-			
-			if((int) cityCoordMap.get(number).getX()<xMin) {
-				xMin =(int) cityCoordMap.get(number).getX();
-			}
-			if((int) cityCoordMap.get(number).getY()<yMin) {
-				yMin =(int) cityCoordMap.get(number).getY();
-			}	
-		}
+    	
+    	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
+    	
+    	int xMax=0;
+    	int yMax=0;
+    	int delta = 0;
+    	do {
+    		
+        	for(int number:cityCoordMap.keySet()) {		
+    			
+    			if((int) cityCoordMap.get(number).getX()<xMin) {
+    				xMin =(int) cityCoordMap.get(number).getX();
+    			}
+    			if((int) cityCoordMap.get(number).getY()<yMin) {
+    				yMin =(int) cityCoordMap.get(number).getY();
+    			}
+    			
+    			if((int) cityCoordMap.get(number).getX()>xMax) {
+    				xMax =(int) cityCoordMap.get(number).getX();
+    			}
+    			if((int) cityCoordMap.get(number).getY()>yMax) {
+    				yMax =(int) cityCoordMap.get(number).getY();
+    			}	
+    		}
+        	if(xMax>height || yMax>width ) {
+        		delta+=1.2;
+        		adjust( delta,  plan);
+        	}
+    		
+    	}while(xMax>=width || yMax>=height);
+
     	xMin-=50;
     	yMin=+20;
-    	
-    	return adjustMap(xMin, yMin, plan);
+ 
+    	return adjustMap(xMin, yMin , plan);
 	}
+	
+	public static Map<Integer, Coord<?, ?>>  adjust(int delta, Plan plan) {
+		
+		Map<Integer, Coord<?, ?>> cityCoordMap= plan.getCityCoordMap();
+		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
+		
+		for(int number:cityCoordMap.keySet()) {
+			int x =(int) cityCoordMap.get(number).getX();
+			int y =(int) cityCoordMap.get(number).getY();
+			
+			Coord<?, ?> coord = new Coord<Object, Object>(x/delta, y/delta);
+			
+			adjustCityCoordMap.put(number, coord);
+			plan.setCityCoordMap(adjustCityCoordMap);
+		}
+		return adjustCityCoordMap;
+	}
+	
+	
 	
 	/**
 	 * Changes the coords stored in the the lsit containing twons coordinates in the selected area 
@@ -230,7 +273,7 @@ public class CreateInterface implements ActionListener {
 		
 		Map<Integer, Coord<?, ?>> cityCoordMap= plan.getCityCoordMap();
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
-		 Map<Integer, TownInterface<?, ?>> rectMap = new HashMap<Integer, TownInterface<?, ?>>();
+		Map<Integer, TownInterface<?, ?>> rectMap = new HashMap<Integer, TownInterface<?, ?>>();
 		for(int number:cityCoordMap.keySet()) {
 			int x =(int) cityCoordMap.get(number).getX();
 			int y =(int) cityCoordMap.get(number).getY();
