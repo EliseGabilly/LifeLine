@@ -68,6 +68,9 @@ public class ByRegion {
 		adjustRegionCoordMap=CreateInterface.adjustOnFrame(plan);
 		int[] dimensionRegion = CreateInterface.getDimension(adjustRegionCoordMap);
 		
+		//dimensionRegion[0] = dimensionRegion[0] -100;
+		//dimensionRegion[1] = dimensionRegion[1] -100;
+		
 		Map<Integer, Boolean> selectedTown = new HashMap<>();
 		Map<Integer, TownInterface<?, ?>> rectMap = plan.getRectCoordMap();
 		plan = new Plan(name,key,selectedTown, adjustRegionCoordMap, dimensionRegion,rectMap ); 
