@@ -2,6 +2,7 @@ package front;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,10 +53,9 @@ public class CreateInterface implements ActionListener {
     	adjustCityCoordMap=adjustOnFrame(forEntireMap);
     	int[] dimensionCountry = getDimension(adjustCityCoordMap);
     	
-    	int btnX=300;
-    	int btnY= dimensionCountry[1];
-    	createTextAreaAndRefresh(btnX, btnY);
-    	createRegionButton(btnX , btnY);
+    	
+    	createTextAreaAndRefresh(dimensionCountry);
+    	createRegionButton(dimensionCountry);
     	  	
     	Map<Integer, Boolean> selectedTown = new HashMap<>();
     	Map<Integer, TownInterface<?, ?>> rectMap = forEntireMap.getRectCoordMap();
@@ -71,19 +71,70 @@ public class CreateInterface implements ActionListener {
 	}
 	
 	/**
+	 * Creates the button for each region
+	 * @param btnX
+	 * @param btnY
+	 */
+	public static void createRegionButton( int[] dimensionCountry) {
+		
+		
+		int btnX=(int) ( dimensionCountry[0]*0.28);
+    	int btnY= dimensionCountry[1];
+    	
+		int width =getBtnDim(cityCoordMap,btnY );
+		for(int key :regMap.keySet() ) {
+			String name = (String) regMap.get(key)[0];
+			JButton button = new JButton(name);
+			
+			 List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(key,namesMap);
+			 Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,cityCoordMap);
+			 
+			button.setFont(new Font("Serif",Font.PLAIN,12));
+			button.setBounds((int) btnX,btnY, width,30);
+			button.addActionListener(new ActionListener() { 
+				  public void actionPerformed(ActionEvent e) { 
+					  if(regionInfo.containsKey(key)) {
+						  ByRegion.recreateFrame(regionInfo.get(key));
+					  }else {
+						  regionMap = ByRegion.createFrameForRegion(name, regionCoordsMap, key);
+		    			  regionInfo.put(key, regionMap);
+					  }
+
+				  } 
+				} );
+	    	
+	    	button.setBackground(chooseColor(key));
+	    	btnX+=width+ width/6 ;
+	    	if(key==4) {
+	    		btnY+= 50;
+	    		btnX =(int) ( dimensionCountry[0]*0.28) - (width+ width/6);
+	    	}
+	    	jc.add(button);
+    	}
+	
+	}
+	
+	
+	/**
 	 * creates the text area and refresh button
 	 * @param btnX
 	 * @param btnY
 	 */
-	public static void createTextAreaAndRefresh(int btnX, int btnY) {
+	public static void createTextAreaAndRefresh( int[] dimensionCountry) {
+		
 		JTextArea area=new JTextArea("Zoom on a region: "); 
+		
+		int btnY= dimensionCountry[1];
+		int btnX=(int) ( dimensionCountry[0]*0.28);
+		int width =getBtnDim(cityCoordMap,btnY );
+		
+    	area.setBounds(10,btnY, btnX - 10,30); 
     	
-    	area.setBounds(10,btnY+20, 250,200); 
-    	area.setFont(area.getFont().deriveFont(25f));
     	area.setEnabled(false);
-    	
+    	area.setFont(new Font("Serif",Font.PLAIN,15));
+    	 
     	JButton refreshBtn = new JButton("Refresh");
-    	refreshBtn.setBounds(btnX,btnY-50,150,30);
+    	refreshBtn.setBounds(btnX,btnY-50,width,30);
     	refreshBtn.addActionListener(new ActionListener() { 
 		public void actionPerformed(ActionEvent e) { 
 
@@ -110,52 +161,11 @@ public class CreateInterface implements ActionListener {
     	
 	}
 	
-	public static int getBtnDim( Map<Integer, Coord<?, ?>> cityCoordMap) {
-		
-		int [] dim = getDimension(cityCoordMap);
-		int width = dim[1]/5;
+	public static int getBtnDim( Map<Integer, Coord<?, ?>> cityCoordMap, int maxY) {	
+		int width = (int) ((0.75*maxY)/4);
 		return width;
 	}
 	
-	/**
-	 * Creates the button for each region
-	 * @param btnX
-	 * @param btnY
-	 */
-	public static void createRegionButton( int btnX, int btnY) {
-
-		for(int key :regMap.keySet() ) {
-			String name = (String) regMap.get(key)[0];
-			JButton button = new JButton(name);
-			
-			 List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(key,namesMap);
-			 Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,cityCoordMap);
-			 
-			
-			button.setBounds(btnX,btnY, getBtnDim(regionCoordsMap),30);
-			button.addActionListener(new ActionListener() { 
-				  public void actionPerformed(ActionEvent e) { 
-					  if(regionInfo.containsKey(key)) {
-						  ByRegion.recreateFrame(regionInfo.get(key));
-					  }else {
-						  regionMap = ByRegion.createFrameForRegion(name, regionCoordsMap, key);
-		    			  regionInfo.put(key, regionMap);
-					  }
-
-				  } 
-				} );
-	    	
-	    	
-	    	button.setBackground(chooseColor(key));
-	    	btnX+=getBtnDim(regionCoordsMap)+ getBtnDim(regionCoordsMap)/6 ;
-	    	if(key==5) {
-	    		btnY+= 50;
-	    		btnX =350;
-	    	}
-	    	jc.add(button);
-    	}
-	
-	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -187,8 +197,8 @@ public class CreateInterface implements ActionListener {
 		}	
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth()-100;
-		double height = screenSize.getHeight()-300;
+		double width = screenSize.getWidth()-((screenSize.getHeight()/5));
+		double height = screenSize.getHeight()-(screenSize.getHeight()/3);
 		while(x>=width) {
 			x-=100;
 		}
@@ -202,7 +212,7 @@ public class CreateInterface implements ActionListener {
 	}
 	
 	/**
-	 * finds the variable that will be use to readjust the coordinates to the top right of the frame
+	 * finds the variable that will be use to read just the coordinates to the top right of the frame
 	 * @param plan
 	 * @return
 	 */
@@ -217,7 +227,7 @@ public class CreateInterface implements ActionListener {
     	int yMin=Integer.MAX_VALUE;
     	
     	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth();
+    	double width = screenSize.getWidth()-((screenSize.getHeight()/5));
 		double height = screenSize.getHeight();
     	
     	
@@ -246,12 +256,12 @@ public class CreateInterface implements ActionListener {
     				yMax =(int) cityCoordMap.get(number).getY();
     			}	
     		}
-        	if(xMax>width-100 || yMax>height-300 ) {
+        	if(xMax>width-100 || yMax>height-(height/3) ) {
         		delta+=1.1;
         		adjust( delta,  plan);
         	}
     		
-    	}while(xMax>width-100 || yMax>height-300);
+    	}while(xMax>width-100 || yMax>height-(height/3));
 
     	xMin-=50;
     	yMin=+20;
