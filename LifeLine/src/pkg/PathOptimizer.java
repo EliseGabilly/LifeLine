@@ -26,6 +26,10 @@ public class PathOptimizer {
 		this.basesList = basesList;
 	}
 
+	/**
+	 * @param nodeRequired
+	 * @return
+	 */
 	public List<Integer> findPath(List<Integer> nodeRequired) {
 		System.out.print("Node requierd : " + nodeRequired);
 		List<Integer> subPath; // path between two needed cities
@@ -52,10 +56,12 @@ public class PathOptimizer {
 
 		List<Integer> flatPath = flatenThePath(thePath);
 		return flatPath;
-	}
+	} // public List<Integer> findPath(List<Integer> nodeRequired) 
 
 	/**
-	 * @param nodeRequiered
+	 * init the variable closet base list
+	 * based on the distance between each node and distencies to bases
+	 * @param nodeRequiered (list of id we have to go throught)
 	 */
 	private void initClosetBases(List<Integer> nodeRequiered) {
 		float weight;
