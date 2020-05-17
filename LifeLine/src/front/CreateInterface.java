@@ -24,8 +24,8 @@ public class CreateInterface implements ActionListener {
 	public static Map<Integer, Coord<?, ?>> cityCoordMap;
 	public static Map<Integer, Object[]> namesMap;
 	public static Map<Integer, Object[]> regMap;
-	public static Map<Integer, String> basesMap;
-	static PaintInterface jc = new PaintInterface();
+	public static List<Integer>  basesList;
+	public static PaintInterface jc = new PaintInterface();
 	static Map<Integer, Plan> regionInfo = new HashMap<>(); // List of all individual maps and the entire one
 	private static Plan regionMap = new Plan();
 	
@@ -38,8 +38,8 @@ public class CreateInterface implements ActionListener {
 	 * @param namesMap
 	 * @param regMap
 	 */
-	public static  void mainIterface(Map<Integer, Coord<?, ?>> cityCoordMapOrigin, Map<Integer, Object[]> namesMapOrigin, Map<Integer, Object[]> regMapOrigin, Map<Integer, String> basesMapOrigin ) {
-		basesMap = basesMapOrigin;
+	public static  void mainIterface(Map<Integer, Coord<?, ?>> cityCoordMapOrigin, Map<Integer, Object[]> namesMapOrigin, Map<Integer, Object[]> regMapOrigin, List<Integer>  basesListOrigin ) {
+		basesList = basesListOrigin;
 		cityCoordMap=cityCoordMapOrigin;
 		namesMap=namesMapOrigin;
 		regMap=regMapOrigin;
@@ -239,8 +239,10 @@ public class CreateInterface implements ActionListener {
 			TownInterface<?, ?> rect = new TownInterface<Object, Object>(x-deltaX, y-deltaY, x-deltaX+PaintInterface.width, y-deltaY+PaintInterface.width );
 			
 			adjustCityCoordMap.put(number, coord);
+			if(!CreateInterface.basesList.contains(number)) {
+				rectMap.put(number, rect);
+			}
 			
-			rectMap.put(number, rect);
 		}
 		plan.setRectCoordMap(rectMap);
 		return adjustCityCoordMap;

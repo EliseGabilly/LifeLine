@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import front.CreateInterface;
 import obj.Adjacent;
 import obj.Coord;
 import util.Printer;
@@ -39,10 +40,7 @@ public class Main {
     		Printer.printDataMap(regMap);
     	
     	
-    	
-    	//call the interface
-    	
-    	CreateInterface.mainIterface(cityCoordMap,namesMap,regMap,basesMap );
+    	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList );
     	
     	// initialize list of cities we have to visit
     	/*int min = Collections.min(cityCoordMap.keySet());

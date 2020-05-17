@@ -42,10 +42,9 @@ public class PaintInterface extends JPanel{
 			x=(int) cityCoordMap.get(number).getX();
 			y=(int) cityCoordMap.get(number).getY();
 			
-			if (CreateInterface.basesMap.containsKey(number)) {
-				g.setColor(color);
-				g.fillOval(x, y, y, width);
-				//g.fillRect(x, y, width, width);	
+			if (CreateInterface.basesList.contains(number)) {
+				g.setColor(Color.black);
+				g.fillOval(x, y, width, width);	
 			}else {
 				if(namesXRegions!=null) {
 					region = (int) namesXRegions.get(number)[1];
