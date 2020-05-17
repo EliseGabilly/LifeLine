@@ -182,10 +182,10 @@ public class CreateInterface implements ActionListener {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth();
 		double height = screenSize.getHeight();
-		while(x>=width) {
+		while(x>=width-100) {
 			x-=100;
 		}
-		while(y>=height) {
+		while(y>=height-100) {
 			y-=100;
 		}
 		
