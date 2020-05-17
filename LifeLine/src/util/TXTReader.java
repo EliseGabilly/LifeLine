@@ -45,7 +45,7 @@ public class TXTReader {
 					String[] edge = line.split(cvsSplitBy);
 					node1 = Integer.parseInt(edge[0]);
 					node2 = Integer.parseInt(edge[1]);
-					weight = format.parse(edge[3]);
+					weight = format.parse(edge[2]);
 					weightFloat = weight.floatValue();
 
 					// add node2 to adjacent of node1
