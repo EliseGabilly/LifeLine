@@ -25,7 +25,7 @@ public class TXTReader {
 	 * value : list of adjacent (node, weight)
 	 */
 	public static Map<Integer, List<Adjacent<?, ?>>> getWeitedAdj() {
-		String csvFile = "sandboxAdjacency.txt";
+		String csvFile = "Adjacency.txt";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\s+";
@@ -149,7 +149,7 @@ public class TXTReader {
 	 * value : node name
 	 */
 	public static List<Integer> getBase() {
-		String csvFile = "sandboxBases.txt";
+		String csvFile = "Bases.txt";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\s+";
