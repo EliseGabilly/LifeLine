@@ -24,19 +24,25 @@ public class CreateInterface implements ActionListener {
 	public static Map<Integer, Coord<?, ?>> cityCoordMap;
 	public static Map<Integer, Object[]> namesMap;
 	public static Map<Integer, Object[]> regMap;
+	public static Map<Integer, String> basesMap;
 	static PaintInterface jc = new PaintInterface();
 	static Map<Integer, Plan> regionInfo = new HashMap<>(); // List of all individual maps and the entire one
 	private static Plan regionMap = new Plan();
 	
 	
+	 
+	
 	/**
-	 * Initializes variables to creates all interfaces
+	 * Initialises variables to creates all interfaces
 	 * @param cityCoordMap
 	 * @param namesMap
 	 * @param regMap
 	 */
-	public static  void mainIterface(Map<Integer, Coord<?, ?>> cityCoordMap, Map<Integer, Object[]> namesMap, Map<Integer, Object[]> regMap ) {
-		
+	public static  void mainIterface(Map<Integer, Coord<?, ?>> cityCoordMapOrigin, Map<Integer, Object[]> namesMapOrigin, Map<Integer, Object[]> regMapOrigin, Map<Integer, String> basesMapOrigin ) {
+		basesMap = basesMapOrigin;
+		cityCoordMap=cityCoordMapOrigin;
+		namesMap=namesMapOrigin;
+		regMap=regMapOrigin;
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
 		
 		Plan forEntireMap = new Plan();
@@ -50,10 +56,9 @@ public class CreateInterface implements ActionListener {
     	int btnY= dimensionCountry[1];
     	createTextAreaAndRefresh(btnX, btnY);
     	createRegionButton(btnX , btnY);
-    	
-    	
+    	  	
     	Map<Integer, Boolean> selectedTown = new HashMap<>();
-    	 Map<Integer, TownInterface<?, ?>> rectMap = forEntireMap.getRectCoordMap();
+    	Map<Integer, TownInterface<?, ?>> rectMap = forEntireMap.getRectCoordMap();
     	forEntireMap = new Plan("All",12, selectedTown,adjustCityCoordMap, dimensionCountry, rectMap);
     	regionInfo.put(12,forEntireMap);
     	
@@ -276,21 +281,7 @@ public class CreateInterface implements ActionListener {
 		}
 		return color;
 	}
-	
-	public static void main(String[] args) {
-		//lecture de la bdd qui a terme sera dans le main de Elise
-				cityCoordMap = TXTReader.getCityCoord();
-		    	if (Arrays.asList(args).contains("-pn") || Arrays.asList(args).contains("-printNode"))
-		    		Printer.printCityCoordMap(cityCoordMap);
-		    	namesMap = TXTReader.getNames();
-		    	if (Arrays.asList(args).contains("-pna") || Arrays.asList(args).contains("-printNames"))
-		    		Printer.printDataMap(namesMap);
-		    	regMap = TXTReader.getRegions();
-		    	if (Arrays.asList(args).contains("-pr") || Arrays.asList(args).contains("-printRegions"))
-		    		Printer.printDataMap(regMap);
-		    	
-		    	mainIterface(cityCoordMap,  namesMap, regMap );
-	}
+
 	
 
 

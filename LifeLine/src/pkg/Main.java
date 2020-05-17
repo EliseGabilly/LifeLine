@@ -44,10 +44,10 @@ public class Main {
     	
     	//call the interface
     	
-    //	PrintPoints.mainIterface(cityCoordMap);
+    	CreateInterface.mainIterface(cityCoordMap,namesMap,regMap,basesMap );
     	
     	// initialize list of cities we have to visit
-    	int min = Collections.min(cityCoordMap.keySet());
+    	/*int min = Collections.min(cityCoordMap.keySet());
     	int max = Collections.max(cityCoordMap.keySet());
     	Random rn = new Random();
     	List<Integer> nodeRequierment = new ArrayList<Integer>();
@@ -57,15 +57,15 @@ public class Main {
     		if(!nodeRequierment.contains(n) && !basesList.contains(n)) {
         		nodeRequierment.add(n);	
     		}
-    	}
+    	}*/
 
     	// launch the path optimizer
-    	PathOptimizer myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
+    	/*PathOptimizer myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
     	List<Integer> fullPath = myPathOptimizer.findPath(nodeRequierment);
     	//TODO choose methode & change initialization of map etc.
 		System.out.println("");
 		System.out.println("Final path : " + fullPath);
-		System.out.println("Cost : " + Calcul.getCost(fullPath, weightedAdjMap));
+		System.out.println("Cost : " + Calcul.getCost(fullPath, weightedAdjMap));*/
     }
 
 }

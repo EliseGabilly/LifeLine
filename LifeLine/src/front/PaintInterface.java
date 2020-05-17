@@ -42,14 +42,22 @@ public class PaintInterface extends JPanel{
 			x=(int) cityCoordMap.get(number).getX();
 			y=(int) cityCoordMap.get(number).getY();
 			
-			if(namesXRegions!=null) {
-				region = (int) namesXRegions.get(number)[1];
-				color = CreateInterface.chooseColor(region);
+			if (CreateInterface.basesMap.containsKey(number)) {
+				g.setColor(color);
+				g.fillOval(x, y, y, width);
+				//g.fillRect(x, y, width, width);	
+			}else {
+				if(namesXRegions!=null) {
+					region = (int) namesXRegions.get(number)[1];
+					color = CreateInterface.chooseColor(region);
+				}
+				
+				
+				g.setColor(color);
+				g.fillRect(x, y, width, width);	
 			}
 			
 			
-			g.setColor(color);
-			g.fillRect(x, y, width, width);	
 		}
 		for(int key : selectedTown.keySet()) {
 			if(selectedTown.get(key)) {
