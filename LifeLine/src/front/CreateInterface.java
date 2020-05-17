@@ -110,6 +110,13 @@ public class CreateInterface implements ActionListener {
     	
 	}
 	
+	public static int getBtnDim( Map<Integer, Coord<?, ?>> cityCoordMap) {
+		
+		int [] dim = getDimension(cityCoordMap);
+		int width = dim[1]/5;
+		return width;
+	}
+	
 	/**
 	 * Creates the button for each region
 	 * @param btnX
@@ -125,7 +132,7 @@ public class CreateInterface implements ActionListener {
 			 Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,cityCoordMap);
 			 
 			
-			button.setBounds(btnX,btnY,150,30);
+			button.setBounds(btnX,btnY, getBtnDim(regionCoordsMap),30);
 			button.addActionListener(new ActionListener() { 
 				  public void actionPerformed(ActionEvent e) { 
 					  if(regionInfo.containsKey(key)) {
@@ -140,7 +147,7 @@ public class CreateInterface implements ActionListener {
 	    	
 	    	
 	    	button.setBackground(chooseColor(key));
-	    	btnX+=155;
+	    	btnX+=getBtnDim(regionCoordsMap)+ getBtnDim(regionCoordsMap)/6 ;
 	    	if(key==5) {
 	    		btnY+= 50;
 	    		btnX =350;
@@ -181,7 +188,7 @@ public class CreateInterface implements ActionListener {
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth()-100;
-		double height = screenSize.getHeight()-100;
+		double height = screenSize.getHeight()-300;
 		while(x>=width) {
 			x-=100;
 		}
@@ -201,18 +208,27 @@ public class CreateInterface implements ActionListener {
 	 */
 	public static Map<Integer, Coord<?, ?>> adjustOnFrame(Plan plan) {
 		
-		Map<Integer, Coord<?, ?>> cityCoordMap =plan.getCityCoordMap();
-		int xMin=Integer.MAX_VALUE;
+		
+		int xMax=0;
+    	int yMax=0;
+    	float delta = 0;
+    	
+    	int xMin=Integer.MAX_VALUE;
     	int yMin=Integer.MAX_VALUE;
     	
     	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth();
 		double height = screenSize.getHeight();
     	
-    	int xMax=0;
-    	int yMax=0;
-    	int delta = 0;
+    	
     	do {
+    		 xMax=0;
+        	 yMax=0;
+        	
+        	 xMin=Integer.MAX_VALUE;
+        	 yMin=Integer.MAX_VALUE;
+        	
+    		Map<Integer, Coord<?, ?>> cityCoordMap =plan.getCityCoordMap();
     		
         	for(int number:cityCoordMap.keySet()) {		
     			
@@ -230,12 +246,12 @@ public class CreateInterface implements ActionListener {
     				yMax =(int) cityCoordMap.get(number).getY();
     			}	
     		}
-        	if(xMax>height || yMax>width ) {
-        		delta+=1.2;
+        	if(xMax>width-100 || yMax>height-300 ) {
+        		delta+=1.1;
         		adjust( delta,  plan);
         	}
     		
-    	}while(xMax>=width || yMax>=height);
+    	}while(xMax>width-100 || yMax>height-300);
 
     	xMin-=50;
     	yMin=+20;
@@ -243,7 +259,7 @@ public class CreateInterface implements ActionListener {
     	return adjustMap(xMin, yMin , plan);
 	}
 	
-	public static Map<Integer, Coord<?, ?>>  adjust(int delta, Plan plan) {
+	public static Map<Integer, Coord<?, ?>>  adjust(float delta, Plan plan) {
 		
 		Map<Integer, Coord<?, ?>> cityCoordMap= plan.getCityCoordMap();
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();

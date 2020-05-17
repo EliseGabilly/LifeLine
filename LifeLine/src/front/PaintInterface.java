@@ -19,6 +19,8 @@ public class PaintInterface extends JPanel{
 	private static final long serialVersionUID = 1L;
 	public static int width = 10;
 	
+
+	
 	
 	/**
 	 * Print all town which the color depending on the region and if the town is selected
