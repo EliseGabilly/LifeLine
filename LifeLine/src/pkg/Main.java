@@ -29,10 +29,9 @@ public class Main {
     	Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap = TXTReader.getWeitedAdj();
     	if (Arrays.asList(args).contains("-pe") || Arrays.asList(args).contains("-printEdge"))
     		Printer.printWeightedAdjMap(weightedAdjMap);
-    	Map<Integer, String> basesMap = TXTReader.getBase();
+    	List<Integer>  basesMap = TXTReader.getBase();
     	if (Arrays.asList(args).contains("-pb") || Arrays.asList(args).contains("-printBases"))
     		Printer.printBasesMap(basesMap);
-    	List<Integer> basesList = new ArrayList<>(basesMap.keySet());
     	Map<Integer, Object[]> namesMap = TXTReader.getNames();
     	if (Arrays.asList(args).contains("-pna") || Arrays.asList(args).contains("-printNames"))
     		Printer.printDataMap(namesMap);

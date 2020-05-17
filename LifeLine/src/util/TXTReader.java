@@ -148,15 +148,14 @@ public class TXTReader {
 	 * key : node code
 	 * value : node name
 	 */
-	public static Map<Integer, String> getBase() {
+	public static List<Integer> getBase() {
 		String csvFile = "sandboxBases.txt";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\s+";
 		int node = 0;
-		String name = "";
 
-		Map<Integer, String> basesMap = new HashMap<Integer, String>();
+		List<Integer> basesMap = new ArrayList<Integer>();
 
 		try {
 			br = new BufferedReader(new FileReader(csvFile));
@@ -164,8 +163,7 @@ public class TXTReader {
 				try {
 					String[] edge = line.split(cvsSplitBy);
 					node = Integer.parseInt(edge[0]);
-					name = edge[1];
-					basesMap.put(node, name);
+					basesMap.add(node);
 
 				} catch (Exception e) {
 //					System.out.println("Ligne vide ou titre");
