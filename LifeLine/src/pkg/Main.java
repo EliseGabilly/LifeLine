@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import front.CreateInterface;
 import obj.Adjacent;
 import obj.Coord;
 import util.Printer;
@@ -17,6 +18,7 @@ public class Main {
     public static String[] getArgs() {
         return savedArgs;
     }
+    public static PathOptimizer myPathOptimizer;
 
     public static void main(String[] args) {
     	savedArgs=args;
@@ -38,14 +40,13 @@ public class Main {
     	if (Arrays.asList(args).contains("-pr") || Arrays.asList(args).contains("-printRegions"))
     		Printer.printDataMap(regMap);
     	
+    	// launch the path optimizer
+    	myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
     	
-    	
-    	//call the interface
-    	
-    //	PrintPoints.mainIterface(cityCoordMap);
+    	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList );
     	
     	// initialize list of cities we have to visit
-    	int min = Collections.min(cityCoordMap.keySet());
+    	/*int min = Collections.min(cityCoordMap.keySet());
     	int max = Collections.max(cityCoordMap.keySet());
     	Random rn = new Random();
     	List<Integer> nodeRequierment = new ArrayList<Integer>();
@@ -55,15 +56,10 @@ public class Main {
     		if(!nodeRequierment.contains(n) && !basesList.contains(n)) {
         		nodeRequierment.add(n);	
     		}
-    	}
+    	}*/
 
-    	// launch the path optimizer
-    	PathOptimizer myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
-    	List<Integer> fullPath = myPathOptimizer.findPath(nodeRequierment);
-    	//TODO choose methode & change initialization of map etc.
-		System.out.println("");
-		System.out.println("Final path : " + fullPath);
-		System.out.println("Cost : " + Calcul.getCost(fullPath, weightedAdjMap));
+    	
+    	
     }
 
 }

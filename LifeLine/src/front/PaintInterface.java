@@ -19,6 +19,8 @@ public class PaintInterface extends JPanel{
 	private static final long serialVersionUID = 1L;
 	public static int width = 10;
 	
+
+	
 	
 	/**
 	 * Print all town which the color depending on the region and if the town is selected
@@ -42,14 +44,21 @@ public class PaintInterface extends JPanel{
 			x=(int) cityCoordMap.get(number).getX();
 			y=(int) cityCoordMap.get(number).getY();
 			
-			if(namesXRegions!=null) {
-				region = (int) namesXRegions.get(number)[1];
-				color = CreateInterface.chooseColor(region);
+			if (CreateInterface.basesList.contains(number)) {
+				g.setColor(Color.black);
+				g.fillOval(x, y, width, width);	
+			}else {
+				if(namesXRegions!=null) {
+					region = (int) namesXRegions.get(number)[1];
+					color = CreateInterface.chooseColor(region);
+				}
+				
+				
+				g.setColor(color);
+				g.fillRect(x, y, width, width);	
 			}
 			
 			
-			g.setColor(color);
-			g.fillRect(x, y, width, width);	
 		}
 		for(int key : selectedTown.keySet()) {
 			if(selectedTown.get(key)) {
