@@ -9,8 +9,8 @@ import obj.Coord;
 public class ValidityChecker {
 
 	/**
-	 * @param start
-	 * @param goal
+	 * @param start (int id of city)
+	 * @param goal (int id of city)
 	 * @param cityCoordMap
 	 * @return a boolean telling if start and goal nodes are in the node map
 	 */
@@ -18,34 +18,34 @@ public class ValidityChecker {
 		boolean isStartOk = cityCoordMap.containsKey(start);
 		boolean isGoalOk = cityCoordMap.containsKey(goal);
 		return isStartOk && isGoalOk;
-	}
+	} //public static boolean areNodeExisting(int start, int goal, Map<Integer, Coord<?, ?>> cityCoordMap) 
 
 	/**
-	 * @param path
-	 * @param start
-	 * @param goal
+	 * @param path (List of int id of city)
+	 * @param start (int id of city)
+	 * @param goal (int id of city)
 	 * @param weightedAdjMap
 	 * @return boolean according if the path is a solution and a valide path
 	 */
 	public static boolean isPathValidSolution(List<Integer> path, int start, int goal,
 			Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) {
 		return isSolusion(path, start, goal) && isPathValid(path, weightedAdjMap);
-	}
+	} // public static boolean isPathValidSolution
 
 	/**
-	 * @param path
-	 * @param start
-	 * @param goal
+	 * @param path (List of int id of city)
+	 * @param start (int id of city)
+	 * @param goal (int id of city)
 	 * @return return a boolean verifying if the path begin at the start and end at the goal
 	 */
 	private static boolean isSolusion(List<Integer> path, int start, int goal) {
 		int lastPathNode = path.get(path.size() - 1);
 		int firstPathNode = path.get(0);
 		return lastPathNode == goal && firstPathNode == start;
-	}
+	} // private static boolean isSolusion
 
 	/**
-	 * @param path
+	 * @param path (List of int id of city)
 	 * @return if the path is valid, meaning are all edges taken existing
 	 */
 	private static boolean isPathValid(List<Integer> path, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) {
@@ -71,5 +71,4 @@ public class ValidityChecker {
 		}
 		return true;
 	} // public boolean isPathValid(List<?> path)
-
 }

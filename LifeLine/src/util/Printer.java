@@ -13,7 +13,8 @@ import pkg.PathFinder_AStar;
 public class Printer {
 
 	/**
-	 * @param cityCoordMap print cities coordinates map
+	 * print cities coordinates map
+	 * @param cityCoordMap 
 	 */
 	public static void printCityCoordMap(Map<Integer, Coord<?, ?>> cityCoordMap) {
 		System.out.println("Printing CityCoordMap");
@@ -29,7 +30,8 @@ public class Printer {
 	} // public void printCityCoordMap(Map<Integer, Coord<?, ?>> cityCoordMap )
 
 	/**
-	 * @param weightedAdjMap print weighted adjacent map
+	 *  print weighted adjacent map
+	 * @param weightedAdjMap
 	 */
 	public static void printWeightedAdjMap(Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap) {
 		System.out.println("Printing Adjency map");
@@ -52,21 +54,29 @@ public class Printer {
 	} // public void printWeightedAdjMap(Map<Integer, List<Adjacent<?, ?>>>
 		// weightedAdjMap)
 	
+	/**
+	 * print the list of bases
+	 * @param basesMap
+	 */
 	public static void printBasesMap(List<Integer> basesMap) {
 		System.out.println("Printing base map");
 		int city;
 		for (Integer  entry : basesMap) {
 			city = entry;
-			System.out.println(city );
+			System.out.print(city+", " );
 		}
 		System.out.println("");
 	} // public static void printBasesMap(Map<Integer, String> basesMap) 
 	
-	public static void printDataMap(Map<Integer, Object[]> basesMap) {
+	/**
+	 * print all city id, their regions and their names
+	 * @param namesMap
+	 */
+	public static void printDataMap(Map<Integer, Object[]> namesMap) {
 		System.out.println("Printing data map");
 		int city;
 		Object[] data;
-		for (Map.Entry<Integer, Object[]> entry : basesMap.entrySet()) {
+		for (Map.Entry<Integer, Object[]> entry : namesMap.entrySet()) {
 			city = entry.getKey();
 			data = entry.getValue();
 			System.out.println(city + " : " +data[0]+", "+data[1]);
@@ -75,8 +85,9 @@ public class Printer {
 	} // public static void printBasesMap(Map<Integer, String[]> namesMap) 
 
 	/**
+	 * Print heuristic map for a given goal
 	 * @param heuristicMap
-	 * @param goal         Print heuristic map
+	 * @param goal         
 	 */
 	public static void printHeuristicdMap(Map<Integer, Float> heuristicMap, int goal) {
 		System.out.println("Printing HeuristicMap for " + goal);
@@ -90,19 +101,25 @@ public class Printer {
 		System.out.println("");
 	} // public void printCityCoordMap(Map<Integer, Coord<?, ?>> cityCoordMap )
 
+	/**
+	 * Print a path and his cost  
+	 * @param path
+	 * @param pFinder
+	 */
 	public static void printPathData(List<Integer> path, PathFinder_AStar pFinder) {
 		System.out.print(path);
 		float cost = Calcul.getCost(path, pFinder.getWeightedAdjMap());
 		System.out.println(" -> cost : " + cost);
-
-
     	if (Arrays.asList(Main.getArgs()).contains("-pv") || Arrays.asList(Main.getArgs()).contains("-printVerif")) {
     		boolean isValid = ValidityChecker.isPathValidSolution(path, pFinder.getStart(), pFinder.getgoal(),
     				pFinder.getWeightedAdjMap());
     		System.out.println("Valide solution : "+isValid);}
-		
-	}
+	}//public static void printPathData(List<Integer> path, PathFinder_AStar pFinder) 
 
+	/**
+	 * Print a map
+	 * @param map
+	 */
 	public static void printMap(Map<?, ?> map) {
 		System.out.println("Printing map");
 		Object a;
