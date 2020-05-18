@@ -1,8 +1,13 @@
 package front;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,11 +18,14 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import obj.Plan;
+import obj.Adjacent;
 import obj.Coord;
 import obj.TownInterface;
+import pkg.Calcul;
 import pkg.Main;
 
 public class CreateInterface implements ActionListener {
@@ -25,51 +33,78 @@ public class CreateInterface implements ActionListener {
 	protected static Map<Integer, Coord<?, ?>> cityCoordMap;
 	protected static Map<Integer, Object[]> namesMap;
 	protected static Map<Integer, Object[]> regMap;
+	protected static Map<Integer, List<Adjacent<?, ?>>> weightedAdjMap;
 	protected static List<Integer>  basesList;
-	private static PaintInterface jc = new PaintInterface();
+	protected static PaintInterface jc = new PaintInterface();
 	protected static Map<Integer, Plan> regionInfo = new HashMap<>(); // List of all individual maps and the entire one
 	private static Plan regionMap = new Plan();
-	private static int yMaxOfTown; 
+	protected static int yMaxOfTown; 
 	private static int xMaxOfTown;
 	private static double width;
 	private static double height;
+	protected static List<Integer> fullPath;
+
+	protected static Boolean isResults = false;
+	protected static float cost;
+	private static Plan forEntireMap = new Plan();
+	protected static int[] dimensionCountry;
 	 
 	
 	/**
-	 * Initialises variables to creates the main interface (Shows towns, buttons, text areas)
+	 * Initialises variables 
 	 * @param cityCoordMap
 	 * @param namesMap
 	 * @param regMap
 	 */
-	public static  void mainIterface(Map<Integer, Coord<?, ?>> cityCoordMapOrigin, Map<Integer, Object[]> namesMapOrigin, Map<Integer, Object[]> regMapOrigin, List<Integer>  basesListOrigin ) {
+	public static  void mainIterface(Map<Integer, Coord<?, ?>> cityCoordMapOrigin, Map<Integer, Object[]> namesMapOrigin, Map<Integer, Object[]> regMapOrigin, List<Integer>  basesListOrigin, Map<Integer, List<Adjacent<?, ?>>> weightedAdjMapOrigin ) {
 		basesList = basesListOrigin;
 		cityCoordMap=cityCoordMapOrigin;
 		namesMap=namesMapOrigin;
 		regMap=regMapOrigin;
-		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
+		weightedAdjMap =weightedAdjMapOrigin;
 		
+		
+		createMap();
+	}
+	
+	
+	/**
+	 * creats the button and areas depending if it is the page to show the results or not
+	 */
+	public static void createMap() {
+		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
 		jc.setFont(new Font("Serif",Font.BOLD,19));
-		Plan forEntireMap = new Plan();
-    	jc.setBackground(Color.WHITE);
+		
+    	jc.setBackground(Color.white);
     	jc.setLayout(null);
-    	forEntireMap.setCityCoordMap(cityCoordMap);
-    	adjustCityCoordMap=adjustOnFrame(forEntireMap);
-    	int[] dimensionCountry = getDimension(adjustCityCoordMap);
     	
-    	createTextAreaAndRefresh(dimensionCountry);
-    	createRegionButton(dimensionCountry);
-    	  	
-    	Map<Integer, Boolean> selectedTown = new HashMap<>();
-    	Map<Integer, TownInterface<?, ?>> rectMap = forEntireMap.getRectCoordMap();
-    	forEntireMap = new Plan("All",12, selectedTown,adjustCityCoordMap, dimensionCountry, rectMap);
-    	regionInfo.put(12,forEntireMap);
-    	
+		if(!isResults) {
+			dimensionCountry = createPlanForCountry(adjustCityCoordMap);
+		}
+		createTextAreaAndRefresh(dimensionCountry);
 		jc.setPreferredSize(new Dimension(dimensionCountry[0]+dimensionCountry[0]/12,dimensionCountry[1]+100));
     	jc.namesXRegions = namesMap;
     	jc.regions = regMap;
     	
-		CreatFrame.showOnFrame(jc,"LifeLine", false, forEntireMap);
- 
+    	if(!isResults) {
+    		createRegionButton(dimensionCountry);
+    		CreatFrame.showOnFrame(jc,"LifeLine",false , forEntireMap);
+    	}
+    	else {
+    		CreatFrame.showOnFrame(jc, "Results",false, forEntireMap);
+    	} 
+	}
+	
+	private static int[] createPlanForCountry(Map<Integer, Coord<?, ?>> adjustCityCoordMap) {
+		forEntireMap.setCityCoordMap(cityCoordMap);
+    	adjustCityCoordMap=adjustOnFrame(forEntireMap);
+    	int[] dimensionCountry = getDimension(adjustCityCoordMap);
+    	
+		Map<Integer, Boolean> selectedTown = new HashMap<>();
+    	Map<Integer, TownInterface<?, ?>> rectMap = forEntireMap.getRectCoordMap();
+    	forEntireMap = new Plan("All",12, selectedTown,adjustCityCoordMap, dimensionCountry, rectMap);
+    	regionInfo.put(12,forEntireMap);
+    	return dimensionCountry;
 	}
 	
 	/**
@@ -133,43 +168,57 @@ public class CreateInterface implements ActionListener {
 		int width =getBtnDimY(dimensionCountry);
 		int heigh = getBtnDimX(dimensionCountry);
 		int btnsDimension =(heigh + heigh/2);
-		
+		JLabel info = new JLabel();
 		JLabel title=new JLabel("Rwandata map : "); 
 		title.setBounds(10, 10, 200,30);
-		JLabel info=new JLabel("Choose the towns that you want to deliver: "); 
-		info.setBounds(10, 40, 400,30);
-		JLabel area=new JLabel("Zoom on a region: ", SwingConstants.CENTER); 
-    	area.setBounds(10, btnY+btnsDimension, btnX - 10,30); 
+		
     	
-    	JButton refreshBtn = new JButton("Refresh");
-    	refreshBtn.setBounds(btnX,btnY+(heigh/4),width,heigh);
-    	refreshBtn.addActionListener(new ActionListener() { 
-		public void actionPerformed(ActionEvent e) {
-				jc.repaint();
-			  } 
-			} );
+    	if(!isResults) {
+    		info=new JLabel("Choose the towns that you want to deliver: "); 
+    		info.setBounds(10, 40, 400,30);
+    		JLabel area=new JLabel("Zoom on a region: ", SwingConstants.CENTER); 
+        	area.setBounds(10, btnY+btnsDimension, btnX - 10,30); 
+        	JButton refreshBtn = new JButton("Refresh");
+        	refreshBtn.setBounds(btnX,btnY+(heigh/4),width,heigh);
+        	refreshBtn.addActionListener(new ActionListener() { 
+    		public void actionPerformed(ActionEvent e) {
+    				jc.repaint();
+    			  } 
+    			} );
 
-    	JButton validatesChoicesBtn = new JButton("Confirm my choices");
-    	validatesChoicesBtn.setBounds(btnX+ width + width/6,btnY+(heigh/4), 200,heigh);
-    	validatesChoicesBtn.addActionListener(new ActionListener() { 
-		public void actionPerformed(ActionEvent e) { 
-				lauchAlgo(); 
-			  } 
-			} );	
+        	JButton validatesChoicesBtn = new JButton("Confirm my choices");
+        	validatesChoicesBtn.setBounds(btnX+ width + width/6,btnY+(heigh/4), 200,heigh);
+        	validatesChoicesBtn.addActionListener(new ActionListener() { 
+    		public void actionPerformed(ActionEvent e) { 
+    				launchAlgo(); 
+    			  } 
+    			} );
+        	
+        	jc.add(refreshBtn);
+        	jc.add(validatesChoicesBtn);
+        	jc.add(area);
+    	}
+    	else {
+    		info=new JLabel("Here is the path you should take: "); 
+    		info.setBounds(10, 40, 400,30);
+    		
+    	}
+    	title.setFont(new Font("Serif",Font.BOLD,25));
+    	info.setFont(new Font("Serif",Font.BOLD,20));
     	jc.add(info);
     	jc.add(title);
-    	jc.add(area);
-    	jc.add(refreshBtn);
-    	jc.add(validatesChoicesBtn);
+    	
     	
 	}
+	
 	
 	/*
 	 * Launch the selected path finding algo
 	 */
-	private static void lauchAlgo(){
+	private static void launchAlgo(){
 		List<Integer> nodeRequierment = new ArrayList<Integer>();
-		Map<Integer, Boolean>  selectedTown= regionInfo.get(12).getSelectedTown();
+		Plan map = regionInfo.get(12);
+		Map<Integer, Boolean>  selectedTown= map.getSelectedTown();
 		
 		for(int key :selectedTown.keySet() ) {
 		
@@ -178,11 +227,23 @@ public class CreateInterface implements ActionListener {
 			}
 		}
 		
-		List<Integer> fullPath = Main.myPathOptimizer.findPath(nodeRequierment);
-		System.out.println("");
-		System.out.println("Final path : " + fullPath);
-		//System.out.println("Cost : " + Calcul.getCost(fullPath, weightedAdjMap));
+		fullPath = Main.myPathOptimizer.findPath(nodeRequierment);
+		cost = Calcul.getCost(fullPath, weightedAdjMap);
 		
+		isResults=true;
+		Frame[] frames = Frame.getFrames();
+		
+		for(Frame frame: frames) {
+			if(frame.getTitle().equals("LifeLine")) {
+				jc.removeAll();
+				frame.dispose();
+				createMap();
+			}
+		}
+		
+		jc.repaint();
+		
+				
 	}
 	/**
 	 * get the height of the buttons

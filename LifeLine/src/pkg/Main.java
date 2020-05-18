@@ -43,7 +43,7 @@ public class Main {
     	// launch the path optimizer
     	myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
     	
-    	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList );
+    	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList, weightedAdjMap );
    
 
     	

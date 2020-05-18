@@ -1,15 +1,21 @@
 package front;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import obj.Plan;
 
 public class CreatFrame {
-	
+	protected static JFrame  frame;
 	
 	/**
 	 * Create and show the frame
@@ -20,21 +26,23 @@ public class CreatFrame {
 	 * @param plan
 	 */
 	protected static void showOnFrame(JComponent component, String frameName, Boolean isSmallMap, Plan plan) {
-		JFrame  frame = new JFrame(frameName);
+		  frame = new JFrame(frameName);
 		WindowAdapter wa;
+			
+		frame.setResizable(false);
+		
+		 
+		
+		component.revalidate();
 		
 			if(!isSmallMap) {
 				 wa = new WindowAdapter() {
 					public void windowClosing(WindowEvent e) {
-						System.exit(0);
+						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					}
 					
 				};
-				
-				
 			}else {
-
-				
 				wa = new WindowAdapter() {
 					public void windowClosing(WindowEvent e) {
 						PaintInterface.idRegion=12;
@@ -42,16 +50,14 @@ public class CreatFrame {
 					}
 				};
 			}
-		
-		
-		
-		
+
 		frame.addWindowListener(wa);
 		frame.getContentPane().add(component);
 		frame.getContentPane().addMouseListener(new ClickListener((PaintInterface) component,plan));
 		frame.pack();
 		frame.setVisible(true);
 	}
+
 
 
 }

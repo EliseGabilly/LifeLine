@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import obj.Coord;
 import obj.Plan;
@@ -50,16 +51,36 @@ public class PaintInterface extends JPanel{
 			}else {
 				if(namesXRegions!=null) {
 					region = (int) namesXRegions.get(number)[1];
-					color = CreateInterface.chooseColor(region);
+					color = Color.gray;
+					if(!CreateInterface.isResults) color = CreateInterface.chooseColor(region);
 				}
-				
-				
 				g.setColor(color);
 				g.fillRect(x, y, width, width);	
 			}
-			
-			
+		
 		}
+		if(CreateInterface.isResults) {
+			for(int townInThePath : CreateInterface.fullPath) {
+				if (!CreateInterface.basesList.contains(townInThePath)) {
+					x=(int) cityCoordMap.get(townInThePath).getX();
+					y=(int) cityCoordMap.get(townInThePath).getY();
+					
+					g.setColor(Color.GREEN);
+					g.fillRect(x, y, width, width);	
+				}
+				
+				
+			}
+			Results.printResultsOnMap(g);
+			JScrollPane scroller = new JScrollPane(CreateInterface.jc, 
+					   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
+					   JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
+			scroller.setBounds(CreateInterface.dimensionCountry[0]+150, 0, 20, CreateInterface.dimensionCountry[1]+70);
+			
+			 
+			CreatFrame.frame.add(scroller);
+		}
+		
 		for(int key : selectedTown.keySet()) {
 			if(selectedTown.get(key)) {
 				
@@ -67,7 +88,10 @@ public class PaintInterface extends JPanel{
 				g.setColor(Color.red);
 				g.fillRect(coords[0], coords[1], width, width);
 			}
+			
+			
 		}
+		
 		
 	}
 	
