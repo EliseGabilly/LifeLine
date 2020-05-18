@@ -2,10 +2,16 @@ package front;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JButton;
+import javax.swing.JTextArea;
 
 import obj.Coord;
 import obj.Plan;
@@ -68,14 +74,13 @@ public class ByRegion {
 		adjustRegionCoordMap=CreateInterface.adjustOnFrame(plan);
 		int[] dimensionRegion = CreateInterface.getDimension(adjustRegionCoordMap);
 		
-		//dimensionRegion[0] = dimensionRegion[0] -100;
-		//dimensionRegion[1] = dimensionRegion[1] -100;
+		
 		
 		Map<Integer, Boolean> selectedTown = new HashMap<>();
 		Map<Integer, TownInterface<?, ?>> rectMap = plan.getRectCoordMap();
-		plan = new Plan(name,key,selectedTown, adjustRegionCoordMap, dimensionRegion,rectMap ); 
-				
-		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]+100));
+		plan = new Plan(name,key,selectedTown, adjustRegionCoordMap, dimensionRegion,rectMap );
+		
+		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]));
 		
 		//TODO
 		/*
@@ -138,7 +143,7 @@ public static Plan recreateFrame(Plan plan) {
 		regionInterface.setLayout(null);
 		int[] dimensionRegion = plan.getDimension();
 				
-		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]+100));
+		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]));
 		
 		//TODO
 		/*
@@ -162,6 +167,9 @@ public static Plan recreateFrame(Plan plan) {
 		CreatFrame.showOnFrame(regionInterface,plan.getName(), true, plan);
 		return plan;
 	}
+
+
+
 	
 
 }

@@ -33,6 +33,8 @@ public class CreatFrame {
 				
 				
 			}else {
+
+				
 				wa = new WindowAdapter() {
 					public void windowClosing(WindowEvent e) {
 						PaintInterface.idRegion=12;

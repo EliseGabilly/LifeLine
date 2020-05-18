@@ -288,8 +288,8 @@ public class CreateInterface implements ActionListener {
     		
     	}while(xMax>width-100 || yMax>height-(height/4));
 
-    	xMin=-50;
-    	yMin=-10;
+    	xMin=xMin-50;
+    	yMin=yMin-20;
     	yMaxOfTown=yMax;
     	xMaxOfTown=xMax;
  
