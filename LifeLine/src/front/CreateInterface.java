@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 import obj.Plan;
 import obj.Coord;
@@ -95,7 +97,7 @@ public class CreateInterface implements ActionListener {
 			 List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(key,namesMap);
 			 Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,cityCoordMap);
 			 
-			button.setFont(new Font("Serif",Font.PLAIN,12));
+			button.setFont(new Font("Serif",Font.BOLD,12));
 			button.setBounds((int) btnX,btnY, width,heigh);
 			button.addActionListener(new ActionListener() { 
 				  public void actionPerformed(ActionEvent e) { 
@@ -128,8 +130,15 @@ public class CreateInterface implements ActionListener {
 	 */
 	public static void createTextAreaAndRefresh( int[] dimensionCountry) {
 		
+		
+		
+		JLabel title=new JLabel("Rwandata map : "); 
+		title.setBounds(10, 10, 200,30);
+		JLabel info=new JLabel("Choose the towns that you want to deliver: "); 
+		info.setBounds(10, 40, 400,30);
+		
 		int heigh = getBtnDimX(dimensionCountry);
-		JTextArea area=new JTextArea("Zoom on a region: "); 
+		JLabel area=new JLabel("Zoom on a region: ", SwingConstants.CENTER); 
 		int btnsDimension =(heigh + heigh/2);
 		
 		int btnY= yMaxOfTown+20 ;
@@ -138,9 +147,6 @@ public class CreateInterface implements ActionListener {
 		
     	area.setBounds(10, btnY+btnsDimension, btnX - 10,30); 
     	
-    	area.setEnabled(false);
-    
-    	 
     	JButton refreshBtn = new JButton("Refresh");
     	refreshBtn.setBounds(btnX,btnY+(heigh/4),width,heigh);
     	refreshBtn.addActionListener(new ActionListener() { 
@@ -166,9 +172,13 @@ public class CreateInterface implements ActionListener {
 			} );
     	
     	
-    	area.setFont(new Font("Serif",Font.PLAIN,15));
-    	refreshBtn.setFont(new Font("Serif",Font.PLAIN,15));
-    	validatesChoicesBtn.setFont(new Font("Serif",Font.PLAIN,15));
+    	info.setFont(new Font("Serif",Font.BOLD,19));
+    	area.setFont(new Font("Serif",Font.BOLD,19));
+    	title.setFont(new Font("Serif",Font.BOLD,19));
+    	refreshBtn.setFont(new Font("Serif",Font.BOLD,15));
+    	validatesChoicesBtn.setFont(new Font("Serif",Font.BOLD,15));
+    	jc.add(info);
+    	jc.add(title);
     	jc.add(area);
     	jc.add(refreshBtn);
     	jc.add(validatesChoicesBtn);
