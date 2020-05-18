@@ -10,6 +10,7 @@ import obj.Plan;
 
 public class CreatFrame {
 	
+	
 	/**
 	 * Create and show the frame
 	 * Add the on close event : stop program or go bakc to the entire Rwanda maps parameters
@@ -19,7 +20,7 @@ public class CreatFrame {
 	 * @param plan
 	 */
 	public static void showOnFrame(JComponent component, String frameName, Boolean isSmallMap, Plan plan) {
-		JFrame frame = new JFrame(frameName);
+		JFrame  frame = new JFrame(frameName);
 		WindowAdapter wa;
 		
 			if(!isSmallMap) {

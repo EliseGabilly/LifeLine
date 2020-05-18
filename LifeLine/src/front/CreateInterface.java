@@ -29,6 +29,8 @@ public class CreateInterface implements ActionListener {
 	public static PaintInterface jc = new PaintInterface();
 	static Map<Integer, Plan> regionInfo = new HashMap<>(); // List of all individual maps and the entire one
 	private static Plan regionMap = new Plan();
+	static int yMaxOfTown; 
+	static int xMaxOfTown;
 	
 	
 	 
@@ -80,10 +82,11 @@ public class CreateInterface implements ActionListener {
 		
 		int heigh = getBtnDimX(dimensionCountry);
 		
+		int btnsDimension =(20 + heigh + heigh/2);
 		int btnX=(int) ( dimensionCountry[0]*0.28);
-    	int btnY= dimensionCountry[1]+20 + heigh + heigh/2;
+    	int btnY= yMaxOfTown+btnsDimension ;
     	
-    	int width =getBtnDimY(btnY );
+    	int width =getBtnDimY(dimensionCountry);
     	
 		for(int key :regMap.keySet() ) {
 			String name = (String) regMap.get(key)[0];
@@ -127,12 +130,13 @@ public class CreateInterface implements ActionListener {
 		
 		int heigh = getBtnDimX(dimensionCountry);
 		JTextArea area=new JTextArea("Zoom on a region: "); 
+		int btnsDimension =(heigh + heigh/2);
 		
-		int btnY= dimensionCountry[1];
+		int btnY= yMaxOfTown+20 ;
 		int btnX=(int) ( dimensionCountry[0]*0.28);
-		int width =getBtnDimY(btnY);
+		int width =getBtnDimY(dimensionCountry);
 		
-    	area.setBounds(10,btnY+(heigh/3), btnX - 10,30); 
+    	area.setBounds(10, btnY+btnsDimension, btnX - 10,30); 
     	
     	area.setEnabled(false);
     
@@ -171,15 +175,18 @@ public class CreateInterface implements ActionListener {
     	
 	}
 	
-	public static int getBtnDimY( int maxY) {	
-		int width = (int) ((0.75*maxY)/4);
-		return width;
+	public static int getBtnDimY(int[] dimensionCountry) {	
+		
+		int height = (int) ((0.75*xMaxOfTown)/5);
+		return height;
 	}
 	
 	public static int getBtnDimX(int[] dimensionCountry) {	
-		int height =  100/5;
+		
+		
+		int width =  (dimensionCountry[1]-yMaxOfTown)/4;
 
-		return height;
+		return width;
 	}
 	
 	
@@ -283,6 +290,8 @@ public class CreateInterface implements ActionListener {
 
     	xMin=-50;
     	yMin=-10;
+    	yMaxOfTown=yMax;
+    	xMaxOfTown=xMax;
  
     	return adjustMap(xMin, yMin , plan);
 	}
