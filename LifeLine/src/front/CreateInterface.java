@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,8 @@ import javax.swing.SwingConstants;
 import obj.Plan;
 import obj.Coord;
 import obj.TownInterface;
+import pkg.Calcul;
+import pkg.Main;
 import util.Printer;
 import util.TXTReader;
 
@@ -129,9 +132,7 @@ public class CreateInterface implements ActionListener {
 	 * @param btnY
 	 */
 	public static void createTextAreaAndRefresh( int[] dimensionCountry) {
-		
-		
-		
+
 		JLabel title=new JLabel("Rwandata map : "); 
 		title.setBounds(10, 10, 200,30);
 		JLabel info=new JLabel("Choose the towns that you want to deliver: "); 
@@ -163,15 +164,26 @@ public class CreateInterface implements ActionListener {
     	validatesChoicesBtn.setBounds(btnX+ width + width/6,btnY+(heigh/4), 200,heigh);
     	validatesChoicesBtn.addActionListener(new ActionListener() { 
 		public void actionPerformed(ActionEvent e) { 
-
-				/**
-				 * 
-				 */
+			
+			List<Integer> nodeRequierment = new ArrayList<Integer>();
+			
+			Map<Integer, Boolean>  selectedTown= regionInfo.get(12).getSelectedTown();
+			
+			for(int key :selectedTown.keySet() ) {
+			
+				if(selectedTown.get(key)) {
+					nodeRequierment.add(key);
+				}
+			}
+			
+			List<Integer> fullPath = Main.myPathOptimizer.findPath(nodeRequierment);
+			System.out.println("");
+			System.out.println("Final path : " + fullPath);
+			//System.out.println("Cost : " + Calcul.getCost(fullPath, weightedAdjMap));
+			
 				 
 			  } 
-			} );
-    	
-    	
+			} );	
     	info.setFont(new Font("Serif",Font.BOLD,19));
     	area.setFont(new Font("Serif",Font.BOLD,19));
     	title.setFont(new Font("Serif",Font.BOLD,19));

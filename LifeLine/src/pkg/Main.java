@@ -18,6 +18,7 @@ public class Main {
     public static String[] getArgs() {
         return savedArgs;
     }
+    public static PathOptimizer myPathOptimizer;
 
     public static void main(String[] args) {
     	savedArgs=args;
@@ -39,6 +40,8 @@ public class Main {
     	if (Arrays.asList(args).contains("-pr") || Arrays.asList(args).contains("-printRegions"))
     		Printer.printDataMap(regMap);
     	
+    	// launch the path optimizer
+    	myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
     	
     	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList );
     	
@@ -55,13 +58,8 @@ public class Main {
     		}
     	}*/
 
-    	// launch the path optimizer
-    	/*PathOptimizer myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
-    	List<Integer> fullPath = myPathOptimizer.findPath(nodeRequierment);
-    	//TODO choose methode & change initialization of map etc.
-		System.out.println("");
-		System.out.println("Final path : " + fullPath);
-		System.out.println("Cost : " + Calcul.getCost(fullPath, weightedAdjMap));*/
+    	
+    	
     }
 
 }
