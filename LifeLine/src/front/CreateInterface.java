@@ -7,41 +7,36 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import obj.Plan;
 import obj.Coord;
 import obj.TownInterface;
-import pkg.Calcul;
 import pkg.Main;
-import util.Printer;
-import util.TXTReader;
 
 public class CreateInterface implements ActionListener {
 	
-	public static Map<Integer, Coord<?, ?>> cityCoordMap;
-	public static Map<Integer, Object[]> namesMap;
-	public static Map<Integer, Object[]> regMap;
-	public static List<Integer>  basesList;
-	public static PaintInterface jc = new PaintInterface();
-	static Map<Integer, Plan> regionInfo = new HashMap<>(); // List of all individual maps and the entire one
+	protected static Map<Integer, Coord<?, ?>> cityCoordMap;
+	protected static Map<Integer, Object[]> namesMap;
+	protected static Map<Integer, Object[]> regMap;
+	protected static List<Integer>  basesList;
+	private static PaintInterface jc = new PaintInterface();
+	protected static Map<Integer, Plan> regionInfo = new HashMap<>(); // List of all individual maps and the entire one
 	private static Plan regionMap = new Plan();
-	static int yMaxOfTown; 
-	static int xMaxOfTown;
-	
-	
+	private static int yMaxOfTown; 
+	private static int xMaxOfTown;
+	private static double width;
+	private static double height;
 	 
 	
 	/**
-	 * Initialises variables to creates all interfaces
+	 * Initialises variables to creates the main interface (Shows towns, buttons, text areas)
 	 * @param cityCoordMap
 	 * @param namesMap
 	 * @param regMap
@@ -53,13 +48,13 @@ public class CreateInterface implements ActionListener {
 		regMap=regMapOrigin;
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
 		
+		jc.setFont(new Font("Serif",Font.BOLD,19));
 		Plan forEntireMap = new Plan();
     	jc.setBackground(Color.WHITE);
     	jc.setLayout(null);
     	forEntireMap.setCityCoordMap(cityCoordMap);
     	adjustCityCoordMap=adjustOnFrame(forEntireMap);
     	int[] dimensionCountry = getDimension(adjustCityCoordMap);
-    	
     	
     	createTextAreaAndRefresh(dimensionCountry);
     	createRegionButton(dimensionCountry);
@@ -78,20 +73,20 @@ public class CreateInterface implements ActionListener {
 	}
 	
 	/**
-	 * Creates the button for each region
+	 * Creates the button for each region (position + dimensions + action...)
 	 * @param btnX
 	 * @param btnY
 	 */
-	public static void createRegionButton( int[] dimensionCountry) {
+	private static void createRegionButton( int[] dimensionCountry) {
 		
 		
-		int heigh = getBtnDimX(dimensionCountry);
+		int btnHeigh = getBtnDimX(dimensionCountry);
 		
-		int btnsDimension =(20 + heigh + heigh/2);
+		int spaceForNextButton =20 + btnHeigh + btnHeigh/2;
 		int btnX=(int) ( dimensionCountry[0]*0.28);
-    	int btnY= yMaxOfTown+btnsDimension ;
+    	int btnY= yMaxOfTown+spaceForNextButton ;
     	
-    	int width =getBtnDimY(dimensionCountry);
+    	int btnWidth =getBtnDimY(dimensionCountry);
     	
 		for(int key :regMap.keySet() ) {
 			String name = (String) regMap.get(key)[0];
@@ -99,9 +94,7 @@ public class CreateInterface implements ActionListener {
 			
 			 List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(key,namesMap);
 			 Map<Integer, Coord<?, ?>> regionCoordsMap = ByRegion.getCoordForSelectedRegion(idTownInRegion,cityCoordMap);
-			 
-			button.setFont(new Font("Serif",Font.BOLD,12));
-			button.setBounds((int) btnX,btnY, width,heigh);
+	
 			button.addActionListener(new ActionListener() { 
 				  public void actionPerformed(ActionEvent e) { 
 					  if(regionInfo.containsKey(key)) {
@@ -110,15 +103,17 @@ public class CreateInterface implements ActionListener {
 						  regionMap = ByRegion.createFrameForRegion(name, regionCoordsMap, key);
 		    			  regionInfo.put(key, regionMap);
 					  }
-
 				  } 
 				} );
 	    	
+			button.setFont(new Font("Serif",Font.BOLD,12));
+			button.setBounds((int) btnX,btnY, btnWidth,btnHeigh);
 	    	button.setBackground(chooseColor(key));
-	    	btnX+=width+ width/6 ;
+	    	
+	    	btnX+=btnWidth+ btnWidth/6 ;
 	    	if(key==4) {
-	    		btnY+=  heigh + heigh/3;
-	    		btnX =(int) ( dimensionCountry[0]*0.28) - (width+ width/6);
+	    		btnY+=  btnHeigh + btnHeigh/3;
+	    		btnX =(int) ( dimensionCountry[0]*0.28) - (btnWidth+ btnWidth/6);
 	    	}
 	    	jc.add(button);
     	}
@@ -127,68 +122,40 @@ public class CreateInterface implements ActionListener {
 	
 	
 	/**
-	 * creates the text area and refresh button
+	 * creates labels and refresh button
 	 * @param btnX
 	 * @param btnY
 	 */
-	public static void createTextAreaAndRefresh( int[] dimensionCountry) {
-
-		JLabel title=new JLabel("Rwandata map : "); 
-		title.setBounds(10, 10, 200,30);
-		JLabel info=new JLabel("Choose the towns that you want to deliver: "); 
-		info.setBounds(10, 40, 400,30);
-		
-		int heigh = getBtnDimX(dimensionCountry);
-		JLabel area=new JLabel("Zoom on a region: ", SwingConstants.CENTER); 
-		int btnsDimension =(heigh + heigh/2);
+	private static void createTextAreaAndRefresh( int[] dimensionCountry) {
 		
 		int btnY= yMaxOfTown+20 ;
 		int btnX=(int) ( dimensionCountry[0]*0.28);
 		int width =getBtnDimY(dimensionCountry);
+		int heigh = getBtnDimX(dimensionCountry);
+		int btnsDimension =(heigh + heigh/2);
 		
+		JLabel title=new JLabel("Rwandata map : "); 
+		title.setBounds(10, 10, 200,30);
+		JLabel info=new JLabel("Choose the towns that you want to deliver: "); 
+		info.setBounds(10, 40, 400,30);
+		JLabel area=new JLabel("Zoom on a region: ", SwingConstants.CENTER); 
     	area.setBounds(10, btnY+btnsDimension, btnX - 10,30); 
     	
     	JButton refreshBtn = new JButton("Refresh");
     	refreshBtn.setBounds(btnX,btnY+(heigh/4),width,heigh);
     	refreshBtn.addActionListener(new ActionListener() { 
-		public void actionPerformed(ActionEvent e) { 
-
+		public void actionPerformed(ActionEvent e) {
 				jc.repaint();
-				 
 			  } 
 			} );
-    	
-    	
-    	
+
     	JButton validatesChoicesBtn = new JButton("Confirm my choices");
     	validatesChoicesBtn.setBounds(btnX+ width + width/6,btnY+(heigh/4), 200,heigh);
     	validatesChoicesBtn.addActionListener(new ActionListener() { 
 		public void actionPerformed(ActionEvent e) { 
-			
-			List<Integer> nodeRequierment = new ArrayList<Integer>();
-			
-			Map<Integer, Boolean>  selectedTown= regionInfo.get(12).getSelectedTown();
-			
-			for(int key :selectedTown.keySet() ) {
-			
-				if(selectedTown.get(key)) {
-					nodeRequierment.add(key);
-				}
-			}
-			
-			List<Integer> fullPath = Main.myPathOptimizer.findPath(nodeRequierment);
-			System.out.println("");
-			System.out.println("Final path : " + fullPath);
-			//System.out.println("Cost : " + Calcul.getCost(fullPath, weightedAdjMap));
-			
-				 
+				lauchAlgo(); 
 			  } 
 			} );	
-    	info.setFont(new Font("Serif",Font.BOLD,19));
-    	area.setFont(new Font("Serif",Font.BOLD,19));
-    	title.setFont(new Font("Serif",Font.BOLD,19));
-    	refreshBtn.setFont(new Font("Serif",Font.BOLD,15));
-    	validatesChoicesBtn.setFont(new Font("Serif",Font.BOLD,15));
     	jc.add(info);
     	jc.add(title);
     	jc.add(area);
@@ -197,17 +164,44 @@ public class CreateInterface implements ActionListener {
     	
 	}
 	
-	public static int getBtnDimY(int[] dimensionCountry) {	
+	/*
+	 * Launch the selected path finding algo
+	 */
+	private static void lauchAlgo(){
+		List<Integer> nodeRequierment = new ArrayList<Integer>();
+		Map<Integer, Boolean>  selectedTown= regionInfo.get(12).getSelectedTown();
+		
+		for(int key :selectedTown.keySet() ) {
+		
+			if(selectedTown.get(key)) {
+				nodeRequierment.add(key);
+			}
+		}
+		
+		List<Integer> fullPath = Main.myPathOptimizer.findPath(nodeRequierment);
+		System.out.println("");
+		System.out.println("Final path : " + fullPath);
+		//System.out.println("Cost : " + Calcul.getCost(fullPath, weightedAdjMap));
+		
+	}
+	/**
+	 * get the height of the buttons
+	 * @param dimensionCountry
+	 * @return
+	 */
+	private static int getBtnDimY(int[] dimensionCountry) {	
 		
 		int height = (int) ((0.75*xMaxOfTown)/5);
 		return height;
 	}
 	
-	public static int getBtnDimX(int[] dimensionCountry) {	
-		
-		
+	/**
+	 * get the width of the buttons
+	 * @param dimensionCountry
+	 * @return
+	 */
+	private static int getBtnDimX(int[] dimensionCountry) {	
 		int width =  (dimensionCountry[1]-yMaxOfTown)/4;
-
 		return width;
 	}
 	
@@ -226,11 +220,9 @@ public class CreateInterface implements ActionListener {
  * @param cityCoordMap
  * @return
  */
-	public static int[] getDimension(Map<Integer, Coord<?, ?>> cityCoordMap) {
-		int x=0;
-    	int y=0;
-    	int newX;
-    	int newY;
+protected static int[] getDimension(Map<Integer, Coord<?, ?>> cityCoordMap) {
+		int x = 0, y = 0;
+    	int newX, newY;
 		for(int number:cityCoordMap.keySet()) {
 			
 			newX=(int) cityCoordMap.get(number).getX();
@@ -243,9 +235,7 @@ public class CreateInterface implements ActionListener {
 			}		
 		}	
 		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth()-((screenSize.getWidth()/5));
-		double height = screenSize.getHeight()-(screenSize.getHeight()/3);
+		height= height-(height/3);
 		while(x>=width) {
 			x-=100;
 		}
@@ -260,10 +250,11 @@ public class CreateInterface implements ActionListener {
 	
 	/**
 	 * finds the variable that will be use to read just the coordinates to the top right of the frame
+	 * Initialises the maximum value of x and Y for the map (not the frame)
 	 * @param plan
 	 * @return
 	 */
-	public static Map<Integer, Coord<?, ?>> adjustOnFrame(Plan plan) {
+	protected static Map<Integer, Coord<?, ?>> adjustOnFrame(Plan plan) {
 		
 		
 		int xMax=0;
@@ -274,8 +265,8 @@ public class CreateInterface implements ActionListener {
     	int yMin=Integer.MAX_VALUE;
     	
     	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    	double width = screenSize.getWidth()-((screenSize.getWidth()/5));
-		double height = screenSize.getHeight();
+    	width = screenSize.getWidth()-((screenSize.getWidth()/5));
+		height = screenSize.getHeight();
     	
     	
     	do {
@@ -318,7 +309,13 @@ public class CreateInterface implements ActionListener {
     	return adjustMap(xMin, yMin , plan);
 	}
 	
-	public static Map<Integer, Coord<?, ?>>  adjust(float delta, Plan plan) {
+	/**
+	 * Adjusts the coordinate depending on the resolution of the frame
+	 * @param delta
+	 * @param plan
+	 * @return
+	 */
+	private static Map<Integer, Coord<?, ?>>  adjust(float delta, Plan plan) {
 		
 		Map<Integer, Coord<?, ?>> cityCoordMap= plan.getCityCoordMap();
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
@@ -338,13 +335,13 @@ public class CreateInterface implements ActionListener {
 	
 	
 	/**
-	 * Changes the coords stored in the the lsit containing twons coordinates in the selected area 
+	 * Changes the coords stored in the the list containing towns coordinates in the selected area that are not bases
 	 * @param deltaX
 	 * @param deltaY
 	 * @param plan
 	 * @return
 	 */
-	public static Map<Integer, Coord<?, ?>>  adjustMap( int deltaX, int deltaY, Plan plan) {
+	private static Map<Integer, Coord<?, ?>>  adjustMap( int deltaX, int deltaY, Plan plan) {
 		
 		Map<Integer, Coord<?, ?>> cityCoordMap= plan.getCityCoordMap();
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
@@ -364,7 +361,6 @@ public class CreateInterface implements ActionListener {
 		}
 		plan.setRectCoordMap(rectMap);
 		return adjustCityCoordMap;
-		
 	}
 
 
@@ -374,7 +370,7 @@ public class CreateInterface implements ActionListener {
 	 * @param region
 	 * @return
 	 */
-	public static Color chooseColor(int region) {
+	protected static Color chooseColor(int region) {
 		Color color = new Color(0,0,0);
 		
 		switch(region) {

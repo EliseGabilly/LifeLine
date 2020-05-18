@@ -2,16 +2,10 @@ package front;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.JTextArea;
 
 import obj.Coord;
 import obj.Plan;
@@ -19,14 +13,14 @@ import obj.TownInterface;
 
 public class ByRegion {
 	
-	static PaintInterface regionInterface = new PaintInterface();
+	private static PaintInterface regionInterface = new PaintInterface();
 	/**
 	 * return the list of all town id in the selected region
 	 * @param idRegion
 	 * @param namesMap
 	 * @return
 	 */
-	public static List<Integer> getTownForSelectedRegion(int idRegion, Map<Integer, Object[]> namesMap) {
+	protected static List<Integer> getTownForSelectedRegion(int idRegion, Map<Integer, Object[]> namesMap) {
 		
 		List<Integer> idTownInRegion = new ArrayList<Integer>();
 		
@@ -46,7 +40,7 @@ public class ByRegion {
 	 * @param cityCoordMap
 	 * @return
 	 */
-	public static Map<Integer, Coord<?, ?>> getCoordForSelectedRegion(List<Integer> idTownInRegion, Map<Integer, Coord<?, ?>> cityCoordMap) {
+	protected static Map<Integer, Coord<?, ?>> getCoordForSelectedRegion(List<Integer> idTownInRegion, Map<Integer, Coord<?, ?>> cityCoordMap) {
 			
 			Map<Integer, Coord<?, ?>> regionCoordsMap = new HashMap<>();
 			
@@ -63,7 +57,7 @@ public class ByRegion {
 	 * @param key
 	 * @return
 	 */
-	public static Plan createFrameForRegion(String name, Map<Integer, Coord<?, ?>> regionCoordsMap, int key) {
+	protected static Plan createFrameForRegion(String name, Map<Integer, Coord<?, ?>> regionCoordsMap, int key) {
 		
 		Plan plan = new Plan();
 		Map<Integer, Coord<?, ?>> adjustRegionCoordMap = new HashMap<>();
@@ -111,7 +105,7 @@ public class ByRegion {
 	 * @param region
 	 * @return
 	 */
-public static Plan createARegion(Map<Integer, Boolean> selectedTownInRegion, int region) {
+	protected static Plan createARegion(Map<Integer, Boolean> selectedTownInRegion, int region) {
 	
 		String name = (String) CreateInterface.regMap.get(region)[0];
 		List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(region,CreateInterface.namesMap);
@@ -137,7 +131,7 @@ public static Plan createARegion(Map<Integer, Boolean> selectedTownInRegion, int
 	 * @param plan
 	 * @return
 	 */
-public static Plan recreateFrame(Plan plan) {
+	protected static Plan recreateFrame(Plan plan) {
 		
 		regionInterface.setBackground(Color.WHITE);
 		regionInterface.setLayout(null);
@@ -167,9 +161,5 @@ public static Plan recreateFrame(Plan plan) {
 		CreatFrame.showOnFrame(regionInterface,plan.getName(), true, plan);
 		return plan;
 	}
-
-
-
-	
 
 }

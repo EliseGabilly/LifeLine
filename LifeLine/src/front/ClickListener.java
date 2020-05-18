@@ -11,7 +11,7 @@ public class ClickListener extends MouseAdapter {
 	
 	private PaintInterface panel;
 	private static int key;
-	static Plan currentMap; 
+	protected static Plan currentMap; 
 	
 	public ClickListener(PaintInterface panel, Plan plan) {
 		super();
@@ -30,12 +30,12 @@ public class ClickListener extends MouseAdapter {
 	
 	
 	/**
-	 * Check if the clikc is inside a square
+	 * Check if the click is inside a square
 	 * @param x
 	 * @param y
 	 * @return
 	 */
-	public static Boolean getNode(int x, int y) {
+	private static Boolean getNode(int x, int y) {
 		Map<Integer, TownInterface<?, ?>> rectCoordMap = currentMap.getRectCoordMap();
 		
 		int currentX1;

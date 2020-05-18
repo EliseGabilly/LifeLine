@@ -19,7 +19,7 @@ public class CreatFrame {
 	 * @param isSmallMap
 	 * @param plan
 	 */
-	public static void showOnFrame(JComponent component, String frameName, Boolean isSmallMap, Plan plan) {
+	protected static void showOnFrame(JComponent component, String frameName, Boolean isSmallMap, Plan plan) {
 		JFrame  frame = new JFrame(frameName);
 		WindowAdapter wa;
 		
