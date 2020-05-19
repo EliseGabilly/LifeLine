@@ -47,8 +47,7 @@ public class Results {
 		printResultsAsText(g,pathNames);
 		
 		
-		
-		if(isEnd)CreateInterface.jc.repaint();
+		if(isEnd)CreateInterface.jc.repaint(); //When we already show the results we stop the processus
 	}
 	
 	/**

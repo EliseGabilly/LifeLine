@@ -36,7 +36,7 @@ public class CreatFrame {
 					
 				 wa = new WindowAdapter() {
 					public void windowClosing(WindowEvent e) {
-						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						System.exit(0);
 					}
 					
 				};
@@ -46,13 +46,16 @@ public class CreatFrame {
 						PaintInterface.idRegion=12;
 						ClickListener.currentMap = CreateInterface.regionInfo.get(12);
 						CreateInterface.ableBtn=true;
+						CreateInterface.jc.repaint();
 					}
 				};
 			}
-			mouseListener = new ClickListener((PaintInterface) component,plan);
+			
+		mouseListener = new ClickListener((PaintInterface) component, plan);
 		frame.addWindowListener(wa);
 		frame.getContentPane().add(component);
 		frame.getContentPane().addMouseListener(mouseListener);
+		frame.getContentPane().addMouseMotionListener(mouseListener);
 		frame.pack();
 		frame.setVisible(true);
 	}

@@ -2,10 +2,17 @@ package front;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import obj.Coord;
 import obj.Plan;
@@ -68,7 +75,7 @@ public class ByRegion {
 		adjustRegionCoordMap=CreateInterface.adjustOnFrame(plan);
 		int[] dimensionRegion = CreateInterface.getDimension(adjustRegionCoordMap);
 		
-		
+		addBtnBack(dimensionRegion);
 		
 		Map<Integer, Boolean> selectedTown = new HashMap<>();
 		Map<Integer, TownInterface<?, ?>> rectMap = plan.getRectCoordMap();
@@ -76,27 +83,35 @@ public class ByRegion {
 		
 		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]));
 		
-		//TODO
-		/*
 		
-		JButton goOnMainPageBtn = new JButton("Go to main page");
-    	
-		goOnMainPageBtn.setBounds(dimension[0]/4,dimension[1],150,30);
-		goOnMainPageBtn.addActionListener(new ActionListener() { 
-			  public void actionPerformed(ActionEvent e) { 
-				  
-			  } 
-			} );
-    	
-    	
-		goOnMainPageBtn.setBackground(new Color(121,171,222));    	
-    	regionInterface.add(goOnMainPageBtn);*/
+		
 	
 		
 		PaintInterface.forEntireMap = false;
 		PaintInterface.idRegion=key;
 		CreatFrame.showOnFrame(regionInterface,name, true, plan);
 		return plan;
+	}
+	
+	private static void addBtnBack(int [] dimensionRegion){
+		regionInterface.removeAll();
+		int width = dimensionRegion[0]/2;
+		JButton goOnMainPageBtn = new JButton("Go to main page");
+    	goOnMainPageBtn.setBounds(dimensionRegion[0]/4, dimensionRegion[1]-30, width, 25);
+		goOnMainPageBtn.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				  JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(regionInterface);
+				  topFrame.dispose();
+				  PaintInterface.idRegion=12;
+					ClickListener.currentMap = CreateInterface.regionInfo.get(12);
+					CreateInterface.ableBtn=true;
+					CreateInterface.jc.repaint();
+			  } 
+			} );
+    	
+    	
+		goOnMainPageBtn.setBackground(new Color(121,171,222));    	
+    	regionInterface.add(goOnMainPageBtn);
 	}
 	
 	/**
@@ -133,27 +148,14 @@ public class ByRegion {
 	 */
 	protected static Plan recreateFrame(Plan plan) {
 		
+		
 		regionInterface.setBackground(Color.WHITE);
 		regionInterface.setLayout(null);
 		int[] dimensionRegion = plan.getDimension();
 				
 		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]));
 		
-		//TODO
-		/*
-		
-		JButton goOnMainPageBtn = new JButton("Go to main page");
-    	
-		goOnMainPageBtn.setBounds(dimension[0]/4,dimension[1],150,30);
-		goOnMainPageBtn.addActionListener(new ActionListener() { 
-			  public void actionPerformed(ActionEvent e) { 
-				  
-			  } 
-			} );
-    	
-    	
-		goOnMainPageBtn.setBackground(new Color(121,171,222));    	
-    	regionInterface.add(goOnMainPageBtn);*/
+		addBtnBack(dimensionRegion);
 	
 		
 		PaintInterface.forEntireMap = false;

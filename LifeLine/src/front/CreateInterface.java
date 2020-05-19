@@ -85,7 +85,7 @@ public class CreateInterface implements ActionListener {
 		if(!isResults) {
 			dimensionCountry = createPlanForCountry(adjustCityCoordMap);
 		}
-		createTextAreaAndRefresh(dimensionCountry);
+		createTextArea(dimensionCountry);
 		jc.setPreferredSize(new Dimension(dimensionCountry[0]+dimensionCountry[0]/12,dimensionCountry[1]+100));
     	jc.namesXRegions = namesMap;
     	jc.regions = regMap;
@@ -115,6 +115,7 @@ public class CreateInterface implements ActionListener {
 			jc.add(scroller);
 
     		showResults.setVisible(true);
+    		
     		CreatFrame.showOnFrame(jc, "Results",false, forEntireMap);
     	} 
 	}
@@ -163,7 +164,7 @@ public class CreateInterface implements ActionListener {
 							  regionMap = ByRegion.createFrameForRegion(name, regionCoordsMap, key);
 			    			  regionInfo.put(key, regionMap);
 						  }
-					  }
+					  }  
 					  
 				  } 
 				} );
@@ -184,11 +185,11 @@ public class CreateInterface implements ActionListener {
 	
 	
 	/**
-	 * creates labels and refresh button
+	 * creates labels and button
 	 * @param btnX
 	 * @param btnY
 	 */
-	private static void createTextAreaAndRefresh( int[] dimensionCountry) {
+	private static void createTextArea( int[] dimensionCountry) {
 		
 		int btnY= yMaxOfTown+20 ;
 		int btnX=(int) ( dimensionCountry[0]*0.28);
@@ -202,35 +203,26 @@ public class CreateInterface implements ActionListener {
 		selectedTowns.setWrapStyleWord(true);
 		JLabel title=new JLabel("Rwanda map : "); 
 		title.setBounds(10, 10, 200,30);
-		selectedTowns.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-200, 40, 150,yMaxOfTown);
+		selectedTowns.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-200, 40, 150,dimensionCountry[1]-300);
 		selectedTowns.setText("Selected towns: ");
     	if(!isResults) {
     		info=new JLabel("Choose the towns that you want to deliver: "); 
     		info.setBounds(10, 40, 400,30);
     		JLabel area=new JLabel("Zoom on a region: ", SwingConstants.CENTER); 
-        	area.setBounds(10, btnY+btnsDimension, btnX - 10,30); 
-        	JButton refreshBtn = new JButton("Refresh");
-        	refreshBtn.setBounds(btnX,btnY+(heigh/4),width,heigh);
-        	refreshBtn.addActionListener(new ActionListener() { 
-    		public void actionPerformed(ActionEvent e) {
-    			if(ableBtn) {
-    				jc.repaint();
-    			}
-    			  } 
-    			} );
-
+        	area.setBounds(10, btnY+btnsDimension, btnX - 10,30);     	
+     
         	JButton validatesChoicesBtn = new JButton("Confirm my choices");
-        	validatesChoicesBtn.setBounds(btnX+ width + width/6,btnY+(heigh/4), 200,heigh);
+        	validatesChoicesBtn.setBounds(btnX ,btnY+(heigh/4), 200,heigh);
         	validatesChoicesBtn.addActionListener(new ActionListener() { 
     		public void actionPerformed(ActionEvent e) { 
     			  if(ableBtn) {
-    				  launchAlgo();  
+    				  if(PaintInterface.listOfNamesForTownsSelected.size()>0) {
+    					  launchAlgo();  
+    				  }
     			  }
-    				
     			  } 
     			} );
-        	
-        	jc.add(refreshBtn);
+        	jc.setOpaque(true);
         	jc.add(validatesChoicesBtn);
         	jc.add(area);
     	}

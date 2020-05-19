@@ -2,6 +2,7 @@ package front;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -22,11 +24,13 @@ public class PaintInterface extends JPanel{
 	
 	protected static boolean forEntireMap =true;	
 	protected static int idRegion =12;
-	protected Map<Integer, Object[]> namesXRegions ;
+	
 	protected Map<Integer, Object[]> regions ;
 	private static final long serialVersionUID = 1L;
 	protected static int width = 10;
 	protected static List<String> listOfNamesForTownsSelected=new ArrayList<String>();
+	protected static Map<Integer, Object[]> namesXRegions ;
+	
 	
 
 	
@@ -87,9 +91,10 @@ public class PaintInterface extends JPanel{
 					g.fillRect(x, y, width, width);	
 				}
 			}
+			
 				Results.printResultsOnMap(g);
 				Results.isEnd=true;
-	
+			
 		}
 		String names = "Selected towns:	 ";
 		for(String name:listOfNamesForTownsSelected) {
@@ -105,8 +110,10 @@ public class PaintInterface extends JPanel{
 				g.fillRect(coords[0], coords[1], width, width);
 			}	
 		}
-	
+		
 	}
+	
+	
 	
 	/**
 	 * Add town in the list which indicates if its selected
@@ -138,7 +145,6 @@ public class PaintInterface extends JPanel{
 	 */
 	
 	protected void addTown(int key, Plan plan) {
-		
 		Map<Integer, Boolean> selectedTown = plan.getSelectedTown();
 		Boolean isSelected=true;
 		if(selectedTown!=null && !selectedTown.isEmpty()&&selectedTown.containsKey(key)) {
