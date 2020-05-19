@@ -2,7 +2,7 @@ package front;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JTextArea;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import obj.Coord;
 import obj.Plan;
@@ -19,14 +20,14 @@ import obj.TownInterface;
 
 public class ByRegion {
 	
-	static PaintInterface regionInterface = new PaintInterface();
+	private static PaintInterface regionInterface = new PaintInterface();
 	/**
 	 * return the list of all town id in the selected region
 	 * @param idRegion
 	 * @param namesMap
 	 * @return
 	 */
-	public static List<Integer> getTownForSelectedRegion(int idRegion, Map<Integer, Object[]> namesMap) {
+	protected static List<Integer> getTownForSelectedRegion(int idRegion, Map<Integer, Object[]> namesMap) {
 		
 		List<Integer> idTownInRegion = new ArrayList<Integer>();
 		
@@ -46,7 +47,7 @@ public class ByRegion {
 	 * @param cityCoordMap
 	 * @return
 	 */
-	public static Map<Integer, Coord<?, ?>> getCoordForSelectedRegion(List<Integer> idTownInRegion, Map<Integer, Coord<?, ?>> cityCoordMap) {
+	protected static Map<Integer, Coord<?, ?>> getCoordForSelectedRegion(List<Integer> idTownInRegion, Map<Integer, Coord<?, ?>> cityCoordMap) {
 			
 			Map<Integer, Coord<?, ?>> regionCoordsMap = new HashMap<>();
 			
@@ -63,7 +64,7 @@ public class ByRegion {
 	 * @param key
 	 * @return
 	 */
-	public static Plan createFrameForRegion(String name, Map<Integer, Coord<?, ?>> regionCoordsMap, int key) {
+	protected static Plan createFrameForRegion(String name, Map<Integer, Coord<?, ?>> regionCoordsMap, int key) {
 		
 		Plan plan = new Plan();
 		Map<Integer, Coord<?, ?>> adjustRegionCoordMap = new HashMap<>();
@@ -74,7 +75,7 @@ public class ByRegion {
 		adjustRegionCoordMap=CreateInterface.adjustOnFrame(plan);
 		int[] dimensionRegion = CreateInterface.getDimension(adjustRegionCoordMap);
 		
-		
+		addBtnBack(dimensionRegion);
 		
 		Map<Integer, Boolean> selectedTown = new HashMap<>();
 		Map<Integer, TownInterface<?, ?>> rectMap = plan.getRectCoordMap();
@@ -82,21 +83,8 @@ public class ByRegion {
 		
 		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]));
 		
-		//TODO
-		/*
 		
-		JButton goOnMainPageBtn = new JButton("Go to main page");
-    	
-		goOnMainPageBtn.setBounds(dimension[0]/4,dimension[1],150,30);
-		goOnMainPageBtn.addActionListener(new ActionListener() { 
-			  public void actionPerformed(ActionEvent e) { 
-				  
-			  } 
-			} );
-    	
-    	
-		goOnMainPageBtn.setBackground(new Color(121,171,222));    	
-    	regionInterface.add(goOnMainPageBtn);*/
+		
 	
 		
 		PaintInterface.forEntireMap = false;
@@ -105,13 +93,34 @@ public class ByRegion {
 		return plan;
 	}
 	
+	private static void addBtnBack(int [] dimensionRegion){
+		regionInterface.removeAll();
+		int width = dimensionRegion[0]/2;
+		JButton goOnMainPageBtn = new JButton("Go to main page");
+    	goOnMainPageBtn.setBounds(dimensionRegion[0]/4, dimensionRegion[1]-30, width, 25);
+		goOnMainPageBtn.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				  JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(regionInterface);
+				  topFrame.dispose();
+				  PaintInterface.idRegion=12;
+					ClickListener.currentMap = CreateInterface.regionInfo.get(12);
+					CreateInterface.ableBtn=true;
+					CreateInterface.jc.repaint();
+			  } 
+			} );
+    	
+    	
+		goOnMainPageBtn.setBackground(new Color(121,171,222));    	
+    	regionInterface.add(goOnMainPageBtn);
+	}
+	
 	/**
 	 * Create the Plan object for the region without creating the frame --> adjust coords, dimension, maps to click on town
 	 * @param selectedTownInRegion
 	 * @param region
 	 * @return
 	 */
-public static Plan createARegion(Map<Integer, Boolean> selectedTownInRegion, int region) {
+	protected static Plan createARegion(Map<Integer, Boolean> selectedTownInRegion, int region) {
 	
 		String name = (String) CreateInterface.regMap.get(region)[0];
 		List<Integer> idTownInRegion = ByRegion.getTownForSelectedRegion(region,CreateInterface.namesMap);
@@ -137,7 +146,8 @@ public static Plan createARegion(Map<Integer, Boolean> selectedTownInRegion, int
 	 * @param plan
 	 * @return
 	 */
-public static Plan recreateFrame(Plan plan) {
+	protected static Plan recreateFrame(Plan plan) {
+		
 		
 		regionInterface.setBackground(Color.WHITE);
 		regionInterface.setLayout(null);
@@ -145,21 +155,7 @@ public static Plan recreateFrame(Plan plan) {
 				
 		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]));
 		
-		//TODO
-		/*
-		
-		JButton goOnMainPageBtn = new JButton("Go to main page");
-    	
-		goOnMainPageBtn.setBounds(dimension[0]/4,dimension[1],150,30);
-		goOnMainPageBtn.addActionListener(new ActionListener() { 
-			  public void actionPerformed(ActionEvent e) { 
-				  
-			  } 
-			} );
-    	
-    	
-		goOnMainPageBtn.setBackground(new Color(121,171,222));    	
-    	regionInterface.add(goOnMainPageBtn);*/
+		addBtnBack(dimensionRegion);
 	
 		
 		PaintInterface.forEntireMap = false;
@@ -167,9 +163,5 @@ public static Plan recreateFrame(Plan plan) {
 		CreatFrame.showOnFrame(regionInterface,plan.getName(), true, plan);
 		return plan;
 	}
-
-
-
-	
 
 }

@@ -1,29 +1,52 @@
 package front;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import obj.Coord;
 import obj.Plan;
 
 public class PaintInterface extends JPanel{
 	
-	static boolean forEntireMap =true;	
-	static int idRegion =12;
-	Map<Integer, Object[]> namesXRegions ;
-	Map<Integer, Object[]> regions ;
+	protected static boolean forEntireMap =true;	
+	protected static int idRegion =12;
+	
+	protected Map<Integer, Object[]> regions ;
 	private static final long serialVersionUID = 1L;
-	public static int width = 10;
+	protected static int width = 10;
+	protected static List<String> listOfNamesForTownsSelected=new ArrayList<String>();
+	protected static Map<Integer, Object[]> namesXRegions ;
+	
 	
 
 	
-	
+	private static void setNameSelectedtown(int key) {
+		String name = (String) CreateInterface.namesMap.get(key)[0];
+		if(!listOfNamesForTownsSelected.contains(name)){
+			listOfNamesForTownsSelected.add(name);
+		}else {
+			listOfNamesForTownsSelected.remove(name);
+		}
+	}
 	/**
-	 * Print all town which the color depending on the region and if the town is selected
+	 * Print all town with the right the color depending on the region and if the town is selected or a base
+	 * base --> circle
+	 *town --> square
+	 *Selected --> red
 	 */
 	@Override
 	public void paint(Graphics g) {
@@ -50,61 +73,82 @@ public class PaintInterface extends JPanel{
 			}else {
 				if(namesXRegions!=null) {
 					region = (int) namesXRegions.get(number)[1];
-					color = CreateInterface.chooseColor(region);
+					color = Color.gray;
+					if(!CreateInterface.isResults) color = CreateInterface.chooseColor(region);
 				}
-				
-				
 				g.setColor(color);
 				g.fillRect(x, y, width, width);	
 			}
+		
+		}
+		if(CreateInterface.isResults) {
+			for(int townInThePath : CreateInterface.fullPath) {
+				if (!CreateInterface.basesList.contains(townInThePath)) {
+					x=(int) cityCoordMap.get(townInThePath).getX();
+					y=(int) cityCoordMap.get(townInThePath).getY();
+					
+					g.setColor(Color.GREEN);
+					g.fillRect(x, y, width, width);	
+				}
+			}
 			
+				Results.printResultsOnMap(g);
+				Results.isEnd=true;
 			
 		}
+		String names = "Selected towns:	 ";
+		for(String name:listOfNamesForTownsSelected) {
+			names = names +name+"	 ";
+			CreateInterface.selectedTowns.setText(names+" ");
+		}
+		
 		for(int key : selectedTown.keySet()) {
 			if(selectedTown.get(key)) {
 				
 				int[] coords = getCoordsInList(key, cityCoordMap);
 				g.setColor(Color.red);
 				g.fillRect(coords[0], coords[1], width, width);
-			}
+			}	
 		}
 		
 	}
 	
+	
+	
 	/**
 	 * Add town in the list which indicates if its selected
-	 * True-6> selected
+	 * True--> selected
 	 * False--> unselected
 	 * @param key
 	 * @param selected
 	 */
-	public void addTownInEntireMap(int key, Boolean selected) {
+	private void addTownInEntireMap(int key, Boolean selected) {
 		
 		Map<Integer, Boolean> selectedTownInCountry =  CreateInterface.regionInfo.get(12).getSelectedTown();
 		if(selectedTownInCountry!=null && !selectedTownInCountry.isEmpty()&&selectedTownInCountry.containsKey(key)) {
-			//townsAllCountry.add(coords);
 			if(selected) {
 				selectedTownInCountry.put(key,true);
+				
 			}else {
 				selectedTownInCountry.put(key,false);
 			}
 		}else {
 			selectedTownInCountry.put(key,true);
 		}
-		
+		setNameSelectedtown(key);
 	}
 	
 	/**
-	 * Add the selected town (or change sur the value to selected or not) in the region map and the country map
+	 * Add the selected town (or change the value to selected or not) in the region map and the country map
 	 * @param key
 	 * @param plan
 	 */
 	
-	public void addTown(int key, Plan plan) {
+	protected void addTown(int key, Plan plan) {
 		Map<Integer, Boolean> selectedTown = plan.getSelectedTown();
-		Boolean isSelected;
+		Boolean isSelected=true;
 		if(selectedTown!=null && !selectedTown.isEmpty()&&selectedTown.containsKey(key)) {
-			if(!selectedTown.get(key)) {
+			if(!selectedTown.get(key)&& listOfNamesForTownsSelected.size()<4) {
 				selectedTown.put(key,true);
 				isSelected=true;
 
@@ -112,40 +156,42 @@ public class PaintInterface extends JPanel{
 				selectedTown.put(key,false);
 				isSelected=false;
 			}
-		}else {
+		}else if (listOfNamesForTownsSelected.size()<4) {
 			selectedTown.put(key,true);
 			isSelected=true;
 		}
-		if(plan.getId()!=12) {
-			addTownInEntireMap(key,isSelected);
-		}else {
-			int region = (int) namesXRegions.get(key)[1];
-			if(CreateInterface.regionInfo.containsKey(region)) {
-				Map<Integer, Boolean> selectedTownInRegion = CreateInterface.regionInfo.get(region).getSelectedTown();
-				if(selectedTownInRegion!=null ) {
-					selectedTownInRegion.put(key, isSelected);
-				}
+		
+		if(!isSelected || (isSelected && listOfNamesForTownsSelected.size()<4)) {
+			if(plan.getId()!=12) {
+				addTownInEntireMap(key,isSelected);
 			}else {
-				Map<Integer, Boolean> selectedTownInRegion = new HashMap<>();	
-				selectedTownInRegion.put(key, isSelected);
-				
-				Plan newRegion = ByRegion.createARegion(selectedTownInRegion, region );
-				CreateInterface.regionInfo.put(region, newRegion);
+				setNameSelectedtown(key);
+				int region = (int) namesXRegions.get(key)[1];
+				if(CreateInterface.regionInfo.containsKey(region)) {
+					Map<Integer, Boolean> selectedTownInRegion = CreateInterface.regionInfo.get(region).getSelectedTown();
+					if(selectedTownInRegion!=null ) {
+						selectedTownInRegion.put(key, isSelected);
+					}
+				}else {
+					Map<Integer, Boolean> selectedTownInRegion = new HashMap<>();	
+					selectedTownInRegion.put(key, isSelected);
+					
+					Plan newRegion = ByRegion.createARegion(selectedTownInRegion, region );
+					CreateInterface.regionInfo.put(region, newRegion);
+				}	
 			}
-			
-			
 		}
 		
 		this.repaint();
 	}
 	
 	/**
-	 * get the coords of the town selected in the liste of coords depending on the area we are working on
+	 * get the coords of the town selected in the list of coords depending on the area we are working on
 	 * @param key
 	 * @param cityCoordMap
 	 * @return
 	 */
-	public int[] getCoordsInList(int key, Map<Integer, Coord<?, ?>> cityCoordMap) {
+	private int[] getCoordsInList(int key, Map<Integer, Coord<?, ?>> cityCoordMap) {
 		int x=(int) cityCoordMap.get(key).getX();
 		int y=(int) cityCoordMap.get(key).getY();
 		int[] coords = {x, y};

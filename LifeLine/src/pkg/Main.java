@@ -43,20 +43,8 @@ public class Main {
     	// launch the path optimizer
     	myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
     	
-    	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList );
-    	
-    	// initialize list of cities we have to visit
-    	/*int min = Collections.min(cityCoordMap.keySet());
-    	int max = Collections.max(cityCoordMap.keySet());
-    	Random rn = new Random();
-    	List<Integer> nodeRequierment = new ArrayList<Integer>();
-    	int n;
-    	while(nodeRequierment.size()<3) {
-    		n=rn.nextInt(max - min + 1) + min;
-    		if(!nodeRequierment.contains(n) && !basesList.contains(n)) {
-        		nodeRequierment.add(n);	
-    		}
-    	}*/
+    	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList, weightedAdjMap );
+   
 
     	
     	
