@@ -70,18 +70,17 @@ public class ClickListener extends MouseAdapter {
 		labelName.setBounds((int) (currentMap.getDimension()[0]/2.5), currentMap.getDimension()[1]-80, 200,40);
 		
 	}
-	
-	
+
 	//labelName.setBounds(x+10, y+10, 200,30);
 	if(onTown) {
 		String name = (String) CreateInterface.namesMap.get(key)[0];
 		labelName.setText(name);
 		panel.add(labelName);
 		panel.repaint();
+	}else {
+		labelName.setText("");
+		panel.add(labelName);
 	}
-	
-	
-	
 	
 }
 	
