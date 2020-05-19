@@ -31,11 +31,12 @@ public class CreatFrame {
 			
 		frame.setResizable(false);
 		
-		 
 		
 		component.revalidate();
 		
 			if(!isSmallMap) {
+				 frame.setPreferredSize(new Dimension(CreateInterface.dimensionCountry[0]+CreateInterface.dimensionCountry[0]/12, CreateInterface.dimensionCountry[1]+100));
+					
 				 wa = new WindowAdapter() {
 					public void windowClosing(WindowEvent e) {
 						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

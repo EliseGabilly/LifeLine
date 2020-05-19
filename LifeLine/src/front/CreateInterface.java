@@ -1,13 +1,11 @@
 package front;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.Rectangle;
+import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +16,7 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
@@ -48,6 +47,8 @@ public class CreateInterface implements ActionListener {
 	protected static float cost;
 	private static Plan forEntireMap = new Plan();
 	protected static int[] dimensionCountry;
+	protected static JPanel showResults;
+	protected static JScrollPane scroller;
 	 
 	
 	/**
@@ -62,21 +63,19 @@ public class CreateInterface implements ActionListener {
 		namesMap=namesMapOrigin;
 		regMap=regMapOrigin;
 		weightedAdjMap =weightedAdjMapOrigin;
-		
-		
+
 		createMap();
 	}
 	
 	
 	/**
-	 * creats the button and areas depending if it is the page to show the results or not
+	 * creates the button and areas depending if it is the page to show the results or not
 	 */
 	public static void createMap() {
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
 		jc.setFont(new Font("Serif",Font.BOLD,19));
-		
-    	jc.setBackground(Color.white);
-    	jc.setLayout(null);
+		jc.setBackground(Color.white);
+		jc.setLayout(null);
     	
 		if(!isResults) {
 			dimensionCountry = createPlanForCountry(adjustCityCoordMap);
@@ -91,6 +90,25 @@ public class CreateInterface implements ActionListener {
     		CreatFrame.showOnFrame(jc,"LifeLine",false , forEntireMap);
     	}
     	else {
+    		showResults = new JPanel();
+    		
+    		Plan country = regionInfo.get(12);
+    		int x = (int) ((int) country.getDimension()[0]*0.20);
+    		int y = (int)country.getDimension()[1]-80;
+    		showResults.setBounds(x, y,(int) (country.getDimension()[0]*0.75), 100);
+    		
+    		
+    		scroller = new JScrollPane(CreateInterface.showResults, 
+					   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
+					   JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
+    		scroller.setViewportView(CreateInterface.showResults);
+    		scroller.setBounds(x, y,(int) (country.getDimension()[0]*0.80), 100);
+			scroller.setPreferredSize(new Dimension(x,y));
+			scroller.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			
+			jc.add(scroller);
+
+    		showResults.setVisible(true);
     		CreatFrame.showOnFrame(jc, "Results",false, forEntireMap);
     	} 
 	}
@@ -116,7 +134,6 @@ public class CreateInterface implements ActionListener {
 		
 		
 		int btnHeigh = getBtnDimX(dimensionCountry);
-		
 		int spaceForNextButton =20 + btnHeigh + btnHeigh/2;
 		int btnX=(int) ( dimensionCountry[0]*0.28);
     	int btnY= yMaxOfTown+spaceForNextButton ;
@@ -169,7 +186,7 @@ public class CreateInterface implements ActionListener {
 		int heigh = getBtnDimX(dimensionCountry);
 		int btnsDimension =(heigh + heigh/2);
 		JLabel info = new JLabel();
-		JLabel title=new JLabel("Rwandata map : "); 
+		JLabel title=new JLabel("Rwanda map : "); 
 		title.setBounds(10, 10, 200,30);
 		
     	

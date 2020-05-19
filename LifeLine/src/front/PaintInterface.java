@@ -1,12 +1,17 @@
 package front;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import obj.Coord;
 import obj.Plan;
@@ -20,6 +25,13 @@ public class PaintInterface extends JPanel{
 	private static final long serialVersionUID = 1L;
 	protected static int width = 10;
 
+	
+	private static void getnameSelectedtown(int key, JTextArea selectedTownList ) {
+		String name = (String) CreateInterface.namesMap.get(key)[0];
+		
+		
+		
+	}
 	/**
 	 * Print all town with the right the color depending on the region and if the town is selected or a base
 	 * base --> circle
@@ -68,20 +80,17 @@ public class PaintInterface extends JPanel{
 					g.setColor(Color.GREEN);
 					g.fillRect(x, y, width, width);	
 				}
-				
-				
+	
 			}
-			Results.printResultsOnMap(g);
-			JScrollPane scroller = new JScrollPane(CreateInterface.jc, 
-					   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
-					   JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
-			scroller.setBounds(CreateInterface.dimensionCountry[0]+150, 0, 20, CreateInterface.dimensionCountry[1]+70);
+			if(!Results.isEnd) {
+				Results.printResultsOnMap(g);
+				Results.isEnd=true;
+			}
 			
-			 
-			CreatFrame.frame.add(scroller);
 		}
 		
 		for(int key : selectedTown.keySet()) {
+			JTextArea selectedTownList = new JTextArea();
 			if(selectedTown.get(key)) {
 				
 				int[] coords = getCoordsInList(key, cityCoordMap);
