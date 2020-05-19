@@ -1,6 +1,7 @@
 package front;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import obj.Plan;
@@ -49,6 +51,8 @@ public class CreateInterface implements ActionListener {
 	protected static int[] dimensionCountry;
 	protected static JPanel showResults;
 	protected static JScrollPane scroller;
+	protected static JTextArea selectedTowns;
+	protected static Boolean ableBtn=true;
 	 
 	
 	/**
@@ -72,6 +76,7 @@ public class CreateInterface implements ActionListener {
 	 * creates the button and areas depending if it is the page to show the results or not
 	 */
 	public static void createMap() {
+
 		Map<Integer, Coord<?, ?>> adjustCityCoordMap = new HashMap<>();
 		jc.setFont(new Font("Serif",Font.BOLD,19));
 		jc.setBackground(Color.white);
@@ -89,23 +94,24 @@ public class CreateInterface implements ActionListener {
     		createRegionButton(dimensionCountry);
     		CreatFrame.showOnFrame(jc,"LifeLine",false , forEntireMap);
     	}
-    	else {
-    		showResults = new JPanel();
-    		
+    	else {//create the scrollPane
     		Plan country = regionInfo.get(12);
     		int x = (int) ((int) country.getDimension()[0]*0.20);
     		int y = (int)country.getDimension()[1]-80;
-    		showResults.setBounds(x, y,(int) (country.getDimension()[0]*0.75), 100);
     		
+    		JLabel labelForpath=new JLabel("Your Path : ", SwingConstants.CENTER); 
+    		labelForpath.setFont(new Font("Serif",Font.BOLD,19));
+    		labelForpath.setBounds(x-170, y, 120,40);
+    		CreateInterface.jc.add(labelForpath);
+    		
+    		showResults = new JPanel();
     		
     		scroller = new JScrollPane(CreateInterface.showResults, 
-					   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
+					   JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
 					   JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
     		scroller.setViewportView(CreateInterface.showResults);
     		scroller.setBounds(x, y,(int) (country.getDimension()[0]*0.80), 100);
 			scroller.setPreferredSize(new Dimension(x,y));
-			scroller.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			
 			jc.add(scroller);
 
     		showResults.setVisible(true);
@@ -149,12 +155,16 @@ public class CreateInterface implements ActionListener {
 	
 			button.addActionListener(new ActionListener() { 
 				  public void actionPerformed(ActionEvent e) { 
-					  if(regionInfo.containsKey(key)) {
-						  ByRegion.recreateFrame(regionInfo.get(key));
-					  }else {
-						  regionMap = ByRegion.createFrameForRegion(name, regionCoordsMap, key);
-		    			  regionInfo.put(key, regionMap);
+					  if(ableBtn) {
+						  ableBtn=false;
+						  if(regionInfo.containsKey(key)) {
+							  ByRegion.recreateFrame(regionInfo.get(key));
+						  }else {
+							  regionMap = ByRegion.createFrameForRegion(name, regionCoordsMap, key);
+			    			  regionInfo.put(key, regionMap);
+						  }
 					  }
+					  
 				  } 
 				} );
 	    	
@@ -186,10 +196,14 @@ public class CreateInterface implements ActionListener {
 		int heigh = getBtnDimX(dimensionCountry);
 		int btnsDimension =(heigh + heigh/2);
 		JLabel info = new JLabel();
+		selectedTowns = new JTextArea();
+		selectedTowns.setEditable(false);
+		selectedTowns.setLineWrap(true);
+		selectedTowns.setWrapStyleWord(true);
 		JLabel title=new JLabel("Rwanda map : "); 
 		title.setBounds(10, 10, 200,30);
-		
-    	
+		selectedTowns.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-200, 40, 150,yMaxOfTown);
+		selectedTowns.setText("Selected towns: ");
     	if(!isResults) {
     		info=new JLabel("Choose the towns that you want to deliver: "); 
     		info.setBounds(10, 40, 400,30);
@@ -199,7 +213,9 @@ public class CreateInterface implements ActionListener {
         	refreshBtn.setBounds(btnX,btnY+(heigh/4),width,heigh);
         	refreshBtn.addActionListener(new ActionListener() { 
     		public void actionPerformed(ActionEvent e) {
+    			if(ableBtn) {
     				jc.repaint();
+    			}
     			  } 
     			} );
 
@@ -207,7 +223,10 @@ public class CreateInterface implements ActionListener {
         	validatesChoicesBtn.setBounds(btnX+ width + width/6,btnY+(heigh/4), 200,heigh);
         	validatesChoicesBtn.addActionListener(new ActionListener() { 
     		public void actionPerformed(ActionEvent e) { 
-    				launchAlgo(); 
+    			  if(ableBtn) {
+    				  launchAlgo();  
+    			  }
+    				
     			  } 
     			} );
         	
@@ -216,14 +235,17 @@ public class CreateInterface implements ActionListener {
         	jc.add(area);
     	}
     	else {
+    		
     		info=new JLabel("Here is the path you should take: "); 
     		info.setBounds(10, 40, 400,30);
     		
     	}
+    	selectedTowns.setFont(new Font("Serif",Font.BOLD,20));
     	title.setFont(new Font("Serif",Font.BOLD,25));
     	info.setFont(new Font("Serif",Font.BOLD,20));
     	jc.add(info);
     	jc.add(title);
+    	jc.add(selectedTowns);
     	
     	
 	}

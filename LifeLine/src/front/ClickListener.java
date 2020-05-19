@@ -23,7 +23,7 @@ public class ClickListener extends MouseAdapter {
 	public void mouseClicked(MouseEvent e) {
 		Boolean toBeAdd = getNode(e.getX(),e.getY());
 		
-		if(toBeAdd) {
+		if(toBeAdd && !CreateInterface.isResults) {
 			panel.addTown(key, currentMap);
 		}	
 	}
