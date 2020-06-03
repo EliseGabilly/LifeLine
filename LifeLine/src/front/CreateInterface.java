@@ -303,7 +303,7 @@ public class CreateInterface implements ActionListener {
 		error.setText(msg);
 		error.setForeground(Color.red);
 		if(ableBtn) {
-			error.setBounds(btnX +300,btnY+(heigh/4), 200,heigh);
+			error.setBounds(btnX +300,btnY+(heigh/4), 300,heigh);
 			jc.add(error);
 			jc.repaint();
 			
