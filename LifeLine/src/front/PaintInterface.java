@@ -182,7 +182,7 @@ public class PaintInterface extends JPanel{
 				}	
 			}
 		}else if(!(isSelected && listOfNamesForTownsSelected.size()<4)) {
-			CreateInterface.createErrorLabel("You can't select more than 4 town" );
+			CreateInterface.createErrorLabel("You can't select more than 4 towns" );
 		}
 		
 		this.repaint();

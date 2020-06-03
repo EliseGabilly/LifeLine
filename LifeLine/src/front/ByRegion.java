@@ -2,7 +2,6 @@ package front;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import obj.TownInterface;
 
 public class ByRegion {
 	
-	private static PaintInterface regionInterface = new PaintInterface();
+	protected static PaintInterface regionInterface = new PaintInterface();
 	/**
 	 * return the list of all town id in the selected region
 	 * @param idRegion
@@ -58,7 +57,7 @@ public class ByRegion {
 			return regionCoordsMap;
 		}
 	/**
-	 * Create the frame for only one region --> dimension, adjuste coords, create Plan for the selected region
+	 * Create the frame for only one region --> dimension, adjust coords, create Plan for the selected region
 	 * @param name
 	 * @param regionCoordsMap
 	 * @param key
@@ -82,11 +81,7 @@ public class ByRegion {
 		plan = new Plan(name,key,selectedTown, adjustRegionCoordMap, dimensionRegion,rectMap );
 		
 		regionInterface.setPreferredSize(new Dimension(dimensionRegion[0],dimensionRegion[1]));
-		
-		
-		
-	
-		
+
 		PaintInterface.forEntireMap = false;
 		PaintInterface.idRegion=key;
 		CreatFrame.showOnFrame(regionInterface,name, true, plan);

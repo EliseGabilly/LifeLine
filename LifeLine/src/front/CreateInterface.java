@@ -247,7 +247,7 @@ public class CreateInterface implements ActionListener {
     	jc.add(info);
     	jc.add(title);
     	jc.add(selectedTowns);
-	
+
 	}
 	
 	/**
@@ -256,10 +256,23 @@ public class CreateInterface implements ActionListener {
 	 */
 	protected static void createErrorLabel(String msg) {
 		error.setText(msg);
-		error.setBounds(btnX +300,btnY+(heigh/4), 200,heigh);
 		error.setForeground(Color.red);
-		jc.add(error);
-		jc.repaint();
+		if(ableBtn) {
+			error.setBounds(btnX +300,btnY+(heigh/4), 200,heigh);
+			jc.add(error);
+			jc.repaint();
+			
+		}else {
+			Dimension dimRegion = ByRegion.regionInterface.getPreferredSize();
+			
+			error.setBounds((int) (dimRegion.width*0.05),dimRegion.height-50, 300,heigh);
+			ByRegion.regionInterface.add(error);
+			ByRegion.regionInterface.repaint();
+		}
+		
+		
+		
+	
 	}
 	
 	/*
