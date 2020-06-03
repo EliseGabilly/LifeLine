@@ -162,6 +162,7 @@ public class PaintInterface extends JPanel{
 		}
 		
 		if(!isSelected || (isSelected && listOfNamesForTownsSelected.size()<4)) {
+			CreateInterface.createErrorLabel("");
 			if(plan.getId()!=12) {
 				addTownInEntireMap(key,isSelected);
 			}else {
@@ -180,6 +181,8 @@ public class PaintInterface extends JPanel{
 					CreateInterface.regionInfo.put(region, newRegion);
 				}	
 			}
+		}else if(!(isSelected && listOfNamesForTownsSelected.size()<4)) {
+			CreateInterface.createErrorLabel("You can't select more than 4 town" );
 		}
 		
 		this.repaint();

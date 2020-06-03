@@ -50,12 +50,14 @@ public class CreatFrame {
 					}
 				};
 			}
-			
-		mouseListener = new ClickListener((PaintInterface) component, plan);
+			if(!CreateInterface.isResults) {
+				mouseListener = new ClickListener((PaintInterface) component, plan);
+				frame.getContentPane().addMouseListener(mouseListener);
+				frame.getContentPane().addMouseMotionListener(mouseListener);
+			}
+		
 		frame.addWindowListener(wa);
 		frame.getContentPane().add(component);
-		frame.getContentPane().addMouseListener(mouseListener);
-		frame.getContentPane().addMouseMotionListener(mouseListener);
 		frame.pack();
 		frame.setVisible(true);
 	}

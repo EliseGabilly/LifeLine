@@ -53,8 +53,13 @@ public class CreateInterface implements ActionListener {
 	protected static JScrollPane scroller;
 	protected static JTextArea selectedTowns;
 	protected static Boolean ableBtn=true;
-	 
 	
+	private static int btnY;
+	private static int btnX;
+	private static int heigh ;
+	
+	private static JLabel error=new JLabel("", SwingConstants.CENTER);
+	  
 	/**
 	 * Initialises variables 
 	 * @param cityCoordMap
@@ -87,7 +92,7 @@ public class CreateInterface implements ActionListener {
 		}
 		createTextArea(dimensionCountry);
 		jc.setPreferredSize(new Dimension(dimensionCountry[0]+dimensionCountry[0]/12,dimensionCountry[1]+100));
-    	jc.namesXRegions = namesMap;
+    	PaintInterface.namesXRegions = namesMap;
     	jc.regions = regMap;
     	
     	if(!isResults) {
@@ -103,7 +108,6 @@ public class CreateInterface implements ActionListener {
     		labelForpath.setFont(new Font("Serif",Font.BOLD,19));
     		labelForpath.setBounds(x-170, y, 120,40);
     		CreateInterface.jc.add(labelForpath);
-    		
     		showResults = new JPanel();
     		
     		scroller = new JScrollPane(CreateInterface.showResults, 
@@ -138,8 +142,7 @@ public class CreateInterface implements ActionListener {
 	 * @param btnY
 	 */
 	private static void createRegionButton( int[] dimensionCountry) {
-		
-		
+
 		int btnHeigh = getBtnDimX(dimensionCountry);
 		int spaceForNextButton =20 + btnHeigh + btnHeigh/2;
 		int btnX=(int) ( dimensionCountry[0]*0.28);
@@ -191,10 +194,10 @@ public class CreateInterface implements ActionListener {
 	 */
 	private static void createTextArea( int[] dimensionCountry) {
 		
-		int btnY= yMaxOfTown+20 ;
-		int btnX=(int) ( dimensionCountry[0]*0.28);
+		 btnY= yMaxOfTown+20 ;
+		 btnX=(int) ( dimensionCountry[0]*0.28);
 		int width =getBtnDimY(dimensionCountry);
-		int heigh = getBtnDimX(dimensionCountry);
+		 heigh = getBtnDimX(dimensionCountry);
 		int btnsDimension =(heigh + heigh/2);
 		JLabel info = new JLabel();
 		selectedTowns = new JTextArea();
@@ -213,15 +216,21 @@ public class CreateInterface implements ActionListener {
      
         	JButton validatesChoicesBtn = new JButton("Confirm my choices");
         	validatesChoicesBtn.setBounds(btnX ,btnY+(heigh/4), 200,heigh);
+        	
+        	
+        	
         	validatesChoicesBtn.addActionListener(new ActionListener() { 
     		public void actionPerformed(ActionEvent e) { 
     			  if(ableBtn) {
     				  if(PaintInterface.listOfNamesForTownsSelected.size()>0) {
     					  launchAlgo();  
+    				  }else {
+    					  createErrorLabel("You must select at least one town" );
     				  }
     			  }
     			  } 
     			} );
+        	
         	jc.setOpaque(true);
         	jc.add(validatesChoicesBtn);
         	jc.add(area);
@@ -238,10 +247,20 @@ public class CreateInterface implements ActionListener {
     	jc.add(info);
     	jc.add(title);
     	jc.add(selectedTowns);
-    	
-    	
+	
 	}
 	
+	/**
+	 * change the text of the label and show it on the frame
+	 * @param msg
+	 */
+	protected static void createErrorLabel(String msg) {
+		error.setText(msg);
+		error.setBounds(btnX +300,btnY+(heigh/4), 200,heigh);
+		error.setForeground(Color.red);
+		jc.add(error);
+		jc.repaint();
+	}
 	
 	/*
 	 * Launch the selected path finding algo
