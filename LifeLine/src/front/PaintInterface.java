@@ -85,11 +85,26 @@ public class PaintInterface extends JPanel{
 				Results.printResultsOnMap(g);
 				Results.isEnd=true;
 		}
-		String names = "Selected towns:	 ";
-		for(String name:listOfNamesForTownsSelected) {
-			names = names +name+"	 ";
-			
+		String names = "Selected towns:  ";
+		if(CreateInterface.isResults) {
+			for( int i=0; i<listOfNamesForTownsSelected.size();i++) {
+				String name="";
+				if(i!=listOfNamesForTownsSelected.size()-1) {
+					name = listOfNamesForTownsSelected.get(i) + ", ";
+				}else {
+					name = listOfNamesForTownsSelected.get(i);
+				}
+				
+				names = names +name;
+			}
+		}else {
+			for(String name:listOfNamesForTownsSelected) {
+				names = names +name+"	 ";
+				CreateInterface.selectedTowns.setText(names+" ");
+			}
 		}
+		
+
 		CreateInterface.selectedTowns.setText(names+" ");
 		for(int key : selectedTown.keySet()) {
 			if(selectedTown.get(key)) {

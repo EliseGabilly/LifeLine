@@ -71,7 +71,6 @@ public class CreateInterface implements ActionListener {
 		namesMap=namesMapOrigin;
 		regMap=regMapOrigin;
 		weightedAdjMap =weightedAdjMapOrigin;
-
 		createMap();
 	}
 	
@@ -105,7 +104,7 @@ public class CreateInterface implements ActionListener {
     		
     		JLabel labelForpath=new JLabel("Your Path : ", SwingConstants.CENTER); 
     		labelForpath.setFont(new Font("Serif",Font.BOLD,19));
-    		labelForpath.setBounds(x-170, y, 120,40);
+    		labelForpath.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-180, 40, 120,40);
     		CreateInterface.jc.add(labelForpath);
     		showResults = new JPanel();
     		
@@ -113,14 +112,14 @@ public class CreateInterface implements ActionListener {
 					   JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
 					   JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
     		scroller.setViewportView(CreateInterface.showResults);
-    		scroller.setBounds(x, y,(int) (country.getDimension()[0]*0.80), 100);
-			scroller.setPreferredSize(new Dimension(x,y));
+    		scroller.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-180, 80, 160,dimensionCountry[1]-200);
+   			
+			scroller.setPreferredSize(new Dimension(100,400));
 			jc.add(scroller);
 
     		showResults.setVisible(true);
     		
-    		
-    		
+
     		JButton btnRestart = new JButton("Restart");
     		btnRestart.addActionListener(new ActionListener() { 
 				  public void actionPerformed(ActionEvent e) { 
@@ -132,43 +131,18 @@ public class CreateInterface implements ActionListener {
 								
 							}
 						reinitializeVariables();
-						
 						CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList, weightedAdjMap );
 						} 
 				} );
 	    	
-    		btnRestart.setFont(new Font("Serif",Font.BOLD,12));
-    		btnRestart.setBounds((int) (dimensionCountry[0]-100), (int) (dimensionCountry[1]-150), 100,50);
+    		btnRestart.setFont(new Font("Serif",Font.BOLD,20));
+    		btnRestart.setBounds((int) (dimensionCountry[0]-70), (int) (dimensionCountry[1]-50), 150,50);
     		jc.add(btnRestart);
     		
     		CreatFrame.showOnFrame(jc, "Results",false, forEntireMap);
     	} 
 	}
-	/**
-	 * reinitialize variable to restart program
-	 */
-	private static void reinitializeVariables() {
-		
-		Main.myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
-		regionInfo = new HashMap<>();
-		regionMap = new Plan();
-		yMaxOfTown=0; 
-		xMaxOfTown=0;
-		width=0;
-		height=0;
-		fullPath= new ArrayList<Integer>();
 
-		isResults = false;
-		cost=0;
-		forEntireMap = new Plan();
-		ableBtn=true;
-		
-		Results.pathNames = new ArrayList<String>();
-		PaintInterface.regions = new HashMap<>();
-		PaintInterface.listOfNamesForTownsSelected=new ArrayList<String>();
-		PaintInterface.namesXRegions = new HashMap<>();
-		
-	}
 	
 	private static int[] createPlanForCountry(Map<Integer, Coord<?, ?>> adjustCityCoordMap) {
 		forEntireMap.setCityCoordMap(cityCoordMap);
@@ -252,9 +226,12 @@ public class CreateInterface implements ActionListener {
 		selectedTowns.setWrapStyleWord(true);
 		JLabel title=new JLabel("Rwanda map : "); 
 		title.setBounds(10, 10, 200,30);
-		selectedTowns.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-200, 40, 150,dimensionCountry[1]-300);
+		
+			
+		
 		selectedTowns.setText("Selected towns: ");
     	if(!isResults) {
+    		selectedTowns.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-150, 40, 150,dimensionCountry[1]-300);
     		info=new JLabel("Choose the towns that you want to deliver: "); 
     		info.setBounds(10, 40, 400,30);
     		JLabel area=new JLabel("Zoom on a region: ", SwingConstants.CENTER); 
@@ -263,8 +240,7 @@ public class CreateInterface implements ActionListener {
         	JButton validatesChoicesBtn = new JButton("Confirm my choices");
         	validatesChoicesBtn.setBounds(btnX ,btnY+(heigh/4), 200,heigh);
         	
-        	
-        	
+
         	validatesChoicesBtn.addActionListener(new ActionListener() { 
     		public void actionPerformed(ActionEvent e) { 
     			  if(ableBtn) {
@@ -282,6 +258,11 @@ public class CreateInterface implements ActionListener {
         	jc.add(area);
     	}
     	else {
+    		Plan country = regionInfo.get(12);
+    		int x = (int) ((int) country.getDimension()[0]*0.20);
+    		int y = (int)country.getDimension()[1]-30;
+    		selectedTowns.setBounds(x, y,country.getDimension()[0]-300, 200);
+    		
     		
     		info=new JLabel("Here is the path you should take: "); 
     		info.setBounds(10, 40, 400,30);
@@ -574,6 +555,31 @@ protected static int[] getDimension(Map<Integer, Coord<?, ?>> cityCoordMap) {
 		return color;
 	}
 
+	/**
+	 * reinitialize variable to restart program
+	 */
+	private static void reinitializeVariables() {
+		
+		Main.myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
+		regionInfo = new HashMap<>();
+		regionMap = new Plan();
+		yMaxOfTown=0; 
+		xMaxOfTown=0;
+		width=0;
+		height=0;
+		fullPath= new ArrayList<Integer>();
+
+		isResults = false;
+		cost=0;
+		forEntireMap = new Plan();
+		ableBtn=true;
+		
+		Results.pathNames = new ArrayList<String>();
+		PaintInterface.regions = new HashMap<>();
+		PaintInterface.listOfNamesForTownsSelected=new ArrayList<String>();
+		PaintInterface.namesXRegions = new HashMap<>();
+		
+	}
 	
 
 

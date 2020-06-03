@@ -55,21 +55,21 @@ public static void printResultsAsText(Graphics g,List<String> pathNames) {
 
 	JTextArea townName=new JTextArea();
 	String names = "";
+	int i = 1;
 		for(String name : pathNames) {
-			names=names+" -> "+name;
+			names=names+ i+") "+name+"	";
+			i++;
 		}
 		
-	Plan country = CreateInterface.regionInfo.get(12);
 	townName.setOpaque(false);
-	townName.setBounds(0, 0,(int) (country.getDimension()[0]*0.70), 100);
+	townName.setBounds(0, 0,120, 100);
 	townName.setText(names);
 	townName.setLineWrap(true);
 	townName.setWrapStyleWord(true);
 	townName.setEditable(false);
-	townName.setFont(new Font("Serif",Font.PLAIN,19));
+	townName.setFont(new Font("Serif",Font.PLAIN,17));
 	CreateInterface.showResults.add(townName);
-	
-	
+
 	}
 
 }
