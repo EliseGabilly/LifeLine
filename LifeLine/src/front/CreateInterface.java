@@ -1,12 +1,9 @@
 package front;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -153,9 +150,6 @@ public class CreateInterface implements ActionListener {
 	private static void reinitializeVariables() {
 		
 		Main.myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
-		
-		
-		
 		regionInfo = new HashMap<>();
 		regionMap = new Plan();
 		yMaxOfTown=0; 

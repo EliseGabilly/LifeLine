@@ -6,10 +6,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.JLabel;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 
 import obj.Coord;
 import obj.Plan;
@@ -45,7 +42,6 @@ public class Results {
 		
 		}
 		pathNames.add( (String) CreateInterface.namesMap.get(fullPath.get(i))[0]);
-
 		printResultsAsText(g,pathNames);
 		
 	}
