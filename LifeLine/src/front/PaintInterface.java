@@ -25,7 +25,7 @@ public class PaintInterface extends JPanel{
 	protected static boolean forEntireMap =true;	
 	protected static int idRegion =12;
 	
-	protected Map<Integer, Object[]> regions ;
+	protected static Map<Integer, Object[]> regions ;
 	private static final long serialVersionUID = 1L;
 	protected static int width = 10;
 	protected static List<String> listOfNamesForTownsSelected=new ArrayList<String>();
@@ -92,9 +92,10 @@ public class PaintInterface extends JPanel{
 				}
 			}
 			
+				
 				Results.printResultsOnMap(g);
-				Results.isEnd=true;
 			
+				Results.isEnd=true;
 		}
 		String names = "Selected towns:	 ";
 		for(String name:listOfNamesForTownsSelected) {

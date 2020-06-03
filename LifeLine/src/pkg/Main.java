@@ -21,8 +21,8 @@ public class Main {
     public static PathOptimizer myPathOptimizer;
 
     public static void main(String[] args) {
-    	savedArgs=args;
     	
+    	savedArgs=args;
     	// read BDD
     	Map<Integer, Coord<?, ?>> cityCoordMap = TXTReader.getCityCoord();
     	if (Arrays.asList(args).contains("-pn") || Arrays.asList(args).contains("-printNode"))

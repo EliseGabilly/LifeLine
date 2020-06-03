@@ -16,11 +16,12 @@ import obj.Plan;
 
 public class Results {
 	
+	protected static List<String> pathNames;
 	protected static Boolean isEnd = false;
 	public static void printResultsOnMap(Graphics g) {
 		
 		List<Integer> fullPath = CreateInterface.fullPath;
-		List<String> pathNames = new ArrayList<String>();
+		pathNames = new ArrayList<String>();
 		Plan country = CreateInterface.regionInfo.get(12);
 		Map<Integer, Coord<?, ?>> cityCoordMap  = country.getCityCoordMap();
 		int xStart;
@@ -44,10 +45,9 @@ public class Results {
 		
 		}
 		pathNames.add( (String) CreateInterface.namesMap.get(fullPath.get(i))[0]);
+
 		printResultsAsText(g,pathNames);
 		
-		
-		if(isEnd)CreateInterface.jc.repaint(); //When we already show the results we stop the processus
 	}
 	
 	/**
@@ -72,6 +72,7 @@ public static void printResultsAsText(Graphics g,List<String> pathNames) {
 	townName.setEditable(false);
 	townName.setFont(new Font("Serif",Font.PLAIN,19));
 	CreateInterface.showResults.add(townName);
+	
 	
 	}
 

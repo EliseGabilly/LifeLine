@@ -28,6 +28,7 @@ import obj.Coord;
 import obj.TownInterface;
 import pkg.Calcul;
 import pkg.Main;
+import pkg.PathOptimizer;
 
 public class CreateInterface implements ActionListener {
 	
@@ -57,6 +58,7 @@ public class CreateInterface implements ActionListener {
 	private static int btnY;
 	private static int btnX;
 	private static int heigh ;
+	public static boolean restart=false;
 	
 	private static JLabel error=new JLabel("", SwingConstants.CENTER);
 	  
@@ -120,8 +122,58 @@ public class CreateInterface implements ActionListener {
 
     		showResults.setVisible(true);
     		
+    		
+    		
+    		JButton btnRestart = new JButton("Restart");
+    		btnRestart.addActionListener(new ActionListener() { 
+				  public void actionPerformed(ActionEvent e) { 
+					  Frame[] frames = Frame.getFrames();
+						
+						for(Frame frame: frames) {
+								jc.removeAll();
+								frame.dispose();
+								
+							}
+						reinitializeVariables();
+						
+						CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList, weightedAdjMap );
+						} 
+				} );
+	    	
+    		btnRestart.setFont(new Font("Serif",Font.BOLD,12));
+    		btnRestart.setBounds((int) (dimensionCountry[0]-100), (int) (dimensionCountry[1]-150), 100,50);
+    		jc.add(btnRestart);
+    		
     		CreatFrame.showOnFrame(jc, "Results",false, forEntireMap);
     	} 
+	}
+	/**
+	 * reinitialize variable to restart program
+	 */
+	private static void reinitializeVariables() {
+		
+		Main.myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
+		
+		
+		
+		regionInfo = new HashMap<>();
+		regionMap = new Plan();
+		yMaxOfTown=0; 
+		xMaxOfTown=0;
+		width=0;
+		height=0;
+		fullPath= new ArrayList<Integer>();
+
+		isResults = false;
+		cost=0;
+		forEntireMap = new Plan();
+		ableBtn=true;
+		
+		Results.pathNames = new ArrayList<String>();
+		PaintInterface.regions = new HashMap<>();
+		PaintInterface.listOfNamesForTownsSelected=new ArrayList<String>();
+		PaintInterface.namesXRegions = new HashMap<>();
+		
 	}
 	
 	private static int[] createPlanForCountry(Map<Integer, Coord<?, ?>> adjustCityCoordMap) {
@@ -247,7 +299,6 @@ public class CreateInterface implements ActionListener {
     	jc.add(info);
     	jc.add(title);
     	jc.add(selectedTowns);
-
 	}
 	
 	/**
@@ -264,14 +315,10 @@ public class CreateInterface implements ActionListener {
 			
 		}else {
 			Dimension dimRegion = ByRegion.regionInterface.getPreferredSize();
-			
 			error.setBounds((int) (dimRegion.width*0.05),dimRegion.height-50, 300,heigh);
 			ByRegion.regionInterface.add(error);
 			ByRegion.regionInterface.repaint();
 		}
-		
-		
-		
 	
 	}
 	
@@ -329,9 +376,7 @@ public class CreateInterface implements ActionListener {
 		return width;
 	}
 	
-	
-	
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		jc.setBackground(Color.black);
