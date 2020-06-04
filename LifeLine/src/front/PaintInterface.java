@@ -85,9 +85,11 @@ public class PaintInterface extends JPanel{
 				}
 			}
 			
-				
-				Results.printResultsOnMap(g);
-				Results.isEnd=true;
+				if(!Results.isEnd) {
+					Results.printResultsOnMap(g);
+					Results.isEnd=true;
+				}
+				Results.printFirstAndLast();
 		
 		}
 		String names = "Selected towns:  ";

@@ -59,6 +59,9 @@ public class CreateInterface implements ActionListener {
 	private static int heigh ;
 	public static boolean restart=false;
 	
+	protected static JTextArea firstBase = new JTextArea();
+	protected static JTextArea lastBase =new JTextArea();
+	
 	private static JLabel error=new JLabel("", SwingConstants.CENTER);
 	  
 	/**
@@ -300,9 +303,8 @@ public class CreateInterface implements ActionListener {
     	else {
     		Plan country = regionInfo.get(12);
     		int x = (int) ((int) country.getDimension()[0]*0.20);
-    		int y = (int)country.getDimension()[1]-30;
-    		selectedTowns.setBounds(x, y,country.getDimension()[0]-300, 200);
-    		
+    		int y = (int)country.getDimension()[1]-80;
+    		selectedTowns.setBounds(x, y,600, 50);
     		
     		info=new JLabel("Here is the path you should take: "); 
     		info.setBounds(10, 40, 400,30);
@@ -616,6 +618,7 @@ protected static int[] getDimension(Map<Integer, Coord<?, ?>> cityCoordMap) {
 		forEntireMap = new Plan();
 		ableBtn=true;
 		
+		Results.isEnd=false;
 		Results.pathNames = new ArrayList<String>();
 		PaintInterface.regions = new HashMap<>();
 		PaintInterface.listOfNamesForTownsSelected=new ArrayList<String>();
