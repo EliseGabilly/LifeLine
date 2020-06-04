@@ -12,12 +12,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 import obj.Plan;
 import obj.Adjacent;
@@ -74,6 +76,43 @@ public class CreateInterface implements ActionListener {
 		createMap();
 	}
 	
+/*
+ * Creates text area and the btn to search
+ */
+	protected static void searchWithTxt() {
+		btnY= yMaxOfTown+20 ;
+		btnX=(int) ( dimensionCountry[0]*0.28);
+		JTextArea searchTxt = new JTextArea();
+		searchTxt.setText("");
+		searchTxt.setFont(new Font("Serif",Font.BOLD,19));
+		searchTxt.setBounds(btnX +getBtnDimY(dimensionCountry)*2+2*getBtnDimY(dimensionCountry)/6, btnY+5, getBtnDimY(dimensionCountry)*2+getBtnDimY(dimensionCountry)/6 ,getBtnDimX(dimensionCountry));
+		
+		Border border = BorderFactory.createLineBorder(Color.GRAY);
+		searchTxt.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(0, 10, 0, 0)));
+		
+		JButton searchBtn = new JButton("Search");
+		searchBtn.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				  String searchedTown = searchTxt.getText();
+					  for(int key : namesMap.keySet()) {
+						 if(namesMap.get(key)[0].equals(searchedTown)) {
+							jc.addTown(key,forEntireMap);
+							searchTxt.setText("");
+						}
+				  }
+			}});
+    	
+		searchBtn.setFont(new Font("Serif",Font.BOLD,15));
+		searchBtn.setBounds(btnX +getBtnDimY(dimensionCountry)*4+4*getBtnDimY(dimensionCountry)/6, btnY+5, getBtnDimY(dimensionCountry) ,getBtnDimX(dimensionCountry));
+		jc.add(searchBtn);
+		
+		
+		
+		
+		jc.add(searchTxt);
+	}
+	
 	
 	/**
 	 * creates the button and areas depending if it is the page to show the results or not
@@ -95,6 +134,7 @@ public class CreateInterface implements ActionListener {
     	
     	if(!isResults) {
     		createRegionButton(dimensionCountry);
+    		searchWithTxt();
     		CreatFrame.showOnFrame(jc,"LifeLine",false , forEntireMap);
     	}
     	else {//create the scrollPane
@@ -231,14 +271,14 @@ public class CreateInterface implements ActionListener {
 		
 		selectedTowns.setText("Selected towns: ");
     	if(!isResults) {
-    		selectedTowns.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-150, 40, 150,dimensionCountry[1]-300);
+    		selectedTowns.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-160, 40, 150,dimensionCountry[1]-300);
     		info=new JLabel("Choose the towns that you want to deliver: "); 
     		info.setBounds(10, 40, 400,30);
     		JLabel area=new JLabel("Zoom on a region: ", SwingConstants.CENTER); 
         	area.setBounds(10, btnY+btnsDimension, btnX - 10,30);     	
      
         	JButton validatesChoicesBtn = new JButton("Confirm my choices");
-        	validatesChoicesBtn.setBounds(btnX ,btnY+(heigh/4), 200,heigh);
+        	validatesChoicesBtn.setBounds(btnX ,btnY+(heigh/4), getBtnDimY(dimensionCountry)*2+getBtnDimY(dimensionCountry)/6 ,heigh);
         	
 
         	validatesChoicesBtn.addActionListener(new ActionListener() { 
@@ -284,12 +324,14 @@ public class CreateInterface implements ActionListener {
 		error.setText(msg);
 		error.setForeground(Color.red);
 		if(ableBtn) {
-			error.setBounds(btnX +300,btnY+(heigh/4), 300,heigh);
+			error.setFont(new Font("Serif",Font.BOLD,20));
+			error.setBounds((int) (dimensionCountry[0]*0.40),dimensionCountry[1]+30, 300,heigh);
 			jc.add(error);
 			jc.repaint();
 			
 		}else {
 			Dimension dimRegion = ByRegion.regionInterface.getPreferredSize();
+			error.setFont(new Font("Serif",Font.BOLD,15));
 			error.setBounds((int) (dimRegion.width*0.05),dimRegion.height-50, 300,heigh);
 			ByRegion.regionInterface.add(error);
 			ByRegion.regionInterface.repaint();

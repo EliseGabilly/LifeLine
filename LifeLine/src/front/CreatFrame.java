@@ -30,8 +30,8 @@ public class CreatFrame {
 		
 		
 		component.revalidate();
-		
 			if(!isSmallMap) {
+				
 				 frame.setPreferredSize(new Dimension(CreateInterface.dimensionCountry[0]+CreateInterface.dimensionCountry[0]/8, CreateInterface.dimensionCountry[1]+100));
 					
 				 wa = new WindowAdapter() {
