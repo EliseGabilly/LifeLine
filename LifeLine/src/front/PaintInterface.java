@@ -26,7 +26,7 @@ public class PaintInterface extends JPanel{
 	protected static Map<Integer, Object[]> namesXRegions ;
 
 	
-	private static void setNameSelectedtown(int key) {
+	protected static void setNameSelectedtown(int key) {
 		String name = (String) CreateInterface.namesMap.get(key)[0];
 		if(!listOfNamesForTownsSelected.contains(name)&&listOfNamesForTownsSelected.size()<4){
 			listOfNamesForTownsSelected.add(name);
@@ -135,7 +135,7 @@ public class PaintInterface extends JPanel{
 	 * @param key
 	 * @param selected
 	 */
-	private void addTownInEntireMap(int key, Boolean selected) {
+	protected static void addTownInEntireMap(int key, Boolean selected) {
 		
 		Map<Integer, Boolean> selectedTownInCountry =  CreateInterface.regionInfo.get(12).getSelectedTown();
 		if(selectedTownInCountry!=null && !selectedTownInCountry.isEmpty()&&selectedTownInCountry.containsKey(key)) {
@@ -207,7 +207,7 @@ public class PaintInterface extends JPanel{
 	 * @param cityCoordMap
 	 * @return
 	 */
-	private int[] getCoordsInList(int key, Map<Integer, Coord<?, ?>> cityCoordMap) {
+	protected static int[] getCoordsInList(int key, Map<Integer, Coord<?, ?>> cityCoordMap) {
 		int x=(int) cityCoordMap.get(key).getX();
 		int y=(int) cityCoordMap.get(key).getY();
 		int[] coords = {x, y};
