@@ -30,8 +30,8 @@ public class CreatFrame {
 		
 		
 		component.revalidate();
-		
 			if(!isSmallMap) {
+				
 				 frame.setPreferredSize(new Dimension(CreateInterface.dimensionCountry[0]+CreateInterface.dimensionCountry[0]/8, CreateInterface.dimensionCountry[1]+100));
 					
 				 wa = new WindowAdapter() {
@@ -50,12 +50,14 @@ public class CreatFrame {
 					}
 				};
 			}
-			
-		mouseListener = new ClickListener((PaintInterface) component, plan);
+			if(!CreateInterface.isResults) {
+				mouseListener = new ClickListener((PaintInterface) component, plan);
+				frame.getContentPane().addMouseListener(mouseListener);
+				frame.getContentPane().addMouseMotionListener(mouseListener);
+			}
+		
 		frame.addWindowListener(wa);
 		frame.getContentPane().add(component);
-		frame.getContentPane().addMouseListener(mouseListener);
-		frame.getContentPane().addMouseMotionListener(mouseListener);
 		frame.pack();
 		frame.setVisible(true);
 	}

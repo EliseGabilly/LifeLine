@@ -1,22 +1,16 @@
 package front;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
 import obj.Coord;
 import obj.Plan;
 
@@ -25,19 +19,19 @@ public class PaintInterface extends JPanel{
 	protected static boolean forEntireMap =true;	
 	protected static int idRegion =12;
 	
-	protected Map<Integer, Object[]> regions ;
+	protected static Map<Integer, Object[]> regions ;
 	private static final long serialVersionUID = 1L;
 	protected static int width = 10;
 	protected static List<String> listOfNamesForTownsSelected=new ArrayList<String>();
 	protected static Map<Integer, Object[]> namesXRegions ;
-	
-	
 
 	
 	private static void setNameSelectedtown(int key) {
 		String name = (String) CreateInterface.namesMap.get(key)[0];
-		if(!listOfNamesForTownsSelected.contains(name)){
+		if(!listOfNamesForTownsSelected.contains(name)&&listOfNamesForTownsSelected.size()<4){
 			listOfNamesForTownsSelected.add(name);
+		}else if(listOfNamesForTownsSelected.size()>=4 &&!listOfNamesForTownsSelected.contains(name) ){
+			CreateInterface.createErrorLabel("You can't select more than 4 towns" );
 		}else {
 			listOfNamesForTownsSelected.remove(name);
 		}
@@ -53,6 +47,7 @@ public class PaintInterface extends JPanel{
 		
 		super.paint(g);
 		Color color = CreateInterface.chooseColor(idRegion);
+	
 		
 		Plan currentMap = CreateInterface.regionInfo.get(idRegion);
 		Map<Integer, Coord<?, ?>> cityCoordMap = currentMap.getCityCoordMap();
@@ -92,16 +87,34 @@ public class PaintInterface extends JPanel{
 				}
 			}
 			
-				Results.printResultsOnMap(g);
-				Results.isEnd=true;
-			
+				if(!Results.isEnd) {
+					Results.printResultsOnMap(g);
+					Results.isEnd=true;
+				}
+				Results.printFirstAndLast();
+		
 		}
-		String names = "Selected towns:	 ";
-		for(String name:listOfNamesForTownsSelected) {
-			names = names +name+"	 ";
-			CreateInterface.selectedTowns.setText(names+" ");
+		String names = "Selected towns:  ";
+		if(CreateInterface.isResults) {
+			for( int i=0; i<listOfNamesForTownsSelected.size();i++) {
+				String name="";
+				if(i!=listOfNamesForTownsSelected.size()-1) {
+					name = listOfNamesForTownsSelected.get(i) + ", ";
+				}else {
+					name = listOfNamesForTownsSelected.get(i);
+				}
+				
+				names = names +name;
+			}
+		}else {
+			for(String name:listOfNamesForTownsSelected) {
+				names = names +name+"	 ";
+				CreateInterface.selectedTowns.setText(names+" ");
+			}
 		}
 		
+
+		CreateInterface.selectedTowns.setText(names+" ");
 		for(int key : selectedTown.keySet()) {
 			if(selectedTown.get(key)) {
 				
@@ -162,6 +175,7 @@ public class PaintInterface extends JPanel{
 		}
 		
 		if(!isSelected || (isSelected && listOfNamesForTownsSelected.size()<4)) {
+			CreateInterface.createErrorLabel("");
 			if(plan.getId()!=12) {
 				addTownInEntireMap(key,isSelected);
 			}else {
@@ -180,6 +194,8 @@ public class PaintInterface extends JPanel{
 					CreateInterface.regionInfo.put(region, newRegion);
 				}	
 			}
+		}else if(!(isSelected && listOfNamesForTownsSelected.size()<4)) {
+			CreateInterface.createErrorLabel("You can't select more than 4 towns" );
 		}
 		
 		this.repaint();

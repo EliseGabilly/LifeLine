@@ -1,12 +1,9 @@
 package front;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,12 +12,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 import obj.Plan;
 import obj.Adjacent;
@@ -28,6 +27,7 @@ import obj.Coord;
 import obj.TownInterface;
 import pkg.Calcul;
 import pkg.Main;
+import pkg.PathOptimizer;
 
 public class CreateInterface implements ActionListener {
 	
@@ -53,8 +53,17 @@ public class CreateInterface implements ActionListener {
 	protected static JScrollPane scroller;
 	protected static JTextArea selectedTowns;
 	protected static Boolean ableBtn=true;
-	 
 	
+	private static int btnY;
+	private static int btnX;
+	private static int heigh ;
+	public static boolean restart=false;
+	
+	protected static JTextArea firstBase = new JTextArea();
+	protected static JTextArea lastBase =new JTextArea();
+	
+	private static JLabel error=new JLabel("", SwingConstants.CENTER);
+	  
 	/**
 	 * Initialises variables 
 	 * @param cityCoordMap
@@ -67,8 +76,44 @@ public class CreateInterface implements ActionListener {
 		namesMap=namesMapOrigin;
 		regMap=regMapOrigin;
 		weightedAdjMap =weightedAdjMapOrigin;
-
 		createMap();
+	}
+	
+/*
+ * Creates text area and the btn to search
+ */
+	protected static void searchWithTxt() {
+		btnY= yMaxOfTown+20 ;
+		btnX=(int) ( dimensionCountry[0]*0.28);
+		JTextArea searchTxt = new JTextArea();
+		searchTxt.setText("");
+		searchTxt.setFont(new Font("Serif",Font.BOLD,19));
+		searchTxt.setBounds(btnX +getBtnDimY(dimensionCountry)*2+2*getBtnDimY(dimensionCountry)/6, btnY+5, getBtnDimY(dimensionCountry)*2+getBtnDimY(dimensionCountry)/6 ,getBtnDimX(dimensionCountry));
+		
+		Border border = BorderFactory.createLineBorder(Color.GRAY);
+		searchTxt.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(0, 10, 0, 0)));
+		
+		JButton searchBtn = new JButton("Search");
+		searchBtn.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				  String searchedTown = searchTxt.getText();
+					  for(int key : namesMap.keySet()) {
+						 if(namesMap.get(key)[0].equals(searchedTown)) {
+							jc.addTown(key,forEntireMap);
+							searchTxt.setText("");
+						}
+				  }
+			}});
+    	
+		searchBtn.setFont(new Font("Serif",Font.BOLD,15));
+		searchBtn.setBounds(btnX +getBtnDimY(dimensionCountry)*4+4*getBtnDimY(dimensionCountry)/6, btnY+5, getBtnDimY(dimensionCountry) ,getBtnDimX(dimensionCountry));
+		jc.add(searchBtn);
+		
+		
+		
+		
+		jc.add(searchTxt);
 	}
 	
 	
@@ -87,11 +132,12 @@ public class CreateInterface implements ActionListener {
 		}
 		createTextArea(dimensionCountry);
 		jc.setPreferredSize(new Dimension(dimensionCountry[0]+dimensionCountry[0]/12,dimensionCountry[1]+100));
-    	jc.namesXRegions = namesMap;
+    	PaintInterface.namesXRegions = namesMap;
     	jc.regions = regMap;
     	
     	if(!isResults) {
     		createRegionButton(dimensionCountry);
+    		searchWithTxt();
     		CreatFrame.showOnFrame(jc,"LifeLine",false , forEntireMap);
     	}
     	else {//create the scrollPane
@@ -101,24 +147,45 @@ public class CreateInterface implements ActionListener {
     		
     		JLabel labelForpath=new JLabel("Your Path : ", SwingConstants.CENTER); 
     		labelForpath.setFont(new Font("Serif",Font.BOLD,19));
-    		labelForpath.setBounds(x-170, y, 120,40);
+    		labelForpath.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-180, 40, 120,40);
     		CreateInterface.jc.add(labelForpath);
-    		
     		showResults = new JPanel();
     		
     		scroller = new JScrollPane(CreateInterface.showResults, 
 					   JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
 					   JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
     		scroller.setViewportView(CreateInterface.showResults);
-    		scroller.setBounds(x, y,(int) (country.getDimension()[0]*0.80), 100);
-			scroller.setPreferredSize(new Dimension(x,y));
+    		scroller.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-180, 80, 160,dimensionCountry[1]-200);
+   			
+			scroller.setPreferredSize(new Dimension(100,400));
 			jc.add(scroller);
 
     		showResults.setVisible(true);
     		
+
+    		JButton btnRestart = new JButton("Restart");
+    		btnRestart.addActionListener(new ActionListener() { 
+				  public void actionPerformed(ActionEvent e) { 
+					  Frame[] frames = Frame.getFrames();
+						
+						for(Frame frame: frames) {
+								jc.removeAll();
+								frame.dispose();
+								
+							}
+						reinitializeVariables();
+						CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList, weightedAdjMap );
+						} 
+				} );
+	    	
+    		btnRestart.setFont(new Font("Serif",Font.BOLD,20));
+    		btnRestart.setBounds((int) (dimensionCountry[0]-70), (int) (dimensionCountry[1]-50), 150,50);
+    		jc.add(btnRestart);
+    		
     		CreatFrame.showOnFrame(jc, "Results",false, forEntireMap);
     	} 
 	}
+
 	
 	private static int[] createPlanForCountry(Map<Integer, Coord<?, ?>> adjustCityCoordMap) {
 		forEntireMap.setCityCoordMap(cityCoordMap);
@@ -138,8 +205,7 @@ public class CreateInterface implements ActionListener {
 	 * @param btnY
 	 */
 	private static void createRegionButton( int[] dimensionCountry) {
-		
-		
+
 		int btnHeigh = getBtnDimX(dimensionCountry);
 		int spaceForNextButton =20 + btnHeigh + btnHeigh/2;
 		int btnX=(int) ( dimensionCountry[0]*0.28);
@@ -191,10 +257,10 @@ public class CreateInterface implements ActionListener {
 	 */
 	private static void createTextArea( int[] dimensionCountry) {
 		
-		int btnY= yMaxOfTown+20 ;
-		int btnX=(int) ( dimensionCountry[0]*0.28);
+		 btnY= yMaxOfTown+20 ;
+		 btnX=(int) ( dimensionCountry[0]*0.28);
 		int width =getBtnDimY(dimensionCountry);
-		int heigh = getBtnDimX(dimensionCountry);
+		 heigh = getBtnDimX(dimensionCountry);
 		int btnsDimension =(heigh + heigh/2);
 		JLabel info = new JLabel();
 		selectedTowns = new JTextArea();
@@ -203,30 +269,42 @@ public class CreateInterface implements ActionListener {
 		selectedTowns.setWrapStyleWord(true);
 		JLabel title=new JLabel("Rwanda map : "); 
 		title.setBounds(10, 10, 200,30);
-		selectedTowns.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-200, 40, 150,dimensionCountry[1]-300);
+		
+			
+		
 		selectedTowns.setText("Selected towns: ");
     	if(!isResults) {
+    		selectedTowns.setBounds(dimensionCountry[0]+dimensionCountry[0]/8-160, 40, 150,dimensionCountry[1]-300);
     		info=new JLabel("Choose the towns that you want to deliver: "); 
     		info.setBounds(10, 40, 400,30);
     		JLabel area=new JLabel("Zoom on a region: ", SwingConstants.CENTER); 
         	area.setBounds(10, btnY+btnsDimension, btnX - 10,30);     	
      
         	JButton validatesChoicesBtn = new JButton("Confirm my choices");
-        	validatesChoicesBtn.setBounds(btnX ,btnY+(heigh/4), 200,heigh);
+        	validatesChoicesBtn.setBounds(btnX ,btnY+(heigh/4), getBtnDimY(dimensionCountry)*2+getBtnDimY(dimensionCountry)/6 ,heigh);
+        	
+
         	validatesChoicesBtn.addActionListener(new ActionListener() { 
     		public void actionPerformed(ActionEvent e) { 
     			  if(ableBtn) {
     				  if(PaintInterface.listOfNamesForTownsSelected.size()>0) {
     					  launchAlgo();  
+    				  }else {
+    					  createErrorLabel("You must select at least one town" );
     				  }
     			  }
     			  } 
     			} );
+        	
         	jc.setOpaque(true);
         	jc.add(validatesChoicesBtn);
         	jc.add(area);
     	}
     	else {
+    		Plan country = regionInfo.get(12);
+    		int x = (int) ((int) country.getDimension()[0]*0.20);
+    		int y = (int)country.getDimension()[1]-80;
+    		selectedTowns.setBounds(x, y,600, 50);
     		
     		info=new JLabel("Here is the path you should take: "); 
     		info.setBounds(10, 40, 400,30);
@@ -238,10 +316,30 @@ public class CreateInterface implements ActionListener {
     	jc.add(info);
     	jc.add(title);
     	jc.add(selectedTowns);
-    	
-    	
 	}
 	
+	/**
+	 * change the text of the label and show it on the frame
+	 * @param msg
+	 */
+	protected static void createErrorLabel(String msg) {
+		error.setText(msg);
+		error.setForeground(Color.red);
+		if(ableBtn) {
+			error.setFont(new Font("Serif",Font.BOLD,20));
+			error.setBounds((int) (dimensionCountry[0]*0.40),dimensionCountry[1]+30, 300,heigh);
+			jc.add(error);
+			jc.repaint();
+			
+		}else {
+			Dimension dimRegion = ByRegion.regionInterface.getPreferredSize();
+			error.setFont(new Font("Serif",Font.BOLD,15));
+			error.setBounds((int) (dimRegion.width*0.05),dimRegion.height-50, 300,heigh);
+			ByRegion.regionInterface.add(error);
+			ByRegion.regionInterface.repaint();
+		}
+	
+	}
 	
 	/*
 	 * Launch the selected path finding algo
@@ -297,9 +395,7 @@ public class CreateInterface implements ActionListener {
 		return width;
 	}
 	
-	
-	
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		jc.setBackground(Color.black);
@@ -503,6 +599,32 @@ protected static int[] getDimension(Map<Integer, Coord<?, ?>> cityCoordMap) {
 		return color;
 	}
 
+	/**
+	 * reinitialize variable to restart program
+	 */
+	private static void reinitializeVariables() {
+		
+		Main.myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
+		regionInfo = new HashMap<>();
+		regionMap = new Plan();
+		yMaxOfTown=0; 
+		xMaxOfTown=0;
+		width=0;
+		height=0;
+		fullPath= new ArrayList<Integer>();
+
+		isResults = false;
+		cost=0;
+		forEntireMap = new Plan();
+		ableBtn=true;
+		
+		Results.isEnd=false;
+		Results.pathNames = new ArrayList<String>();
+		PaintInterface.regions = new HashMap<>();
+		PaintInterface.listOfNamesForTownsSelected=new ArrayList<String>();
+		PaintInterface.namesXRegions = new HashMap<>();
+		
+	}
 	
 
 

@@ -6,21 +6,19 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.JLabel;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 
 import obj.Coord;
 import obj.Plan;
 
 public class Results {
 	
+	protected static List<String> pathNames;
 	protected static Boolean isEnd = false;
 	public static void printResultsOnMap(Graphics g) {
 		
 		List<Integer> fullPath = CreateInterface.fullPath;
-		List<String> pathNames = new ArrayList<String>();
+		pathNames = new ArrayList<String>();
 		Plan country = CreateInterface.regionInfo.get(12);
 		Map<Integer, Coord<?, ?>> cityCoordMap  = country.getCityCoordMap();
 		int xStart;
@@ -47,7 +45,7 @@ public class Results {
 		printResultsAsText(g,pathNames);
 		
 		
-		if(isEnd)CreateInterface.jc.repaint(); //When we already show the results we stop the processus
+		
 	}
 	
 	/**
@@ -56,23 +54,50 @@ public class Results {
 	 * @param pathNames
 	 */
 public static void printResultsAsText(Graphics g,List<String> pathNames) {
-
+System.out.println("ici");
 	JTextArea townName=new JTextArea();
 	String names = "";
+	int i = 1;
 		for(String name : pathNames) {
-			names=names+" -> "+name;
+			names=names+ i+") "+name+"	";
+			i++;
 		}
 		
-	Plan country = CreateInterface.regionInfo.get(12);
 	townName.setOpaque(false);
-	townName.setBounds(0, 0,(int) (country.getDimension()[0]*0.70), 100);
+	townName.setBounds(0, 0,120, 100);
 	townName.setText(names);
 	townName.setLineWrap(true);
 	townName.setWrapStyleWord(true);
 	townName.setEditable(false);
-	townName.setFont(new Font("Serif",Font.PLAIN,19));
-	CreateInterface.showResults.add(townName);
+	townName.setFont(new Font("Serif",Font.PLAIN,17));
 	
+	
+	CreateInterface.showResults.add(townName);
 	}
+
+/**
+ * Show first and last bases
+ * @param g
+ * @param pathNames
+ */
+	public static void printFirstAndLast() {
+	
+		Plan country = CreateInterface.regionInfo.get(12);
+		
+		CreateInterface.firstBase.setOpaque(false);
+		CreateInterface.firstBase.setBounds((int)(country.getDimension()[0]*0.20), country.getDimension()[1]-30,400, 400);
+		CreateInterface.firstBase.setText("Starting base : " + pathNames.get(0) );
+		CreateInterface.firstBase.setEditable(false);
+		CreateInterface.firstBase.setFont(new Font("Serif",Font.BOLD,20));
+		CreateInterface.jc.add(CreateInterface.firstBase);
+		
+		CreateInterface.lastBase.setOpaque(false);
+		CreateInterface.lastBase.setBounds((int)(country.getDimension()[0]*0.20), country.getDimension()[1],400, 400);
+		CreateInterface.lastBase.setText("Arrival base : " + pathNames.get(pathNames.size()-1) );
+		CreateInterface.lastBase.setEditable(false);
+		CreateInterface.lastBase.setFont(new Font("Serif",Font.BOLD,20));
+		CreateInterface.jc.add(CreateInterface.lastBase);	
+	}
+	
 
 }
