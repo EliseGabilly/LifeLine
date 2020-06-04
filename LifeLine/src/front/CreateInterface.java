@@ -40,7 +40,7 @@ public class CreateInterface implements ActionListener {
 	protected static Map<Integer, Plan> regionInfo = new HashMap<>(); // List of all individual maps and the entire one
 	private static Plan regionMap = new Plan();
 	protected static int yMaxOfTown; 
-	private static int xMaxOfTown;
+	protected static int xMaxOfTown;
 	private static double width;
 	private static double height;
 	protected static List<Integer> fullPath;
@@ -88,7 +88,7 @@ public class CreateInterface implements ActionListener {
 		JTextArea searchTxt = new JTextArea();
 		searchTxt.setText("");
 		searchTxt.setFont(new Font("Serif",Font.BOLD,19));
-		searchTxt.setBounds(btnX +getBtnDimY(dimensionCountry)*2+2*getBtnDimY(dimensionCountry)/6, btnY+5, getBtnDimY(dimensionCountry)*2+getBtnDimY(dimensionCountry)/6 ,getBtnDimX(dimensionCountry));
+		searchTxt.setBounds(btnX +getBtnDimY()*2+2*getBtnDimY()/6, btnY+5, getBtnDimY()*2+getBtnDimY()/6 ,getBtnDimX());
 		
 		Border border = BorderFactory.createLineBorder(Color.GRAY);
 		searchTxt.setBorder(BorderFactory.createCompoundBorder(border,
@@ -107,7 +107,7 @@ public class CreateInterface implements ActionListener {
 			}});
     	
 		searchBtn.setFont(new Font("Serif",Font.BOLD,15));
-		searchBtn.setBounds(btnX +getBtnDimY(dimensionCountry)*4+4*getBtnDimY(dimensionCountry)/6, btnY+5, getBtnDimY(dimensionCountry) ,getBtnDimX(dimensionCountry));
+		searchBtn.setBounds(btnX +getBtnDimY()*4+4*getBtnDimY()/6, btnY+5, getBtnDimY() ,getBtnDimX());
 		jc.add(searchBtn);
 		
 		
@@ -206,12 +206,12 @@ public class CreateInterface implements ActionListener {
 	 */
 	private static void createRegionButton( int[] dimensionCountry) {
 
-		int btnHeigh = getBtnDimX(dimensionCountry);
+		int btnHeigh = getBtnDimX();
 		int spaceForNextButton =20 + btnHeigh + btnHeigh/2;
 		int btnX=(int) ( dimensionCountry[0]*0.28);
     	int btnY= yMaxOfTown+spaceForNextButton ;
     	
-    	int btnWidth =getBtnDimY(dimensionCountry);
+    	int btnWidth =getBtnDimY();
     	
 		for(int key :regMap.keySet() ) {
 			String name = (String) regMap.get(key)[0];
@@ -259,8 +259,8 @@ public class CreateInterface implements ActionListener {
 		
 		 btnY= yMaxOfTown+20 ;
 		 btnX=(int) ( dimensionCountry[0]*0.28);
-		int width =getBtnDimY(dimensionCountry);
-		 heigh = getBtnDimX(dimensionCountry);
+		int width =getBtnDimY();
+		 heigh = getBtnDimX();
 		int btnsDimension =(heigh + heigh/2);
 		JLabel info = new JLabel();
 		selectedTowns = new JTextArea();
@@ -281,7 +281,7 @@ public class CreateInterface implements ActionListener {
         	area.setBounds(10, btnY+btnsDimension, btnX - 10,30);     	
      
         	JButton validatesChoicesBtn = new JButton("Confirm my choices");
-        	validatesChoicesBtn.setBounds(btnX ,btnY+(heigh/4), getBtnDimY(dimensionCountry)*2+getBtnDimY(dimensionCountry)/6 ,heigh);
+        	validatesChoicesBtn.setBounds(btnX ,btnY+(heigh/4), getBtnDimY()*2+getBtnDimY()/6 ,heigh);
         	
 
         	validatesChoicesBtn.addActionListener(new ActionListener() { 
@@ -379,7 +379,7 @@ public class CreateInterface implements ActionListener {
 	 * @param dimensionCountry
 	 * @return
 	 */
-	private static int getBtnDimY(int[] dimensionCountry) {	
+	protected static int getBtnDimY() {	
 		
 		int height = (int) ((0.75*xMaxOfTown)/5);
 		return height;
@@ -390,7 +390,7 @@ public class CreateInterface implements ActionListener {
 	 * @param dimensionCountry
 	 * @return
 	 */
-	private static int getBtnDimX(int[] dimensionCountry) {	
+	protected static int getBtnDimX() {	
 		int width =  (dimensionCountry[1]-yMaxOfTown)/4;
 		return width;
 	}
