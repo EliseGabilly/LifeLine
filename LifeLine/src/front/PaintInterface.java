@@ -28,8 +28,10 @@ public class PaintInterface extends JPanel{
 	
 	private static void setNameSelectedtown(int key) {
 		String name = (String) CreateInterface.namesMap.get(key)[0];
-		if(!listOfNamesForTownsSelected.contains(name)){
+		if(!listOfNamesForTownsSelected.contains(name)&&listOfNamesForTownsSelected.size()<4){
 			listOfNamesForTownsSelected.add(name);
+		}else if(listOfNamesForTownsSelected.size()>=4 &&!listOfNamesForTownsSelected.contains(name) ){
+			CreateInterface.createErrorLabel("You can't select more than 4 towns" );
 		}else {
 			listOfNamesForTownsSelected.remove(name);
 		}
