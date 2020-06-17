@@ -29,19 +29,20 @@ public class BaseOptimizer {
 			break;
 		case 2:
 			double max=1000;
-			int iterations = 100;
+			int iterations = 1;
+			outerloop:
 			while (true) {
 				try {
 					max = ComputeBases(cityCoordMap, iterations, max_iterations);
-					if(max<number_of_bases || iterations == 0) {
-						break;
-					}
-					iterations = iterations-1;
-
-					break;
-				} catch (Exception e) {}
+					//if(max<number_of_bases || iterations == 100) {
+					//	break outerloop;
+					//}
+					iterations = iterations+1;
+					System.out.println(iterations);
+				} catch (Exception e) {
+					
+				}
 			}
-			break;
 		}
 
 	}
@@ -78,7 +79,7 @@ public class BaseOptimizer {
 				}
 			}
 		}
-		System.out.println("Max Distance :" + Math.round(maxDistance));
+		System.out.println("Max Distance :" + Math.round(maxDistance)+"km");
 		return maxDistance;
 
 	}
