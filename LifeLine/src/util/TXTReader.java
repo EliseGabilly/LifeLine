@@ -25,7 +25,7 @@ public class TXTReader {
 	 * value : list of adjacent (node, weight)
 	 */
 	public static Map<Integer, List<Adjacent<?, ?>>> getWeitedAdj() {
-		String csvFile = "C:\\Users\\archa\\git\\LifeLine3\\LifeLine\\src\\data\\Adjacency.txt";
+		String csvFile = "Adjacency.txt";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\s+";
@@ -95,7 +95,7 @@ public class TXTReader {
 	 * value : coord(x, y)
 	 */
 	public static Map<Integer, Coord<?, ?>> getCityCoord() {
-		String csvFile = "C:\\Users\\archa\\git\\LifeLine3\\LifeLine\\src\\data\\Coordinates.txt";
+		String csvFile = "Coordinates.txt";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\s+";
@@ -147,7 +147,7 @@ public class TXTReader {
 	 * value : node name
 	 */
 	public static List<Integer> getBase() {
-		String csvFile = "C:\\Users\\archa\\git\\LifeLine3\\LifeLine\\src\\data\\Bases.txt";
+		String csvFile = "Bases.txt";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\s+";
@@ -190,7 +190,7 @@ public class TXTReader {
 	 * value : [name (string), code region(int)]
 	 */
 	public static Map<Integer, Object[]> getNames() {
-		String csvFile = "C:\\Users\\archa\\git\\LifeLine3\\LifeLine\\src\\data\\NamesXRegions.txt";
+		String csvFile = "NamesXRegions.txt";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\s+";
@@ -238,7 +238,7 @@ public class TXTReader {
 	 * value : [name (string), dencity (int)]
 	 */
 	public static Map<Integer, Object[]> getRegions() {
-		String csvFile = "C:\\Users\\archa\\git\\LifeLine3\\LifeLine\\src\\data\\Table 5 - Regions.txt";
+		String csvFile = "Table 5 - Regions.txt";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = "\\s+";
