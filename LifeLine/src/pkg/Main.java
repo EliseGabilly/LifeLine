@@ -44,7 +44,7 @@ public class Main {
     	// launch the path optimizer
     	myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
     	
-    	myBaseOptimizer = new BaseOptimizer(cityCoordMap, 5, 10000,1);
+    	myBaseOptimizer = new BaseOptimizer(cityCoordMap, 10, 10000,1);
     	
     	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList, weightedAdjMap );
    

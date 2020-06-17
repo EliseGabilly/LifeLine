@@ -19,23 +19,34 @@ public class BaseOptimizer {
 
 		switch (method) {
 		case 1:
+			while (true) {
+				try {
+					ComputeBases(cityCoordMap, number_of_bases, max_iterations);
+					break;
+				} catch (Exception e) {
+				}
+			}
 			break;
 		case 2:
-			break;
-		}
+			double max=1000;
+			int iterations = 100;
+			while (true) {
+				try {
+					max = ComputeBases(cityCoordMap, iterations, max_iterations);
+					if(max<number_of_bases || iterations == 0) {
+						break;
+					}
+					iterations = iterations-1;
 
-		while (true) {
-			try {
-				ComputeBases(cityCoordMap, number_of_bases, max_iterations, method);
-				break;
-			} catch (Exception e) {
+					break;
+				} catch (Exception e) {}
 			}
+			break;
 		}
 
 	}
 
-	private void ComputeBases(Map<Integer, Coord<?, ?>> cityCoordMap, int number_of_bases, int max_iterations,
-			int method) {
+	private double ComputeBases(Map<Integer, Coord<?, ?>> cityCoordMap, int number_of_bases, int max_iterations) {
 		Kmeans k = new Kmeans(cityCoordMap, number_of_bases);
 		Map<Integer, List<Integer>> placedClusters;
 		placedClusters = k.fit(cityCoordMap, max_iterations);
@@ -43,7 +54,8 @@ public class BaseOptimizer {
 
 		describeClusters(placedClusters);
 		System.out.println(iterations + " iterations");
-		computeMaxDistance(placedClusters, k);
+		double max = computeMaxDistance(placedClusters, k);
+		return max;
 	}
 
 	public double computeMaxDistance(Map<Integer, List<Integer>> clusters, Kmeans k) {
@@ -66,7 +78,7 @@ public class BaseOptimizer {
 				}
 			}
 		}
-		System.out.println("Max Distance :" + maxDistance);
+		System.out.println("Max Distance :" + Math.round(maxDistance));
 		return maxDistance;
 
 	}
@@ -78,7 +90,7 @@ public class BaseOptimizer {
 		for (Integer centroidID : centroids) {
 			List<Integer> clusterCitiesID = clusters.get(centroidID);
 			int clusterSize = clusterCitiesID.size();
-			System.out.println("Cluster n°" + n + " - " + clusterSize + " cities - capital :" + centroidID);
+			System.out.println("Cluster n°" + n + " - " + clusterSize + " cities - capital:" + centroidID);
 			n = n + 1;
 
 			for (Integer cityID : clusterCitiesID) {
