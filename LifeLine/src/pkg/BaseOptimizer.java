@@ -13,15 +13,19 @@ import obj.Kmeans;
 public class BaseOptimizer {
 
 	Map<Integer, Coord<?, ?>> coordinates;
-
-	public BaseOptimizer(Map<Integer, Coord<?, ?>> cityCoordMap, int number_of_bases, int max_iterations, int method) {
+	Set<Integer> finalBases;
+	
+	public BaseOptimizer(Map<Integer, Coord<?, ?>> cityCoordMap) {
 		this.coordinates = cityCoordMap;
-
+	}
+	
+	public List<Integer> getBasesList(int number_of_bases, int max_iterations, int method) {
+		
 		switch (method) {
 		case 1:
 			while (true) {
 				try {
-					ComputeBases(cityCoordMap, number_of_bases, max_iterations);
+					ComputeBases(this.coordinates, number_of_bases, max_iterations);
 					break;
 				} catch (Exception e) {
 				}
@@ -33,18 +37,25 @@ public class BaseOptimizer {
 			outerloop:
 			while (true) {
 				try {
-					max = ComputeBases(cityCoordMap, iterations, max_iterations);
-					//if(max<number_of_bases || iterations == 100) {
-					//	break outerloop;
-					//}
+					max = ComputeBases(this.coordinates, iterations, max_iterations);
+					if(max<number_of_bases || iterations == 100) {
+						break outerloop;
+					}
 					iterations = iterations+1;
 					System.out.println(iterations);
+
 				} catch (Exception e) {
 					
 				}
 			}
 		}
-
+		
+		int n = this.finalBases.size(); 
+	    List<Integer> aList = new ArrayList<Integer>(n); 
+	    for (Integer x : this.finalBases) 
+	      aList.add(x);
+		return aList;
+		
 	}
 
 	private double ComputeBases(Map<Integer, Coord<?, ?>> cityCoordMap, int number_of_bases, int max_iterations) {
@@ -55,6 +66,9 @@ public class BaseOptimizer {
 
 		describeClusters(placedClusters);
 		System.out.println(iterations + " iterations");
+		
+		
+		this.finalBases = placedClusters.keySet();
 		double max = computeMaxDistance(placedClusters, k);
 		return max;
 	}
