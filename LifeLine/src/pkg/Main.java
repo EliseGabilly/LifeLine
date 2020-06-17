@@ -19,6 +19,7 @@ public class Main {
         return savedArgs;
     }
     public static PathOptimizer myPathOptimizer;
+    public static BaseOptimizer myBaseOptimizer;
 
     public static void main(String[] args) {
     	
@@ -42,6 +43,8 @@ public class Main {
     	
     	// launch the path optimizer
     	myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
+    	
+    	myBaseOptimizer = new BaseOptimizer(cityCoordMap, 5, 10000,1);
     	
     	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList, weightedAdjMap );
    
