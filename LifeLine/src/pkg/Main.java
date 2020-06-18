@@ -39,8 +39,11 @@ public class Main {
     	Map<Integer, Object[]> regMap = TXTReader.getRegions();
     	if (Arrays.asList(args).contains("-pr") || Arrays.asList(args).contains("-printRegions"))
     		Printer.printDataMap(regMap);
+    
     	
-    	// launch the path optimizer
+    	myBaseOptimizer = new BaseOptimizer(cityCoordMap);
+    	basesList = myBaseOptimizer.getBasesList(8, 10000, 1);
+
     	myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
     	
     	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList, weightedAdjMap );
