@@ -1,11 +1,8 @@
 package pkg;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import front.CreateInterface;
 import obj.Adjacent;
@@ -44,19 +41,13 @@ public class Main {
     	Map<Integer, Object[]> regMap = TXTReader.getRegions();
     	if (Arrays.asList(args).contains("-pr") || Arrays.asList(args).contains("-printRegions"))
     		Printer.printDataMap(regMap);
-    	
-    	
+    
     	myBaseOptimizer = new BaseOptimizer(cityCoordMap);
-    	basesList = myBaseOptimizer.getBasesList(150, 10000, 2);
+    	basesList = myBaseOptimizer.getBasesList(8, 10000, 1);
 
     	myPathOptimizer = new PathOptimizer(cityCoordMap, weightedAdjMap, basesList);
 
-    	
     	CreateInterface.mainIterface(cityCoordMap,  namesMap,  regMap,  basesList, weightedAdjMap );
-   
-
-    	
-    	
     }
 
 }

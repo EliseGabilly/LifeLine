@@ -1,7 +1,5 @@
 package obj;
 
-import java.awt.Graphics;
-
 public class TownInterface<T,A> {
 
 	

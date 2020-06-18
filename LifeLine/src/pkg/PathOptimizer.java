@@ -65,10 +65,11 @@ public class PathOptimizer {
 	 */
 	private void initClosetBases(List<Integer> nodeRequiered) {
 		float weight;
-		float minWeight = (float) Double.MAX_VALUE;
+		float minWeight;
 		int minBase = 0;
 
 		for (Integer oneNode : nodeRequiered) {
+			minWeight = (float) Double.MAX_VALUE;
 			for (Integer aNode : basesList) {
 				weight = Calcul.getDistance(cityCoordMap.get(oneNode), cityCoordMap.get(aNode));
 				if (weight < minWeight) {

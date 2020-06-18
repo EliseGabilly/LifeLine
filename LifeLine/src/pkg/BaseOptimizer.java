@@ -1,12 +1,10 @@
 package pkg;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import obj.Centroid;
 import obj.Coord;
 import obj.Kmeans;
 
