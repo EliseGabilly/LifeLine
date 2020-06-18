@@ -1,7 +1,5 @@
 package obj;
 
-import java.util.Map;
-
 public class Centroid {
 
 	private float X;
